@@ -1,0 +1,19 @@
+Options         +Indexes
+DirectoryIndex  index.php
+
+#"C:\Program Files (x86)\Apache Software Foundation\Apache2.2\bin\htpasswd" -b C:\projects\mzgb\htdocs\mzgb\backoffice\.htpasswd admin ibBsfReight1
+#Updating password for user admin
+
+AuthType        Basic
+AuthName        "Private"
+#AuthUserFile	/home/ibsfreight/public_html/backoffice/.htpasswd
+AuthUserFile	/www/vhosts/dev.webie.ru/html/mzgb/backoffice/.htpasswd
+require         valid-user
+
+#CharsetDisable  on
+
+
+#php_value max_execution_time 60
+#php_value upload_max_filesize "5M"
+#php_value post_max_size "5M"
+#php_value memory_limit "16M"

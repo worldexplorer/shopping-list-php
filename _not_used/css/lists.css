@@ -1,0 +1,18 @@
+
+ul, ol {
+	padding: 0ex 0 0 2ex;
+	margin: 0 0 1em 0;
+}
+
+ul li, ol li {
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+/*	line-spacing: 1ex;*/
+}
+
+/*ul li:hover, ol li:hover {
+	background-color: gray;
+}*/
+ul.noleftmargin {
+	margin: 0px 0px 0px 15px;
+}

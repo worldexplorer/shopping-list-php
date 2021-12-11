@@ -1,0 +1,86 @@
+
+
+
+form.pid {
+	display: inline;
+}
+
+form.pid input {
+	border: 0px solid black;
+	width: 3em;
+	padding: 0px 1px 0px 2px;
+	margin: 0px;
+}
+
+/*
+form.replic input {
+	border: 1px solid gray;
+	width: 40%;
+}
+
+form.replic textarea {
+	border: 1px solid gray;
+	width: 100%;
+	height: 8em;
+	padding: 0px 1px 0px 2px;
+	margin: 0px;
+}
+
+form.rating input {
+	border: 1px solid gray;
+	width: 40%;
+}
+
+form.rating textarea {
+	border: 1px solid gray;
+	width: 100%;
+	height: 8em;
+	padding: 0px 1px 0px 2px;
+	margin: 0px;
+}
+*/
+
+
+input.piii {
+	border: 1px solid gray;
+	width: 40%;
+}
+
+input.cancel {
+	border: 1px solid gray;
+	width: 30%;
+}
+
+input.delete {
+	border: 1px solid gray;
+	width: 20%;
+}
+
+textarea.replic {
+	border: 1px solid gray;
+	width: 100%;
+	height: 8em;
+	padding: 0px 1px 0px 2px;
+	margin: 0px;
+}
+
+textarea.opinion, textarea.wish {
+	border: 1px solid gray;
+	width: 100%;
+	height: 8em;
+	padding: 0px 1px 0px 2px;
+	margin: 0px;
+}
+
+
+span.filled {
+	width: 80ex;
+	color: gray;
+	border: 1px solid gray;
+	margin: 0px;
+	padding: 3px;
+}
+
+span.textarea {
+	height: 6em;
+}

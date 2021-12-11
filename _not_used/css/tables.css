@@ -1,0 +1,61 @@
+/*
+table.bordered_cells td {
+	border: 1px solid gray;
+}
+
+table.bordered_cells td.noborder, div.content table tr td {
+	border: 0;
+}
+*/
+
+table.pricelist {
+	border: 1px solid #eeeeee;
+	background-color: #aaaaaa;
+}
+
+table.pricelist caption {
+	color: #1A337B;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+table.pricelist td {
+	padding: 0.3ex 1ex 0.3ex 1ex;
+	background-color: white;
+}
+
+table.pricelist th {
+	padding: 0.3ex 1ex 0.3ex 1ex;
+	background-color: #bbbbbb;
+}
+
+caption {
+	font-size: 1.3em;
+	padding-top: 1ex;
+	text-align: left;
+}
+
+
+table.pricelist input.qnty {
+	text-align: right;
+/*	padding: 1 5 1 0;
+	height: 3.2ex;
+	border: 1px dashed gray; */
+
+	height: 3ex;
+	width: 6ex;
+
+	padding: 0px 1ex 0px 0px;
+
+	border-top: 0;
+	border-right: 0;
+	border-bottom: 1px solid gray;
+	border-left: 0;
+	
+/*	background-image: url(img/order.gif);*/
+
+	font-weight: bold;
+
+/*	color: red; */
+
+}

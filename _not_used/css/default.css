@@ -1,0 +1,95 @@
+/* * { transition: .5s ease-in-out; } */
+
+body {
+    font-family: 'Open Sans', arial, sans-serif;
+    font-size: 14px;
+    line-height: 1;
+    color: #373737;
+    background: #f7f7f7;
+}
+
+/* table, div, p, textarea, input, select {
+	font-family: Verdana, Tahoma, Arial;
+	font-size: 1em;
+} */
+
+
+a			{color: #0D2B88; text-decoration: none;}
+a:hover		{color: #0000CC; text-decoration: underline;}
+
+a.cur		{color: gray; text-decoration: none;}
+a.cur:hover	{color: gray; text-decoration: underline;}
+
+
+
+
+h1, h2, h3, h4, h5 {
+	color: #1A337B;
+}
+
+h1 {
+	padding-top: 1ex;
+	font-size: 137%;
+}
+
+h2 {
+/*	float: left*/
+}
+
+h5 {
+	margin-bottom: 1ex;
+}
+
+h6 {
+	margin-top: 0px;
+	margin-bottom:0px;
+}
+
+div.content {
+	/* margin: 1px; */
+	/* padding: 0px 0px 2ex 0px; */
+	/* height: 600px; */
+    margin: 0 auto;
+    width: 100%;
+    max-width: 960px;
+    padding: 0 15px;
+}
+
+
+em {
+	font-family: Tahoma, Verdana, Arial;
+	font-size: 1.2em;
+	font-style: italic;
+	color: gray;
+}
+
+
+
+
+hr {
+	color: #aaaaaa;
+	height: 1px;
+	width: 100%;
+}
+
+
+
+.border {
+	border: 1px #aaaaaa solid;
+}
+
+.w100 {
+	width: 100%;
+}
+
+
+
+
+blockquote {
+	color: gray;
+	margin: 5px 0px 5px 15px;
+	padding: 5px 10px 5px 10px;
+	border: 0px solid gray;
+}
+
+

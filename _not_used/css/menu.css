@@ -1,0 +1,174 @@
+
+div.menutop {
+	margin-left: 3ex;
+}
+
+div.menutop a {
+	display: block;
+	float: left;
+	padding: 0px 0px 3px 5px;
+	margin-left: 0px;
+	margin-right: 2em;
+	font-weight: bold;
+}
+
+div.menutop a {
+/*	color: blue; */
+}
+
+div.menutop a.cur, div.menutop a:hover {
+	color: gray;
+}
+
+
+div.menutop {
+/*	margin-left: 3ex; */
+	text-align: center;
+}
+
+div.menubottom {
+	padding-left: 5px;
+	padding-bottom: 3px;
+/*	margin-left: 0px;
+	margin-right: 2em;*/
+	font-weight: normal;
+	color: white;
+}
+
+div.menubottom a {
+/*	display: block; 
+	float: left;
+*/
+	padding: 0px 5px 0px 5px;
+	font-weight: normal;
+}
+
+div.menubottom a {
+	color: white;
+/*	background: url("img/_sample_menu_dot.gif") left top no-repeat;*/
+	background-position: 0px 2px;
+}
+
+div.menubottom a.cur, div.menubottom a:hover {
+	color: white;
+/*	background: url("img/_sample_menu_dot.gif") left top no-repeat;*/
+	background-position: 0px 2px;
+}
+
+
+
+
+
+
+div.menuleft {
+/*	padding: 10 5 15 10;*/
+/*	border-top: 1px solid A1A9AC;*/
+/*	width: 180px;*/
+}
+
+div.menuleft div.item {
+/*	background: url("img/leftmenu-bgv.gif") left top repeat-x;*/
+/*	background-color: #C2CBD2; bottom */
+/*	background-color: #E9EEF2;
+	border-left: 1px solid A1A9AC;
+	border-right: 1px solid A1A9AC;
+	border-bottom: 1px solid A1A9AC;*/
+
+	padding: 4px 0px 4px 0px;
+}
+
+
+div.menuleft div.item div {
+	padding-left: 10px;
+}
+
+div.menuleft a {
+	display: block;
+	padding: 2px 0px 2px 15px;
+	font-weight: bold;
+/*
+	background: url("img/li11.gif") left top no-repeat;
+	background-position: 8px 1.2ex;
+*/
+}
+
+div.menuleft a.cur, div.menuleft a:hover {
+	font-weight: bold;
+	color: gray;
+/*	background: url("img/li21-mover.gif") left top no-repeat;
+	background-position: 8px 1.2ex;*/
+}
+
+div.menuleft div.item div a {
+/*	color: black;
+	background: url("img/li02.gif") left top no-repeat;
+	background-position: 8px 1.2ex;
+	font-weight: normal;*/
+}
+
+div.menuleft div.item div a.cur, div.menuleft div.item div a:hover {
+/*	color: #1453C7;
+	background: url("img/li02-mover.gif") left top no-repeat;
+	background-position: 8px 1.2ex;*/
+}
+
+
+
+
+div.menuleft div.level2 {
+/*	background: url("img/leftmenu-bgh-level2.gif") left top repeat-y;
+	border-left: 1px solid A1A9AC;
+	border-right: 1px solid A1A9AC;
+	border-bottom: 1px solid A1A9AC;*/
+	padding: 0px 5px 8px 25px;
+}
+
+
+div.menuleft div.level2 div.item {
+/*	background: url("img/leftmenu-bgh-level2-separator.gif") left bottom no-repeat;*/
+	border: 0px dashed white;
+	padding: 0px 0px 0px 0px;
+}
+
+div.menuleft div.level2 div.item a {
+	display: block;
+	background: url("");
+	padding: 3px 0px 3px 2px;
+	font-weight: normal;
+/*	color: black;*/
+}
+
+div.menuleft div.level2 div.item a.cur, div.menuleft div.level2 div.item a:hover {
+	color: #757C82;
+}
+
+
+
+
+div.menuleft div.level3 {
+/*	background: url("img/leftmenu-bgh-level3.gif") left top repeat-y;
+	border-left: 1px solid A1A9AC;
+	border-right: 1px solid A1A9AC;
+	border-bottom: 1px solid A1A9AC;
+	padding: 0 5 8 35;*/
+}
+
+
+div.menuleft div.level3 div.item {
+/*	background: url("img/leftmenu-bgh-level3-separator.gif") left bottom no-repeat;
+	border: 0px dashed white;*/
+	padding: 0px 5px 0px 0px;
+}
+
+div.menuleft div.level3 div.item a {
+	display: block;
+	background: url("");
+	padding: 4px 0px 4px 0px;
+	font-weight: normal;
+/*	color: black; */
+}
+
+div.menuleft div.level3 div.item a.cur, div.menuleft div.level3 div.item a:hover {
+	color: #757C82;
+}
+

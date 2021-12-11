@@ -1,0 +1,38 @@
+
+div.content img {
+	border: 1px solid gray;
+}
+
+div.content img.fm {
+	margin-right: 1.5ex;
+	float: left;
+}
+
+div.content img.imgfloat {
+	margin-right: 10px;
+	margin-bottom: 7px;
+	float: left;
+}
+
+div.image {
+	float: left;
+	margin: 0px 2ex 1ex 0px;
+	border: 0px solid #eeeeee;
+}
+
+div.image img.noborder {
+	border: 0px solid #eeeeee;
+}
+
+div.image img, div.image_popup img, div.content p img {
+	border: 1px solid #AAAAAA;
+}
+
+div.image p, div.image_popup p {
+	color: gray;
+	font-size: 0.9em;
+	margin-top: 0px;
+	margin-bottom: 1ex;
+ 	padding-top: 2px;
+ 	text-align: left;
+}

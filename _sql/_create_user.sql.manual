@@ -1,0 +1,19 @@
+use mysql;
+create database shli;
+
+# mysql4
+#grant all privileges on shli.* to shli;
+#update user set host='localhost', password=old_password("shli") where user='shli';
+#insert into user (host, user, password) values ('195.28.42.35', 'shli', password("shli"));
+
+# mysql5
+create user 'shli'@'localhost';
+update user set host='localhost', password=old_password("shli") where user='shli';
+grant all privileges on shli.* to 'shli'@'localhost';
+
+flush privileges;
+use shli;
+
+#_delete_user.sql
+#drop database shli;
+#delete from user where user='shli';

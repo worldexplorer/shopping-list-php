@@ -1,0 +1,59 @@
+.poll-container {
+    padding: 2ex;
+    border: 1px solid gainsboro;
+    font-size: 200%;
+}
+
+.poll-container input {
+    font-size: 200%;
+}
+
+.poll-comment-above {
+    margin-top: 1ex;
+    margin-bottom: 1ex;
+}
+
+.poll-comment-below {
+    margin-top: 1ex;
+}
+
+.poll-submit {
+    margin-top: 2em;
+}
+
+.question-container {
+    /* border: 1px solid green; */
+    margin-bottom: 1ex;
+}
+
+.question {
+    border: 1px solid green;
+}
+
+.poll-question {
+    font-weight: bold;
+}
+
+.answers {
+    border: 1px solid red;
+}
+
+.answer-option {
+
+}
+
+.answer-input {
+
+}
+
+.answer-line {
+
+}
+
+.answer-line-label {
+
+}
+
+.answer-comment{
+
+}
