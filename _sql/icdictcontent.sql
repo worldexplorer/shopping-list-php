@@ -1,42 +1,54 @@
-use shli;
-set names cp1251;
-SET CHARACTER SET cp1251;
+--\connect shli
+\encoding utf8;
+--SET CHARACTER SET utf8;
 
 DROP TABLE IF EXISTS shli_icdictcontent;
 CREATE TABLE shli_icdictcontent (
-	id				INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-	date_updated	TIMESTAMP,
-	date_created	TIMESTAMP,
-	date_published	TIMESTAMP,
-	published		TINYINT UNSIGNED NOT NULL DEFAULT 1,
-	deleted			TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	manorder		INTEGER UNSIGNED NOT NULL DEFAULT 0,
+	id				SERIAL,
+	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	date_published	TIMESTAMP WITHOUT TIME ZONE,
+	published		BOOLEAN NOT NULL DEFAULT true,
+	deleted			BOOLEAN NOT NULL DEFAULT false,
+	manorder		SERIAL, -- INTEGER NOT NULL DEFAULT 0 CHECK (manorder >= 0),
+
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
 
 	hashkey			VARCHAR(250) NOT NULL DEFAULT '',
 	content			TEXT,
 
 	label_style		VARCHAR(250) NOT NULL DEFAULT '',
-	tf1_width		INTEGER UNSIGNED NOT NULL DEFAULT 0,
-	tf1_incolumn 	TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	tf1_width		INTEGER NOT NULL DEFAULT 0,
+	tf1_incolumn 	BOOLEAN NOT NULL DEFAULT false,
 
-	tf1_addtodict 		TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	tf1_addedpublished 	TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	tf1_addtodict 		BOOLEAN NOT NULL DEFAULT false,
+	tf1_addedpublished 	BOOLEAN NOT NULL DEFAULT false,
 
-	icdict			INTEGER UNSIGNED NOT NULL DEFAULT 0,
+	icdict			INTEGER NOT NULL DEFAULT 0,
 
 	PRIMARY KEY(id)
 );
 
-#desc shli_icdictcontent;
 
-insert into shli_icdictcontent(id, manorder, icdict, ident) values(1, 1, 1, 'Бумага');
-insert into shli_icdictcontent(id, manorder, icdict, ident) values(2, 2, 1, 'Картон');
-insert into shli_icdictcontent(id, manorder, icdict, ident) values(3, 3, 1, 'Пластик');
-insert into shli_icdictcontent(id, manorder, icdict, ident) values(4, 4, 1, 'Подарочная');
+-- https://stackoverflow.com/questions/2362871/postgresql-current-timestamp-on-update
+CREATE OR REPLACE FUNCTION fn_sync_date_updated() RETURNS TRIGGER 
+LANGUAGE plpgsql AS $$
+BEGIN
+    NEW.date_updated = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$;
 
-#select * from shli_icdictcontent;
+CREATE TRIGGER trg_shli_icdictcontent_update_date_updated
+	BEFORE UPDATE ON shli_icdictcontent FOR EACH ROW
+	EXECUTE PROCEDURE fn_sync_date_updated();
 
 
-#alter table shli_icdictcontent add tf1_addtodict TINYINT UNSIGNED NOT NULL DEFAULT 0;
-#alter table shli_icdictcontent add tf1_addedpublished TINYINT UNSIGNED NOT NULL DEFAULT 0;
+--\d shli_icdictcontent;
+
+insert into shli_icdictcontent(id, manorder, icdict, ident) values(1, 1, 1, 'Р‘СѓРјР°РіР°');
+insert into shli_icdictcontent(id, manorder, icdict, ident) values(2, 2, 1, 'РљР°СЂС‚РѕРЅ');
+insert into shli_icdictcontent(id, manorder, icdict, ident) values(3, 3, 1, 'РџР»Р°СЃС‚РёРє');
+insert into shli_icdictcontent(id, manorder, icdict, ident) values(4, 4, 1, 'РџРѕРґР°СЂРѕС‡РЅР°СЏ');
+
+--select * from shli_icdictcontent;

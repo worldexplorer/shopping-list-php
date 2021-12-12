@@ -1,54 +1,62 @@
-use shli;
-set names cp1251;
-SET CHARACTER SET cp1251;
+--\connect shli
+\encoding utf8;
+--SET CHARACTER SET utf8;
 
 DROP TABLE IF EXISTS shli_ic;
 CREATE TABLE shli_ic (
-	id				INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-	date_updated	TIMESTAMP,
-	date_created	TIMESTAMP,
-	date_published	TIMESTAMP,
-	published		TINYINT UNSIGNED NOT NULL DEFAULT 1,
-	deleted			TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	manorder		INTEGER UNSIGNED NOT NULL DEFAULT 0,
+	id				SERIAL,
+	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	date_published	TIMESTAMP WITHOUT TIME ZONE,
+	published		BOOLEAN NOT NULL DEFAULT true,
+	deleted			BOOLEAN NOT NULL DEFAULT false,
+	manorder		SERIAL, -- INTEGER NOT NULL DEFAULT 0 CHECK (manorder >= 0),
+
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
 
 	hashkey			VARCHAR(250) NOT NULL DEFAULT '',
 
-	icwhose			INTEGER UNSIGNED NOT NULL DEFAULT 0,
-	icwhat			INTEGER UNSIGNED NOT NULL DEFAULT 0,
-	ictype			INTEGER UNSIGNED NOT NULL DEFAULT 0,
-	icdict			INTEGER UNSIGNED NOT NULL DEFAULT 0,
+	icwhose			INTEGER NOT NULL DEFAULT 0,
+	icwhat			INTEGER NOT NULL DEFAULT 0,
+	ictype			INTEGER NOT NULL DEFAULT 0,
+	icdict			INTEGER NOT NULL DEFAULT 0,
 	param1			VARCHAR(250) NOT NULL DEFAULT '',
 	param2			VARCHAR(250) NOT NULL DEFAULT '',
 	graycomment		VARCHAR(250) NOT NULL DEFAULT '',
 
-	jsvalidator		INTEGER UNSIGNED NOT NULL DEFAULT 0,
-	obligatory		TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	obligatory_bo	TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	jsvalidator		INTEGER NOT NULL DEFAULT 0,
+	obligatory		BOOLEAN NOT NULL DEFAULT false,
+	obligatory_bo	BOOLEAN NOT NULL DEFAULT false,
 
-	inbrief			TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	sorting			TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	inbrief			BOOLEAN NOT NULL DEFAULT false,
+	sorting			BOOLEAN NOT NULL DEFAULT false,
 
-	published_bo	TINYINT UNSIGNED NOT NULL DEFAULT 1,
+	published_bo	BOOLEAN NOT NULL DEFAULT true,
 
 	PRIMARY KEY(id)
 );
 
-#desc shli_ic;
 
-insert into shli_ic(id, manorder, icwhose, ictype, ident) values(1, 1, 1, 1, 'Размеры: см');
-insert into shli_ic(id, manorder, icwhose, ictype, ident) values(2, 2, 1, 2, 'Масса: кг');
-insert into shli_ic(id, manorder, icwhose, ictype, icdict, inbrief, sorting, ident) values(3, 3, 1, 4, 1, 1, 1, 'Упаковка:');
-insert into shli_ic(id, manorder, icwhose, ictype, inbrief, sorting, ident) values(4, 4, 1, 2, 1, 1, 'Доставка: дней');
-insert into shli_ic(id, manorder, icwhose, ictype, inbrief, sorting, ident) values(5, 5, 1, 2, 1, 1, 'На складе: шт');
+-- https://stackoverflow.com/questions/2362871/postgresql-current-timestamp-on-update
+CREATE OR REPLACE FUNCTION fn_sync_date_updated() RETURNS TRIGGER 
+LANGUAGE plpgsql AS $$
+BEGIN
+    NEW.date_updated = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$;
 
-#select * from shli_ic;
+CREATE TRIGGER trg_shli_ic_update_date_updated
+	BEFORE UPDATE ON shli_ic FOR EACH ROW
+	EXECUTE PROCEDURE fn_sync_date_updated();
 
+--\d shli_ic;
 
-#alter TABLE ic add graycomment		VARCHAR(250) NOT NULL DEFAULT '';
+insert into shli_ic(id, manorder, icwhose, ictype, ident) values(1, 1, 1, 1, 'Р Р°Р·РјРµСЂС‹: СЃРј');
+insert into shli_ic(id, manorder, icwhose, ictype, ident) values(2, 2, 1, 2, 'РњР°СЃСЃР°: РєРі');
+insert into shli_ic(id, manorder, icwhose, ictype, icdict, inbrief, sorting, ident) values(3, 3, 1, 4, 1, true, true, 'РЈРїР°РєРѕРІРєР°:');
+insert into shli_ic(id, manorder, icwhose, ictype, inbrief, sorting, ident) values(4, 4, 1, 2, true, true, 'Р”РѕСЃС‚Р°РІРєР°: РґРЅРµР№');
+insert into shli_ic(id, manorder, icwhose, ictype, inbrief, sorting, ident) values(5, 5, 1, 2, true, true, 'РќР° СЃРєР»Р°РґРµ: С€С‚');
 
-# added in richclub
-#alter table shli_ic add obligatory_bo TINYINT UNSIGNED NOT NULL DEFAULT 0;
-#alter table shli_ic add published_bo TINYINT UNSIGNED NOT NULL DEFAULT 1;
+--select * from shli_ic;
 

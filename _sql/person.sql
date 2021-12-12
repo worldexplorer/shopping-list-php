@@ -1,56 +1,86 @@
-use shli;
-set names cp1251;
-SET CHARACTER SET cp1251;
+--\connect shli
+\encoding utf8;
+--SET CHARACTER SET utf8;
 
-DROP TABLE IF EXISTS shli_person;
-CREATE TABLE shli_person (
-	id				INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-	date_updated	TIMESTAMP,
-	date_created	TIMESTAMP,
-	date_published	TIMESTAMP,
-	published		TINYINT UNSIGNED NOT NULL DEFAULT 1,
-	deleted			TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	manorder		INTEGER UNSIGNED NOT NULL DEFAULT 0,
+DROP TABLE IF EXISTS shli_user;
+CREATE TABLE shli_user (
+	id				SERIAL,
+	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP, --  ON UPDATE CURRENT_TIMESTAMP,
+	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	date_published	TIMESTAMP WITHOUT TIME ZONE,
+	published		BOOLEAN NOT NULL DEFAULT true,
+	deleted			BOOLEAN NOT NULL DEFAULT false,
+	manorder		SERIAL, -- INTEGER NOT NULL DEFAULT 0 CHECK (manorder >= 0),
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
 
 	phone			VARCHAR(250) NOT NULL DEFAULT '',
+	email			VARCHAR(250) NOT NULL DEFAULT '',
 
 	password		VARCHAR(250) NOT NULL DEFAULT '',
 	auth			VARCHAR(250) NOT NULL DEFAULT '',
 	
-	female			TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	unsubscribed	TINYINT UNSIGNED NOT NULL DEFAULT 0,
-
 	date_lastclick	TIMESTAMP,
 	lastip			VARCHAR(250) NOT NULL DEFAULT '',
 	lastsid			VARCHAR(250) NOT NULL DEFAULT '',
-	lastip_login	VARCHAR(250) NOT NULL DEFAULT '',
-	lastip_auth		VARCHAR(250) NOT NULL DEFAULT '',
-	user_agent		VARCHAR(250) NOT NULL DEFAULT '',
 	
 	PRIMARY KEY(id)
-	, key (published), key (deleted)
-	, key(ident)
+----		, key (published), key (deleted)
+----		, key(ident)
 );
 
-insert into shli_person(id, manorder, ident) values
-	(1, 1, 'Вася'),
-	(2, 2, 'Маша'),
-	(3, 3, 'Даша'),
-	(4, 4, 'Коля'),
-	(5, 5, 'Маруся'),
-	(6, 6, 'Петрович');
+-- https://stackoverflow.com/questions/2362871/postgresql-current-timestamp-on-update
+CREATE OR REPLACE FUNCTION fn_sync_date_updated() RETURNS TRIGGER 
+LANGUAGE plpgsql AS $$
+BEGIN
+    NEW.date_updated = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$;
 
-#desc shli_person;
+CREATE TRIGGER trg_shli_user_update_date_updated
+	BEFORE UPDATE ON shli_user FOR EACH ROW
+	EXECUTE PROCEDURE fn_sync_date_updated();
 
 
-alter table shli_person change column cookie password VARCHAR(250) NOT NULL DEFAULT '';
-alter table shli_person change column guid auth VARCHAR(250) NOT NULL DEFAULT '';
-alter table shli_person change column cellphone phone VARCHAR(250) NOT NULL DEFAULT '';
+-- http://sqlines.com/postgresql/datatypes/serial
+-- https://www.postgresqltutorial.com/creating-first-trigger-postgresql/
+--CREATE OR REPLACE FUNCTION fn_manorder_equals_id() RETURNS TRIGGER 
+--LANGUAGE plpgsql AS $$
+--BEGIN
+--    NEW.manorder = OLD.id;
+--	update shli_user set manorder=id where id=OLD.id;
+--    RETURN NEW;
+--END;
+--$$;
 
-alter table shli_person add column date_lastclick TIMESTAMP;
-alter table shli_person add column lastip VARCHAR(250) NOT NULL DEFAULT '';
-alter table shli_person add column lastsid VARCHAR(250) NOT NULL DEFAULT '';
-alter table shli_person add column lastip_login VARCHAR(250) NOT NULL DEFAULT '';
-alter table shli_person add column lastip_auth VARCHAR(250) NOT NULL DEFAULT '';
-alter table shli_person add column user_agent VARCHAR(250) NOT NULL DEFAULT '';
+--CREATE TRIGGER trg_shli_user_on_insert_manorder_equals_id
+--  AFTER INSERT ON shli_user FOR EACH ROW
+--  EXECUTE PROCEDURE fn_manorder_equals_id();
+
+
+-- \d shli_user;
+
+
+insert into shli_user(ident) values
+	('Р’Р°СЃСЏ'),
+	('РњР°С€Р°'),
+	('Р”Р°С€Р°'),
+	('РљРѕР»СЏ'),
+	('РњР°СЂСѓСЃСЏ'),
+	('РџРµС‚СЂРѕРІРёС‡');
+
+-- select * from shli_user;
+
+
+
+-- CREATE OR REPLACE FUNCTION update_date_updated_column()
+-- RETURNS TRIGGER AS $$
+-- BEGIN
+--    NEW.date_updated = now(); 
+--    RETURN NEW;
+-- END;
+-- $$ language 'plpgsql';
+
+-- CREATE TRIGGER trg_shli_user_update_date_updated
+-- 	BEFORE UPDATE ON shli_user FOR EACH ROW
+-- 	EXECUTE PROCEDURE update_date_updated_column();

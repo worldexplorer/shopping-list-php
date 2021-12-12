@@ -1,27 +1,43 @@
-use shli;
-set names cp1251;
-SET CHARACTER SET cp1251;
+--\connect shli
+\encoding utf8;
+--SET CHARACTER SET utf8;
 
 DROP TABLE IF EXISTS shli_icdict;
 CREATE TABLE shli_icdict (
-	id				INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-	date_updated	TIMESTAMP,
-	date_created	TIMESTAMP,
-	date_published	TIMESTAMP,
-	published		TINYINT UNSIGNED NOT NULL DEFAULT 1,
-	deleted			TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	manorder		INTEGER UNSIGNED NOT NULL DEFAULT 0,
+	id				SERIAL,
+	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	date_published	TIMESTAMP WITHOUT TIME ZONE,
+	published		BOOLEAN NOT NULL DEFAULT true,
+	deleted			BOOLEAN NOT NULL DEFAULT false,
+	manorder		SERIAL, -- INTEGER NOT NULL DEFAULT 0 CHECK (manorder >= 0),
+
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
 
 	hashkey			VARCHAR(250) NOT NULL DEFAULT '',
 
-	icwhose			INTEGER UNSIGNED NOT NULL DEFAULT 0,
+	icwhose			INTEGER NOT NULL DEFAULT 0,
 
 	PRIMARY KEY(id)
 );
 
-#desc shli_icdict;
 
-insert into shli_icdict(id, manorder, icwhose, ident) values(1, 1, 1, '”Ô‡ÍÓ‚Í‡');
+-- https://stackoverflow.com/questions/2362871/postgresql-current-timestamp-on-update
+CREATE OR REPLACE FUNCTION fn_sync_date_updated() RETURNS TRIGGER 
+LANGUAGE plpgsql AS $$
+BEGIN
+    NEW.date_updated = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$;
 
-#select * from shli_icdict;
+CREATE TRIGGER trg_shli_icdict_update_date_updated
+	BEFORE UPDATE ON shli_icdict FOR EACH ROW
+	EXECUTE PROCEDURE fn_sync_date_updated();
+
+
+--\d shli_icdict;
+
+insert into shli_icdict(id, manorder, icwhose, ident) values(1, 1, 1, '‚Äù–ø–∞–∫–æ–≤–∫–∞');
+
+--select * from shli_icdict;

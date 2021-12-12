@@ -17,3 +17,11 @@ use shli;
 #_delete_user.sql
 #drop database shli;
 #delete from user where user='shli';
+
+
+
+#https://medium.com/coding-blocks/creating-user-database-and-adding-access-on-postgresql-8bfcd2f4a91e
+sudo -u postgres psql
+postgres=# create database shli ENCODING = 'UTF8';
+postgres=# create user shli with encrypted password 'shli';
+postgres=# grant all privileges on database shli to shli;

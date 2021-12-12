@@ -1,27 +1,28 @@
-use shli;
-set names cp1251;
-SET CHARACTER SET cp1251;
+--\connect shli
+\encoding utf8;
+--SET CHARACTER SET utf8;
 
 DROP TABLE IF EXISTS shli_mmenu;
 CREATE TABLE shli_mmenu (
-	id				INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-	date_updated	TIMESTAMP,
-	date_created	TIMESTAMP,
-	date_published	TIMESTAMP,
-	published		TINYINT UNSIGNED NOT NULL DEFAULT 1,
-	deleted			TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	manorder		INTEGER UNSIGNED NOT NULL DEFAULT 0,
+	id				SERIAL,
+	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	date_published	TIMESTAMP WITHOUT TIME ZONE,
+	published		BOOLEAN NOT NULL DEFAULT true,
+	deleted			BOOLEAN NOT NULL DEFAULT false,
+	manorder		SERIAL, -- INTEGER NOT NULL DEFAULT 0 CHECK (manorder >= 0),
+
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
 	
-	parent_id		INTEGER UNSIGNED NOT NULL DEFAULT 1,
+	parent_id		INTEGER NOT NULL DEFAULT 1,
 	
 	hashkey			VARCHAR(250) NOT NULL DEFAULT '',
-	is_heredoc		TINYINT NOT NULL DEFAULT 1,
-	is_drone		TINYINT NOT NULL DEFAULT 0,
+	is_heredoc		BOOLEAN NOT NULL DEFAULT true,
+	is_drone		BOOLEAN NOT NULL DEFAULT false,
 
-	#annotation				TEXT,
+	--annotation				TEXT,
 	content					TEXT,
-	content_no_freetext		TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	content_no_freetext		BOOLEAN NOT NULL DEFAULT false,
 
 	img_free		VARCHAR(250) NOT NULL DEFAULT '',
 	img_mover		VARCHAR(250) NOT NULL DEFAULT '',
@@ -34,8 +35,8 @@ CREATE TABLE shli_mmenu (
 	img_ctx_right	VARCHAR(250) NOT NULL DEFAULT '',
 	img_ctx_top		VARCHAR(250) NOT NULL DEFAULT '',
 
-	banner_top		INTEGER UNSIGNED NOT NULL DEFAULT 0,
-	banner_sky		INTEGER UNSIGNED NOT NULL DEFAULT 0,
+	banner_top		INTEGER NOT NULL DEFAULT 0,
+	banner_sky		INTEGER NOT NULL DEFAULT 0,
 
 
 	pagetitle			TEXT,
@@ -46,26 +47,42 @@ CREATE TABLE shli_mmenu (
 	tpl_list_item		TEXT,
 	tpl_list_wrapper	TEXT,
 
-	published_legend 	TINYINT UNSIGNED NOT NULL DEFAULT 1,
-	manorder_legend		INTEGER UNSIGNED NOT NULL DEFAULT 0,
+	published_legend 	BOOLEAN NOT NULL DEFAULT true,
+	manorder_legend		INTEGER NOT NULL DEFAULT 0,
 
-	published_sitemap 	TINYINT UNSIGNED NOT NULL DEFAULT 1,
+	published_sitemap 	BOOLEAN NOT NULL DEFAULT true,
 
-	PRIMARY KEY(id),
-	INDEX (parent_id)
+	PRIMARY KEY(id)
+--	INDEX (parent_id),
 );
 
-#desc shli_shli_mmenu;
 
 
-insert into shli_mmenu(id, manorder, parent_id, ident, published) values(1, 1, 0, 'root', 0);
+-- https://stackoverflow.com/questions/2362871/postgresql-current-timestamp-on-update
+CREATE OR REPLACE FUNCTION fn_sync_date_updated() RETURNS TRIGGER 
+LANGUAGE plpgsql AS $$
+BEGIN
+    NEW.date_updated = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$;
 
-insert into shli_mmenu(id, manorder, parent_id, ident, hashkey, published, deleted) values
-	(2, 2, 1, 'Top menu', 'MMENU_TOP', 0, 0)
+CREATE TRIGGER trg_shli_mmenu_update_date_updated
+	BEFORE UPDATE ON shli_mmenu FOR EACH ROW
+	EXECUTE PROCEDURE fn_sync_date_updated();
+
+
+--\d shli_mmenu;
+
+
+insert into shli_mmenu(id, manorder, parent_id, ident, published) values(1, 1, 0, 'root', false);
+
+insert into shli_mmenu(id, manorder, parent_id, ident, hashkey, published) values
+	(2, 2, 1, 'Top menu', 'MMENU_TOP', false)
 	;
 
 insert into shli_mmenu(id, manorder, parent_id, ident, hashkey, is_heredoc) values
-	(10, 10, 2, 'ABOUT', 'index', 0)
+	(10, 10, 2, 'ABOUT', 'index', false)
 	;
 
-#select * from shli_shli_mmenu;
+--select * from shli_mmenu;

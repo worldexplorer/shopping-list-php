@@ -1,54 +1,69 @@
-use shli;
-set names cp1251;
-SET CHARACTER SET cp1251;
+--\connect shli
+\encoding utf8;
+--SET CHARACTER SET utf8;
 
 DROP TABLE IF EXISTS shli_img;
 CREATE TABLE shli_img (
-	id				INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-	date_updated	TIMESTAMP,
-	date_created	TIMESTAMP,
-	date_published	TIMESTAMP,
-	published		TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	deleted			TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	manorder		INTEGER UNSIGNED NOT NULL DEFAULT 0,
+	id				SERIAL,
+	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	date_published	TIMESTAMP WITHOUT TIME ZONE,
+	published		BOOLEAN NOT NULL DEFAULT false,
+	deleted			BOOLEAN NOT NULL DEFAULT false,
+	manorder		SERIAL, -- INTEGER NOT NULL DEFAULT 0 CHECK (manorder >= 0),
+
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
 
 	img				VARCHAR(255) NOT NULL DEFAULT '',
-	img_w			INTEGER UNSIGNED NOT NULL DEFAULT 0,
-	img_h			INTEGER UNSIGNED NOT NULL DEFAULT 0,
+	img_w			INTEGER NOT NULL DEFAULT 0,
+	img_h			INTEGER NOT NULL DEFAULT 0,
 	img_txt			VARCHAR(255) NOT NULL DEFAULT '',
 
 	img_big			VARCHAR(255) NOT NULL DEFAULT '',
-	img_big_w		INTEGER UNSIGNED NOT NULL DEFAULT 0,
-	img_big_h		INTEGER UNSIGNED NOT NULL DEFAULT 0,
+	img_big_w		INTEGER NOT NULL DEFAULT 0,
+	img_big_h		INTEGER NOT NULL DEFAULT 0,
 	img_big_txt		VARCHAR(255) NOT NULL DEFAULT '',
 
 	owner_entity	VARCHAR(250) NOT NULL DEFAULT '',
-	owner_entity_id	INTEGER UNSIGNED NOT NULL DEFAULT 1,
-	imgtype			INTEGER UNSIGNED NOT NULL DEFAULT 1,
+	owner_entity_id	INTEGER NOT NULL DEFAULT 1,
+	imgtype			INTEGER NOT NULL DEFAULT 1,
 
 	img_src			VARCHAR(250) NOT NULL DEFAULT '',
 	img_big_src		VARCHAR(250) NOT NULL DEFAULT '',
 
-	img_main		TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	img_main		BOOLEAN NOT NULL DEFAULT false,
 
-	crc32			INTEGER UNSIGNED NOT NULL DEFAULT 0,
+	crc32			INTEGER NOT NULL DEFAULT 0,
 
 	date_faceted	TIMESTAMP,
-	faceted			TINYINT UNSIGNED NOT NULL DEFAULT 0,
-	faceting		TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	faceted			BOOLEAN NOT NULL DEFAULT false,
+	faceting		BOOLEAN NOT NULL DEFAULT false,
 
 	PRIMARY KEY(id)
-	, key (owner_entity, owner_entity_id)
-	, key (imgtype)
-	, key (published, deleted)
-	, key (img_txt)
-	, key (img_big_txt)
-	, key (faceted)
-	, key (faceting)
+----		, key (owner_entity, owner_entity_id),
+----		, key (imgtype),
+----		, key (published, deleted),
+----		, key (img_txt),
+----		, key (img_big_txt),
+----		, key (faceted),
+----		, key (faceting),
 );
 
-#desc shli_img;
-#select * from shli_img;
 
-#ALTER TABLE shli_img COLLATE='utf8_general_ci' CONVERT TO CHARSET utf8;
+
+-- https://stackoverflow.com/questions/2362871/postgresql-current-timestamp-on-update
+CREATE OR REPLACE FUNCTION fn_sync_date_updated() RETURNS TRIGGER 
+LANGUAGE plpgsql AS $$
+BEGIN
+    NEW.date_updated = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trg_shli_img_update_date_updated
+	BEFORE UPDATE ON shli_img FOR EACH ROW
+	EXECUTE PROCEDURE fn_sync_date_updated();
+
+
+--\d shli_img;
+--select * from shli_img;
