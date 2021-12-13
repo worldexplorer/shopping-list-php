@@ -8,8 +8,8 @@ CREATE TABLE shli_img (
 	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	date_published	TIMESTAMP WITHOUT TIME ZONE,
-	published		BOOLEAN NOT NULL DEFAULT false,
-	deleted			BOOLEAN NOT NULL DEFAULT false,
+	published		SMALLINT NOT NULL DEFAULT 0,
+	deleted			SMALLINT NOT NULL DEFAULT 0,
 	manorder		SERIAL, -- INTEGER NOT NULL DEFAULT 0 CHECK (manorder >= 0),
 
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
@@ -31,13 +31,13 @@ CREATE TABLE shli_img (
 	img_src			VARCHAR(250) NOT NULL DEFAULT '',
 	img_big_src		VARCHAR(250) NOT NULL DEFAULT '',
 
-	img_main		BOOLEAN NOT NULL DEFAULT false,
+	img_main		SMALLINT NOT NULL DEFAULT 0,
 
 	crc32			INTEGER NOT NULL DEFAULT 0,
 
 	date_faceted	TIMESTAMP,
-	faceted			BOOLEAN NOT NULL DEFAULT false,
-	faceting		BOOLEAN NOT NULL DEFAULT false,
+	faceted			SMALLINT NOT NULL DEFAULT 0,
+	faceting		SMALLINT NOT NULL DEFAULT 0,
 
 	PRIMARY KEY(id)
 ----		, key (owner_entity, owner_entity_id),

@@ -34,7 +34,7 @@ if ($mode != "" && $kw_search != "" && $kw_replace != "") {
 
 /*
 	$dbtables = array();
-	for ($i = 0; $i < mysql_num_rows($dbtables_result); $i++) {
+	for ($i = 0; $i < pg_num_rows($dbtables_result); $i++) {
 	    $dbtables[] =  mysql_tablename($dbtables_result, $i);
 	}
 	
@@ -45,7 +45,7 @@ if ($mode != "" && $kw_search != "" && $kw_replace != "") {
 */
 
 	$dbtables_result = mysql_list_tables($mysql_info["db"]);
-	for ($i = 0; $i < mysql_num_rows($dbtables_result); $i++) {
+	for ($i = 0; $i < pg_num_rows($dbtables_result); $i++) {
 	    $dbtable =  mysql_tablename($dbtables_result, $i);
 		$prefix_position = strpos($dbtable, TABLE_PREFIX);
 	    if ($prefix_position !== 0) {
@@ -60,7 +60,7 @@ if ($mode != "" && $kw_search != "" && $kw_replace != "") {
 		
 		$entity_dbfields_array = array();
 		$entity_dbfields_result = mysql_list_fields($mysql_info["db"], $dbtable);
-		for ($j = 0; $j < mysql_num_fields($entity_dbfields_result); $j++) {
+		for ($j = 0; $j < pg_num_fields($entity_dbfields_result); $j++) {
 			$type  = mysql_field_type($entity_dbfields_result, $j);
 		    $name  = mysql_field_name($entity_dbfields_result, $j);
 		    $len   = mysql_field_len($entity_dbfields_result, $j);

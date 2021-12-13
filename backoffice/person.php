@@ -29,8 +29,9 @@ $table_columns = array (
 	"ident" => array("", "textfield", "", "11em", "10em"),
 
 	"phone" => array("", "textfield", "", "11em", "10em"),
+	"email" => array("", "textfield", "", "11em", "10em"),
+
 	"password" => array("", "textfield", "", "11em", "10em"),
-	
 	//"auth" => array("", "textfield", "", "11em", "10em"),
 	"auth" => array("", "ahref", "$tpl_login_auth"),
 	
@@ -38,8 +39,8 @@ $table_columns = array (
 	//"game" => array("", "cnt"),
 	//"game_ident" => array("", "groupconcat"),
 
-	"female" => array("", "checkbox"),
-	"unsubscribed" => array("", "checkbox"),
+	// "female" => array("", "checkbox"),
+	// "unsubscribed" => array("", "checkbox"),
 	
 	"published" => array("", "checkbox"),
 	"~delete" => array("", "checkboxdel")

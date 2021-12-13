@@ -81,9 +81,9 @@ if ($id > 0) {
 		. " inner join ic i on i.ictype=t.id"
 		. " where i.id=$id";
 	$query = add_sql_table_prefix($query);
-	$result1 = mysqli_query($cms_dbc, $query) or die("SELECT FIELD failed:<br>$query<br>" . mysqli_error($cms_dbc));
-	if (mysqli_num_rows($result1) > 0) {
-		$row1 = mysqli_fetch_row($result1);
+	$result1 = pg_query($cms_dbc, $query) or die("SELECT FIELD failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	if (pg_num_rows($result1) > 0) {
+		$row1 = pg_fetch_row($result1);
 		$ictype_hashkey = $row1[0];
 	}
 

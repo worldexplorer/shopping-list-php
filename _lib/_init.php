@@ -3,7 +3,7 @@
 ini_set("asp_tags", 0);
 ini_set("magic_quotes_gpc", 0);
 
-ini_set("error_reporting", E_ALL);
+ini_set("error_reporting", E_ERROR);
 //ini_set("error_reporting", 0);
 ini_set("display_errors", 1);
 ini_set("display_startup_errors", 1);
@@ -32,16 +32,16 @@ date_default_timezone_set("America/New_York");
 //ini_set("variables_order", "CGPS");
 
 
-if (!defined("TABLE_PREFIX")) define("TABLE_PREFIX", "slspicy_");
+if (!defined("TABLE_PREFIX")) define("TABLE_PREFIX", "shli_");
 
 if (strpos($_SERVER["SERVER_NAME"], "dev.webie.ru") !== false
 	|| strpos($_SERVER["SERVER_NAME"], "localhost") !== false
 //	|| strpos($_SERVER["SERVER_NAME"], "powersportsdepot.ca") !== false
 	) {
-	if (!defined("UPLOAD_PREFIX")) define("UPLOAD_PREFIX", "slspicy/");
-	if (!defined("LIB_PREFIX")) define("LIB_PREFIX", "slspicy/");
+	if (!defined("UPLOAD_PREFIX")) define("UPLOAD_PREFIX", "shli/");
+	if (!defined("LIB_PREFIX")) define("LIB_PREFIX", ""); //"slspicy/"
 } else {
-	if (!defined("UPLOAD_PREFIX")) define("UPLOAD_PREFIX", "slspicy/");
+	if (!defined("UPLOAD_PREFIX")) define("UPLOAD_PREFIX", "shli/");
 	if (!defined("LIB_PREFIX")) define("LIB_PREFIX", "");
 }
 
@@ -223,9 +223,10 @@ if (isset($lang_content_type_charset_hash[$lang_current]) && $lang_content_type_
 // end MULTILINGUAL SUPPORT INIT
 
 
-require_once "_mysqli.php";
+//require_once "_mysqli.php";
+require_once "_postgres.php";
 
-require_once "_sendmail.php";
+//require_once "_sendmail.php";
 require_once "_input_types.php";
 require_once "_link_types.php";
 require_once "_img_layer.php";
@@ -889,7 +890,7 @@ if (!isset($pages_per_frame)) {
 $pg = get_number("pg");
 if (!isset($no_pg999999)) $no_pg999999 = 0;
 
-$limit_sql = " limit $rows_per_page";
+$limit_sql = " offset 0 limit $rows_per_page";
 $rows_total = 0;
 $pager_HTML = "";
 

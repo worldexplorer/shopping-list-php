@@ -62,10 +62,10 @@ function multicompositebidirect ($compositetype = "supplierbypgroup",
 //				pre($qa);
 		
 				$query = add_sql_table_prefix($query);
-				$result = mysqli_query($cms_dbc, $query)
-						or die("OPTIONS_PGROUPTREEPRODUCTSELECTABLE failed:<br>$query:<br>" . mysqli_error($cms_dbc));
+				$result = pg_query($cms_dbc, $query)
+						or die("OPTIONS_PGROUPTREEPRODUCTSELECTABLE failed:<br>$query:<br>" . pg_last_error($cms_dbc));
 		
-				while ($row = mysqli_fetch_array($result)) {
+				while ($row = pg_fetch_array($result)) {
 					$pgroup_restricted_by_p2p_relation_hash[$row["id"]] = $row["product_cnt"];
 				}
 //				pre($pgroup_restricted_by_p2p_relation_hash);
@@ -175,11 +175,11 @@ function options_pgrouptreeproductselectable($m2m_table, $m2m_fixed, $composite,
 	}
 
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query)
-			or die("OPTIONS_PGROUPTREEPRODUCTSELECTABLE failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$num_rows = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query)
+			or die("OPTIONS_PGROUPTREEPRODUCTSELECTABLE failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$num_rows = pg_num_rows($result);
 
-	for ($i=0; $row = mysqli_fetch_array($result); $i++) {
+	for ($i=0; $row = pg_fetch_array($result); $i++) {
 //		pre($row);
 		$pgroup_id = $row["id"];
 		$row["option_color"] = ($row["published"] == 1) ? OPTIONS_COLOR_BLACK : OPTIONS_COLOR_GRAY;
@@ -280,8 +280,8 @@ EOT;
 				. " group by p.id"
 				. " order by p." . get_entity_orderby($product_table);
 			$query_product = add_sql_table_prefix($query_product);
-			$result_product = mysqli_query($cms_dbc, $query_product)
-					or die("SELECT OPTIONS_PGROUPTREEPRODUCTSELECTABLE PRODUCTBYFIXED failed:<br>$query:<br>" . mysqli_error($cms_dbc));
+			$result_product = pg_query($cms_dbc, $query_product)
+					or die("SELECT OPTIONS_PGROUPTREEPRODUCTSELECTABLE PRODUCTBYFIXED failed:<br>$query:<br>" . pg_last_error($cms_dbc));
 	
 			$fixed_hrefsuffix = "";
 			$it_name = $m2m_table . "_" . $product_table . "_to";
@@ -305,7 +305,7 @@ EOT;
 EOT;
 
 
-			while ($row_product = mysqli_fetch_array($result_product)) {
+			while ($row_product = pg_fetch_array($result_product)) {
 	//			pre($row_product);
 				$row_product["option_color"] = ($row_product["published"] == "1") ? OPTIONS_COLOR_BLACK : OPTIONS_COLOR_GRAY;
 				$row_product["option_color"] = ($row_product["id"] == $id) ? OPTIONS_COLOR_GRAY : $row_product["option_color"];
@@ -441,8 +441,8 @@ function options_pgroupflatproductselectable($m2m_table, $m2m_fixed, $composite,
 //	$qa = select_queryarray($query_product);
 //	pre($qa);
 
-	$result_product = mysqli_query($cms_dbc, $query_product)
-			or die("SELECT OPTIONS_PGROUPFLATPRODUCTSELECTABLE failed:<br>$query:<br>" . mysqli_error($cms_dbc));
+	$result_product = pg_query($cms_dbc, $query_product)
+			or die("SELECT OPTIONS_PGROUPFLATPRODUCTSELECTABLE failed:<br>$query:<br>" . pg_last_error($cms_dbc));
 
 	$fixed_hrefsuffix = "";
 	$it_name = $m2m_table . "_" . $product_table . "_to";
@@ -481,7 +481,7 @@ EOT;
 EOT;
 
 	$unique_product_checked_cnt = 0;
-	while ($row = mysqli_fetch_array($result_product)) {
+	while ($row = pg_fetch_array($result_product)) {
 //		pre($row);
 		$row["option_color"] = ($row["published"] == "1") ? OPTIONS_COLOR_BLACK : OPTIONS_COLOR_GRAY;
 		$row["checked"] = ($row["m2m_id"] != "") ? "checked" : "";
@@ -571,8 +571,8 @@ function multicompositebidirect_update($m2m_table, $value_arr
 	
 	$query = "select id, deleted, $composite_db_fields from $m2m_table where ${entity}_from=$id";
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT4DELETE MULTICOMPOSITEBIDIRECT_UPDATE failed:<br>$query<br>" . mysqli_error($cms_dbc));
-	while ($row = mysqli_fetch_assoc($result)) {
+	$result = pg_query($cms_dbc, $query) or die("SELECT4DELETE MULTICOMPOSITEBIDIRECT_UPDATE failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	while ($row = pg_fetch_assoc($result)) {
 //		pre($row);
 
 		$m2m_id = $row["id"];

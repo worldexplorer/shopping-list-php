@@ -397,7 +397,7 @@ switch ($lang_current) {
 			"question-content" => "Полный вопрос",
 						
 //slspicy
-			"person-phone" => "Whatsapp",
+			"person-phone" => "Phone", // Whatsapp
 			"person-cookie" => "Cookie",
 			"person-guid" => "GUID",
 			"person-password" => "Пароль",

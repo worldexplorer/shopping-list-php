@@ -1,7 +1,7 @@
 <?
 
 if (!isset($site_name)) $site_name = "Shared Shopping List";
-if (!isset($site_ident)) $site_ident = "shasholi";
+if (!isset($site_ident)) $site_ident = "shli";
 if (!isset($auth_cookie_name)) $auth_cookie_name = $site_ident . "_auth";
 
 $path_separator = $pagetitle_separator = " &raquo; ";
@@ -10,7 +10,25 @@ $path_separator = $pagetitle_separator = " &raquo; ";
 $legend_separator = "&nbsp;&nbsp;|&nbsp;&nbsp;";
 
 
-$mysqli_info = array (
+// $mysqli_info = array (
+// 	"host" => "localhost",
+// 	"login" => "***********",
+// 	"passwd" => "***********",
+// 	"db" => "***********"
+// );
+
+
+// if ($_SERVER["SERVER_NAME"] == "localhost") {
+// 	$mysqli_info = array (
+// 		"host" => "localhost",
+// 		"login" => "shli",
+// 		"passwd" => "shli",
+// 		"db" => "shli",
+// 		"charset" => "utf8",
+// 	);
+// }
+
+$postgres_info = array (
 	"host" => "localhost",
 	"login" => "***********",
 	"passwd" => "***********",
@@ -19,16 +37,17 @@ $mysqli_info = array (
 
 
 if ($_SERVER["SERVER_NAME"] == "localhost") {
-	$mysqli_info = array (
+	$postgres_info = array (
 		"host" => "localhost",
-		"login" => "shasholi",
-		"passwd" => "shasholi",
-		"db" => "shasholi",
+		//"port" => "5432",
+		"login" => "shli",
+		"passwd" => "shli",
+		"db" => "shli",
 		"charset" => "utf8",
 	);
 }
 
-//pre($mysqli_info);
+//pre($postgres_info);
 
 
 $menu_bo1 = array (
@@ -122,8 +141,8 @@ $menu_bo = array (
 //	"=../mailer/user/login.php?mlist=1&l_login=1234&l_passwd=1234&mode=login' target='_blank" => "Рассылка",
 //	"=mmenu-legend.php" => "",
 
-//	"~7" => "&nbsp;",
-//	"constant" => "",
+	"~7" => "&nbsp;",
+	"constant" => "",
 //	"mtpl" => "",
 //	"sentlog" => "",
 //	"imgtype" => "",
@@ -234,7 +253,7 @@ $entity_fixed_list = array (
 	"game" => array("team"),
 	"team" => array("game"),
 
-	//shasholi
+	//shli
 	"pollanswer" => array("poll", "parent_id"),
 //	"question" => array("game", "tour"),
 	
@@ -354,7 +373,7 @@ $entity_fixedlike_list = array (
 	);
 
 
-$mail_from = "shasholi website <info@shasholi.com>";
+$mail_from = "shli website <info@shli.com>";
 $mail_subscriber = "";
 $mail_visor = "info@webie.ru";
 $mail_visor_debug = 0;

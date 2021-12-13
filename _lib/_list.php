@@ -414,7 +414,10 @@ $deleted = "";
 
 //$entity_has_deleted_field = entity_has_deleted_field($entity);
 //if ($entity_has_deleted_field == 1) 
-$list_query_cond .= " and e.deleted=0 ";
+if ($list_query_cond != "") {
+	$list_query_cond .= " and ";
+}
+$list_query_cond .= "e.deleted=0 ";
 
 //if ($list_url_suffix == "") $list_url_suffix = hrefsuffix_fromhash($fixed_hash, "?");
 
@@ -609,7 +612,7 @@ if ($list_query_cnt == "") {
 					. $list_left_m2mjoins
 
 					. $list_left_additional_joins
-					. " where 1=1"
+					. " where "
 					. $list_query_cond
 					. $list_query_like_cond
 //					. " group by e.id"
@@ -621,7 +624,7 @@ if ($list_query_cnt == "") {
 					. $list_left_o2mjoins
 					. $list_left_m2mjoins
 					. $list_left_additional_joins
-					. " where 1=1"
+					. " where "
 					. $list_query_cond
 					. $list_query_like_cond
 					. " group by e.id"
@@ -637,7 +640,7 @@ if ($list_query_cnt == "") {
 					. $list_left_m2mjoins
 
 //					. $list_left_additional_joins
-					. " where 1=1"
+					. " where "
 					. $list_query_cond
 					. $list_query_like_cond
 //					. " group by e.id"
@@ -648,7 +651,7 @@ if ($list_query_cnt == "") {
 					. " from $entity e"
 					. $list_left_m2mjoins
 					. $list_left_additional_joins
-					. " where 1=1"
+					. " where "
 					. $list_query_cond
 					. $list_query_like_cond
 //					. " group by e.id"
@@ -665,7 +668,7 @@ if ($list_query_cnt == "") {
 			. $list_left_o2mjoins
 
 			. $list_left_additional_joins
-			. " where 1=1"
+			. " where "
 			. $list_query_cond
 			. $list_query_like_cond
 //			. " group by e.id"
@@ -679,8 +682,8 @@ if (!isset($list_url)) $list_url = $_SERVER["SCRIPT_NAME"] . $list_url_suffix;
 $list_query_cnt = add_sql_table_prefix($list_query_cnt);
 if ($debug_query == 1) echo "<br>LIST_QUERY_CNT[$list_query_cnt]<br>";
 
-$result = mysqli_query($cms_dbc, $list_query_cnt) or die("SELECT CNT failed:<br>$list_query_cnt<br>" . mysqli_error($cms_dbc));
-$row = mysqli_fetch_array($result);
+$result = pg_query($cms_dbc, $list_query_cnt) or die("SELECT CNT failed:<br>$list_query_cnt<br>" . pg_last_error($cms_dbc));
+$row = pg_fetch_array($result);
 $rows_total = $row["cnt"];
 
 if (!isset($pager_HTML)) {
@@ -707,7 +710,7 @@ if ($list_query == "") {
 
 
 	$list_query = "select e.*"
-		. " from $entity e where 1=1 $list_query_cond $list_query_like_cond"
+		. " from $entity e where $list_query_cond $list_query_like_cond"
 		. " order by e." . get_entity_orderby($entity)
 		;
 
@@ -717,7 +720,7 @@ if ($list_query == "") {
 		. $list_left_o2mjoins
 		. $list_left_m2mjoins
 		. $list_left_additional_joins
-		. " where 1=1"
+		. " where "
 		. $list_query_cond
 		. $list_query_like_cond
 		. " group by e.id"
@@ -742,9 +745,9 @@ $list_query = add_sql_table_prefix($list_query);
 // updating & deleting
 if ($mode == "update") {
 	if ($debug_query == 1) echo "<br>LIST_QUERY_FOR_UPDATE&DELETE[$list_query]<br>";
-	$result = mysqli_query($cms_dbc, $list_query) or die("SELECT LIST FOR_UPDATE&DELETE failed:<br>$list_query<br>" . mysqli_error($cms_dbc));
+	$result = pg_query($cms_dbc, $list_query) or die("SELECT LIST FOR_UPDATE&DELETE failed:<br>$list_query<br>" . pg_last_error($cms_dbc));
 	
-	for ($i=1; $row = mysqli_fetch_assoc($result); $i++) {
+	for ($i=1; $row = pg_fetch_assoc($result); $i++) {
 		$id = $row["id"];
 
 		if (get_number("save_pressed") == 1) {
@@ -846,9 +849,9 @@ $entity_before_select_function = $entity . "_before_select";
 if (function_exists($entity_before_select_function)) $entity_before_select_function();
 
 if ($debug_query == 1) echo "<br>LIST_QUERY[$list_query]<br>";
-$result = mysqli_query($cms_dbc, $list_query) or die("SELECT LIST failed:<br>$list_query<br>" . mysqli_error($cms_dbc));
+$result = pg_query($cms_dbc, $list_query) or die("SELECT LIST failed:<br>$list_query<br>" . pg_last_error($cms_dbc));
 
-for ($i=1; $row = mysqli_fetch_assoc($result); $i++) {
+for ($i=1; $row = pg_fetch_assoc($result); $i++) {
 //	require "_list_item.php";
 	$id = $row["id"];
 	$skipitem = 0;

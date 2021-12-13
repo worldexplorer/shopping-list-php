@@ -41,8 +41,8 @@ function login_password($login, $passwd, $sendcookie = 1, $passwd_md5 = 0) {
 	$person_id = 0;
 	$query = "select *, md5(auth) as auth_from_db from " . TABLE_PREFIX . "person where login='$login' and deleted=0";
 //	echo $query;
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT person failed");
-	$num_rows = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query) or die("SELECT person failed");
+	$num_rows = pg_num_rows($result);
 	if ($num_rows == 0) {
 		$ret = "Login [$login] не зарегистрирован";
 		return $ret;
@@ -67,7 +67,7 @@ function login_password($login, $passwd, $sendcookie = 1, $passwd_md5 = 0) {
 		}
 	
 
-	$row = mysqli_fetch_assoc($result);
+	$row = pg_fetch_assoc($result);
 //	pre($row);
 	$ret = user_found_set_cookie($row, $sendcookie);
 

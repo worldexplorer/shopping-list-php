@@ -139,11 +139,16 @@ $entity_dbfields_array = array();
 $db_values_array = array();
 
 if ($id > 0) {
-	$query = "SHOW COLUMNS FROM $entity";
-	$query = add_sql_table_prefix($query);
-	$entity_dbfields_result = mysqli_query($cms_dbc, $query);
-	for ($i=1; $row = mysqli_fetch_assoc($entity_dbfields_result); $i++) {
-		$entity_dbfields_array[] = $row["Field"];
+	//$query = "SHOW COLUMNS FROM $entity";
+	//$query = add_sql_table_prefix($query);
+	// https://stackoverflow.com/questions/20194806/how-to-get-a-list-column-names-and-datatypes-of-a-table-in-postgresql
+	$query = "SELECT column_name, data_type FROM information_schema.columns"
+	. " WHERE table_name='" . TABLE_PREFIX . "$entity'";
+	$entity_dbfields_result = pg_query($cms_dbc, $query)
+		or die("SELECT_COLUMNS failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	for ($i=1; $row = pg_fetch_assoc($entity_dbfields_result); $i++) {
+		// $entity_dbfields_array[] = $row["Field"];
+		$entity_dbfields_array[] = $row["column_name"];
 	}
 	//pre($entity_dbfields_array, "_edit-fields.php:entity_dbfields_array");
 	
@@ -161,8 +166,8 @@ if ($id > 0) {
 
 	$query = "select $sql_fields from $entity where id=$id";
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT ID failed:<br>$query<br>" . mysqli_error($cms_dbc));
-	$db_values_array = mysqli_fetch_assoc($result);
+	$result = pg_query($cms_dbc, $query) or die("SELECT ID failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	$db_values_array = pg_fetch_assoc($result);
 
 	$entity_before_wrapping_function = $entity . "_before_wrapping";
 	if (function_exists($entity_before_wrapping_function)) {

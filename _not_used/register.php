@@ -27,11 +27,11 @@ $markers_hash = array (
 	"confirm_img" => "",
 	"confirm_id" => md5(uniqid($_SERVER["REMOTE_ADDR"])),
 	"confirm" => "",
-	"askme_clause" => urlencode("отсутствует картинка с изображением проверочного кода при регистрации пользователя"),
+	"askme_clause" => urlencode("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"),
 
 	"submit_HTMLrow" => ($mode == "")
-		? "<tr><td colspan=2><td align=left><input type='button' onclick='form_edit_submit_with_passwds_are_equal()' value='Зарегистрироваться'></td></tr>"
-		: "<tr><td colspan=2><td align=left><input type='button' onclick='form_edit_submit_with_passwds_are_equal()' value='Зарегистрироваться ещё раз'></td></tr>"
+		? "<tr><td colspan=2><td align=left><input type='button' onclick='form_edit_submit_with_passwds_are_equal()' value='пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'></td></tr>"
+		: "<tr><td colspan=2><td align=left><input type='button' onclick='form_edit_submit_with_passwds_are_equal()' value='пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ'></td></tr>"
 		,
 );
 //$cookie_debug = 1;
@@ -40,7 +40,7 @@ $markers_hash = gethash_bytplhash($markers_hash, 0);
 
 //$markers_hash["select_gender_my"] = boolean_hash("gender_my", $markers_hash["gender_my"], $gender_my_hash);
 //$markers_hash["select_gender_search"] = boolean_hash("gender_search", $markers_hash["gender_search"], $gender_search_hash2);
-//$markers_hash["select_city"] = select_table_all("city", $markers_hash["city"], "ident", "", array(), "- не указано -", 0);
+//$markers_hash["select_city"] = select_table_all("city", $markers_hash["city"], "ident", "", array(), "- пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ -", 0);
 
 
 $markers_hash["email"] = trim($markers_hash["email"]);
@@ -73,31 +73,31 @@ $tpl = <<< EOT
 <input type=hidden name=mode value=update>
 <input type=hidden name=confirm_id value="#CONFIRM_ID#">
 <tr>
-	<td align=right><font color=red>*</font> Логин</td>
+	<td align=right><font color=red>*</font> пїЅпїЅпїЅпїЅпїЅ</td>
 	<td width=10></td>
 	<td><input type="text" size="20" id="login" name="login" value="#LOGIN#"></td>
 </tr>
 
 <tr>
-	<td align=right><font color=red>*</font> Пароль</td>
+	<td align=right><font color=red>*</font> пїЅпїЅпїЅпїЅпїЅпїЅ</td>
 	<td></td>
 	<td><input type="text" size="20" id="passwd" name="passwd" value="#passwd#"></td>
 </tr>
 
 <tr>
-	<td align=right><font color=red>*</font> Пароль ещё раз</td>
+	<td align=right><font color=red>*</font> пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ</td>
 	<td></td>
 	<td><input type="text" size="20" id="passwd2" name="passwd2" value="#passwd2#"></td>
 </tr>
 
 <tr>
-	<td align=right><font color=red>*</font> Ваш Email</td>
+	<td align=right><font color=red>*</font> пїЅпїЅпїЅ Email</td>
 	<td></td>
 	<td><input type="text" size="20" id="email" name="email" value="#EMAIL#">
 </td></tr>
 
 <tr>
-	<td align=right><font color=red>*</font> Ваше имя</td>
+	<td align=right><font color=red>*</font> пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ</td>
 	<td></td>
 	<td><input type="text" size="20" id="cname" name="cname" value="#CNAME#"></td>
 </tr>
@@ -105,12 +105,12 @@ $tpl = <<< EOT
 <tr><td height=10></td></tr>
 
 <tr>
-	<td align=right>если справа<br>отсутствует картинка,<br><a href="askme.php?subject=#ASKME_CLAUSE#">сообщите нам об этом</a></td>
+	<td align=right>пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ<br>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ,<br><a href="askme.php?subject=#ASKME_CLAUSE#">пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ</a></td>
 	<td></td>
 	<td>#CONFIRM_IMG#</td>
 </tr>
 <tr> 
-	<td align=right><font color=red>*</font> Код на картинке</td>
+	<td align=right><font color=red>*</font> пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</td>
 	<td></td>
 	<td><input type="text" size="20" maxlength="6" id="confirm" name="confirm" value="#CONFIRM#"></td>
 </tr>
@@ -118,7 +118,7 @@ $tpl = <<< EOT
 <tr> 
 	<td></td>
 	<td></td>
-	<td>вводите латинские буквы заглавными!!!<br>цифра "ноль" перечёркнута по диагонали</td>
+	<td>пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!!!<br>пїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅ" пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</td>
 </tr>
 
 <tr><td height=20></td></tr>
@@ -130,32 +130,32 @@ $tpl = <<< EOT
 EOT;
 
 if ($mode == "update" && $errormsg == "" && $markers_hash["login"] == "") {
-	$errormsg = "Укажите логин";
+	$errormsg = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ";
 }
 
 if ($mode == "update" && $errormsg == "" && $markers_hash["passwd"] == "") {
-	$errormsg = "Укажите пароль";
+	$errormsg = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ";
 }
 
 if ($mode == "update" && $errormsg == "" && $markers_hash["passwd2"] == "") {
-	$errormsg = "Укажите повтор пароля";
+	$errormsg = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ";
 }
 
 if ($mode == "update" && $errormsg == "" && $markers_hash["passwd"] != $markers_hash["passwd2"]) {
-	$errormsg = "Введённый пароль и повтор пароля не совпадают; проверьте и введите ещё раз";
+	$errormsg = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ; пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ";
 }
 
 if ($mode == "update" && $errormsg == "" && $markers_hash["email"] == "") {
-	$errormsg = "Укажите свой email";
+	$errormsg = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ email";
 }
 
 if ($mode == "update" && $errormsg == "" && $markers_hash["cname"] == "") {
-	$errormsg = "Укажите своё имя";
+	$errormsg = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ";
 }
 
 /*
 if ($mode == "update" && $errormsg == "" && $markers_hash["confirm"] == "") {
-	$errormsg = "Укажите код на картинке";
+	$errormsg = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ";
 }
 */
 
@@ -163,44 +163,44 @@ if ($mode == "update" && $errormsg == "" && $markers_hash["confirm"] == "") {
 if ($mode == "update" && $errormsg == "") {
 	$sql = 'SELECT code  FROM ' . CONFIRM_TABLE . " WHERE session_id = '" . $userdata['session_id']
 			. "' AND confirm_id = '$confirm_id'";
-	if (!($result = mysqli_query($cms_dbc, $sql)))	{
+	if (!($result = pg_query($cms_dbc, $sql)))	{
 		die("Could not obtain confirm code [$sql]");
 	}
 	
 	// If we have a row then grab data else create a new id
-	if ($row = mysqli_fetch_assoc($result))	{
+	if ($row = pg_fetch_assoc($result))	{
 		$confirm_db = $row['code'];
 	} else {
 		pre($row);
-		$errormsg = "Ошибка чтения подверждающего кода";
+		$errormsg = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ";
 	}
-	mysqli_free_result($result);
+	pg_free_result($result);
 }
 
 if ($mode == "update" && $errormsg == "" && $markers_hash["confirm"] != $confirm_db) {
-	$errormsg = "Не совпадает код на картинке: латинские буквы - заглавные, цифра ноль перечёркнута по диагонали";
+	$errormsg = "пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ";
 }
 
 if ($mode == "" || ($mode == "update" && $errormsg != "")) {
 	$sql = 'DELETE FROM ' .  CONFIRM_TABLE . " WHERE date_updated < DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 5 MINUTE)";
-	if (!mysqli_query($cms_dbc, $sql))	{
+	if (!pg_query($cms_dbc, $sql))	{
 		die("Could not delete stale confirm data [$sql]");
 	}
 
 	$sql = 'SELECT COUNT(session_id) AS attempts FROM ' . CONFIRM_TABLE
 		. " WHERE session_id = '" . $userdata['session_id'] . "'";
-	if (!($result = mysqli_query($cms_dbc, $sql))) {
+	if (!($result = pg_query($cms_dbc, $sql))) {
 		die("Could not obtain confirm code count [$sql]");
 	}
 
-	if ($row = mysqli_fetch_assoc($result)) {
+	if ($row = pg_fetch_assoc($result)) {
 		if ($row['attempts'] > 5 && $mode == "update") {
-			$errormsg = "Превышено количество попыток, попробуйте через 5 минут";
+			$errormsg = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 5 пїЅпїЅпїЅпїЅпїЅ";
 			sleep(10);
 //			die("Too_many_registers [$sql]");
 		}
 	}
-	mysqli_free_result($result);
+	pg_free_result($result);
 }
 
 if ($mode == "" || ($mode == "update" && $errormsg != "")) {
@@ -221,7 +221,7 @@ if ($mode == "" || ($mode == "update" && $errormsg != "")) {
 
 	$sql = 'INSERT INTO ' . CONFIRM_TABLE . " (confirm_id, session_id, code) VALUES ('$confirm_id', '"
 		. $userdata['session_id'] . "', '$code')";
-	if (!mysqli_query($cms_dbc, $sql)) {
+	if (!pg_query($cms_dbc, $sql)) {
 		die("Could not insert new confirm code information [$sql]");
 	}
 
@@ -232,8 +232,8 @@ if ($mode == "" || ($mode == "update" && $errormsg != "")) {
 if ($mode == "update" && $errormsg == "") {
 	$person_row = select_entity_row(array("email" => $markers_hash["email"]), "person");
 	if (isset($person_row["id"])) {
-		 if ($person_row["published"] == 0) $errormsg = "Ваш аккаунт был временно деактивирован, обратитесь к <a href='mmenu.php?id=35'>администратору</a>";
-		 if ($person_row["deleted"] == 1) $errormsg = "Ваш аккаунт был удалён, обратитесь к <a href='mmenu.php?id=35'>администратору</a>";
+		 if ($person_row["published"] == 0) $errormsg = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ <a href='mmenu.php?id=35'>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</a>";
+		 if ($person_row["deleted"] == 1) $errormsg = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ <a href='mmenu.php?id=35'>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</a>";
 	}
 }
 */
@@ -245,21 +245,21 @@ if ($mode == "update" && $errormsg == "") {
 		$email = $markers_hash["email"];
 
 		 if ($person_row["deleted"] == 0 && $person_row["published"] == 1) {
-			$errormsg = "Пользователь с e-mail [" . $markers_hash["email"] . "] уже зарегистрирован, <br>попробуйте <a href='javascript:popup_pwreminder(\"" . $markers_hash["email"] . "\")'>напомнить пароль</a>.";
+			$errormsg = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ e-mail [" . $markers_hash["email"] . "] пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, <br>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ <a href='javascript:popup_pwreminder(\"" . $markers_hash["email"] . "\")'>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ</a>.";
 
 			$mmenu_content .= <<<EOT
 <script>
-//alert("Пользователь с email [$email] уже существует, попробуйте напомнить пароль.")
+//alert("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ email [$email] пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.")
 popup_pwreminder("$email")
 </script>
 EOT;
 		}
 
 		if ($person_row["published"] == 0) {
-		 	$errormsg = "Ваш аккаунт был временно деактивирован, обратитесь к <a href='askme.php?subject=" . urlencode("Пользователь " . $markers_hash["email"] . " деактивирован") . "'>администратору</a>";
+		 	$errormsg = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ <a href='askme.php?subject=" . urlencode("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ " . $markers_hash["email"] . " пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ") . "'>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</a>";
 		 }
 		 if ($person_row["deleted"] == 1) {
-		 	$errormsg = "Ваш аккаунт был удалён, обратитесь к <a href='askme.php?subject=" . urlencode("Пользователь " . $markers_hash["email"] . " удалён") . "'>администратору</a>";
+		 	$errormsg = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ <a href='askme.php?subject=" . urlencode("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ " . $markers_hash["email"] . " пїЅпїЅпїЅпїЅпїЅ") . "'>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</a>";
 		 }
 	}
 }
@@ -267,7 +267,7 @@ EOT;
 if ($mode == "update" && $errormsg == "") {
 	$person_row = select_entity_row(array("login" => $markers_hash["login"]), "person");
 	if (isset($person_row["id"])) {
-		 $errormsg = "Логин [" . $markers_hash["login"] . "] уже занят; если это Ваш - обратитесь к <a href='askme.php?subject=" . urlencode("Логин " . $markers_hash["login"] . " уже занят") . "'>администратору</a>";
+		 $errormsg = "пїЅпїЅпїЅпїЅпїЅ [" . $markers_hash["login"] . "] пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ; пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ <a href='askme.php?subject=" . urlencode("пїЅпїЅпїЅпїЅпїЅ " . $markers_hash["login"] . " пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ") . "'>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</a>";
 	}
 }
 
@@ -314,8 +314,8 @@ if ($mode == "update" && $errormsg == "") {
 	while ($idrandom_unique == 0) {
 		$idrandom = rand(100000000, 999999999);		//4294967295
 		$query = "select id from " . TABLE_PREFIX . "person where idrandom=$idrandom";
-		$result = mysqli_query($cms_dbc, $query);
-		if (mysql_num_rows($result) == 0) {
+		$result = pg_query($cms_dbc, $query);
+		if (pg_num_rows($result) == 0) {
 			$insert_hash["idrandom"] = $idrandom;
 			$idrandom_unique = 1;
 		}
@@ -339,7 +339,7 @@ if ($mode == "update" && $errormsg == "") {
 
 
 <script>
-alert("Пользователь с email [$email] уже существует, попробуйте напомнить пароль.")
+alert("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ email [$email] пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.")
 popup_pwreminder("$email")
 </script>
 EOT;
@@ -389,21 +389,21 @@ EOT;
 
 
 //	$sql = 'DELETE FROM ' . CONFIRM_TABLE . " WHERE confirm_id = '$confirm_id' AND session_id = '" . $userdata['session_id'] . "'";
-//	if (!mysqli_query($cms_dbc, $sql)) die("Could not delete confirmation code [$sql]");
+//	if (!pg_query($cms_dbc, $sql)) die("Could not delete confirmation code [$sql]");
 
 }
 
 
 $table .= $form;
 
-jsv_addvalidation("JSV_TF_CHAR", "login", "Логин");
-jsv_addvalidation("JSV_TF_CHAR", "passwd", "Пароль");
-jsv_addvalidation("JSV_TF_CHAR", "passwd2", "Пароль ещё раз");
-jsv_addvalidation("JSV_TF_EMAIL", "email", "Ваш Email");
-jsv_addvalidation("JSV_TF_CHAR", "cname", "Ваше имя");
-//jsv_addvalidation("JSV_TF_CHAR", "city", "В каком городе Вы живёте");
-//jsv_addvalidation("JSV_PLAINDATE_FILLED", "date_birth", "Дата рождения");
-//jsv_addvalidation("JSV_TF_CHAR", "confirm", "Код на картинке");
+jsv_addvalidation("JSV_TF_CHAR", "login", "пїЅпїЅпїЅпїЅпїЅ");
+jsv_addvalidation("JSV_TF_CHAR", "passwd", "пїЅпїЅпїЅпїЅпїЅпїЅ");
+jsv_addvalidation("JSV_TF_CHAR", "passwd2", "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ");
+jsv_addvalidation("JSV_TF_EMAIL", "email", "пїЅпїЅпїЅ Email");
+jsv_addvalidation("JSV_TF_CHAR", "cname", "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ");
+//jsv_addvalidation("JSV_TF_CHAR", "city", "пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ");
+//jsv_addvalidation("JSV_PLAINDATE_FILLED", "date_birth", "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+//jsv_addvalidation("JSV_TF_CHAR", "confirm", "пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 
 if ($errormsg != "") $alertmsg = strip_tags($errormsg);
 
@@ -455,7 +455,7 @@ function form_edit_submit_with_passwds_are_equal() {
 			if (!confirmed) return false
 		}
 
-		alert('Введённые пароли не совпадают, повторите ещё раз')
+		alert('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ')
 		passwd_item.focus()
 		return false
 	}

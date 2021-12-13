@@ -186,11 +186,11 @@ function optionscompositecontent_productbyfixed($m2m_table, $m2m_fixed, $composi
 	}
 	
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($dbc_cms, $query)
-			or die("SELECT OPTIONSCOMPOSITECONTENT_PRODUCTBYFIXED failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$size = mysqli_num_rows($result);
+	$result = pg_query($dbc_cms, $query)
+			or die("SELECT OPTIONSCOMPOSITECONTENT_PRODUCTBYFIXED failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$size = pg_num_rows($result);
 
-	while ($row = mysqli_fetch_array($result)) {
+	while ($row = pg_fetch_array($result)) {
 //		pre($row);
 		$row["option_color"] = ($row["published"] == '1') ? OPTIONS_COLOR_BLACK : OPTIONS_COLOR_GRAY;
 		$row["selected"] = "";
@@ -240,9 +240,9 @@ EOT;
 					. " and $joinon";
 	
 			$query2 = add_sql_table_prefix($query2);
-			$result2 = mysqli_query($dbc_cms, $query2)
-					or die("SELECT PRODUCT_OPTION failed:<br>$query2:<br>" . mysqli_error($cms_dbc));
-			if (mysqli_num_rows($result2) > 0) {
+			$result2 = pg_query($dbc_cms, $query2)
+					or die("SELECT PRODUCT_OPTION failed:<br>$query2:<br>" . pg_last_error($cms_dbc));
+			if (pg_num_rows($result2) > 0) {
 				$row["selected"] = "selected";
 				$row["checked"] = "checked";
 			}
@@ -371,13 +371,13 @@ function optionscompositecontent_pgroupfromroot($m2m_table, $m2m_fixed, $composi
 	}
 
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($dbc_cms, $query)
-			or die("OPTIONSCOMPOSITECONTENT_PGROUP failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$num_rows = mysqli_num_rows($result);
+	$result = pg_query($dbc_cms, $query)
+			or die("OPTIONSCOMPOSITECONTENT_PGROUP failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$num_rows = pg_num_rows($result);
 
 	$it_name = $pgroup_table;
 
-	for ($i=0; $row = mysqli_fetch_array($result); $i++) {
+	for ($i=0; $row = pg_fetch_array($result); $i++) {
 //		pre($row);
 //		$row["ident"] = preg_replace("/^(\d*\.*)(.*)$/", '$2', $row["ident"]);
 		$row["spaces"] = spaces_bylevel($level);
@@ -709,11 +709,11 @@ function optionscompositecontent_supplierbypgroup($m2m_table, $m2m_fixed, $compo
 //	echo "$query<br>";
 
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query)
-			or die("SELECT OPTIONSCOMPOSITECONTENT_SUPPLIER failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$size = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query)
+			or die("SELECT OPTIONSCOMPOSITECONTENT_SUPPLIER failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$size = pg_num_rows($result);
 
-	while ($row = mysqli_fetch_array($result)) {
+	while ($row = pg_fetch_array($result)) {
 //		$row["ident"] .= " (". $row["pcnt"] . " продуктов)";
 //		$is_concurent = $row["is_concurent"];
 //		$is_concurent_txt = 
@@ -828,9 +828,9 @@ EOT;
 //				echo "$query2<br>";
 		
 				$query2 = add_sql_table_prefix($query2);
-				$result2 = mysqli_query($cms_dbc, $query2)
-						or die("SELECT PRODUCT_SUPPLIER failed:<br>$query2:<br>" . mysqli_error($cms_dbc));
-				if (mysqli_num_rows($result2) > 0) {
+				$result2 = pg_query($cms_dbc, $query2)
+						or die("SELECT PRODUCT_SUPPLIER failed:<br>$query2:<br>" . pg_last_error($cms_dbc));
+				if (pg_num_rows($result2) > 0) {
 					$row["selected"] = "selected";
 					$row["checked"] = "checked";
 				}
@@ -901,8 +901,8 @@ function multicompositecontent_update($m2m_table, $value_arr,
 	$query = add_sql_table_prefix($query);
 	pre($query);
 
-	$result = mysqli_query($dbc_cms, $query) or die("SELECT4DELETE MULTICOMPOSITECONTENT_UPDATE failed:<br>$query<br>" . mysqli_error($cms_dbc));
-	while ($row = mysqli_fetch_assoc($result)) {
+	$result = pg_query($dbc_cms, $query) or die("SELECT4DELETE MULTICOMPOSITECONTENT_UPDATE failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	while ($row = pg_fetch_assoc($result)) {
 		$m2m_id = $row["id"];
 		$m2m_deleted = $row["deleted"];
 

@@ -17,4 +17,4 @@ $table_columns = array (
 <? require "../_lib/_updown.php" ?>
 <? require_once "_top.php" ?>
 <? require "../_lib/_list.php" ?>
-<? require_once "_bottom.php" ?>
+<? require_once "_bottom.php" ?> 

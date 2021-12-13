@@ -58,19 +58,17 @@ $entity_fields = array (
 	"ident" => array ("", "textfield", ""),
 	
 	"phone" => array ("", "textfield", ""),
+	"email" => array ("", "textfield", ""),
 		
-	"female" => array ("", "checkbox", 0),
-	"unsubscribed" => array ("", "checkbox", 0),
+//	"female" => array ("", "checkbox", 0),
+//	"unsubscribed" => array ("", "checkbox", 0),
 
 //	"~1_layer-open" => array ("Авторизация", "layer_open"),
 	"password" => array ("", "textfield", ""),
 	"~login-password" => array ("", "ahref", "<a href=../auth.php?l_login=id#id# target=_blank>$msg_tag_shortcut войти с лица id+пароль</a>"),
 	"auth" => array ("", "textfield", ""),
 	"~login-auth" => array ("", "ahref", "<a href=../auth.php?l_auth=#AUTH# target=_blank>$msg_tag_shortcut войти с лица токеном</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='?id=#ID#&mode=auth_regenerate'>[Перегенерировать Токен]</a>"),
-//	"~generate_auth" => array ("", "ahref", "<a href='?id=#ID#&mode=auth_regenerate'>Перегенерировать Токен</a>"),
-//	"~1_layer-close" => array ("Авторизация", "layer_close"),
-
-
+//	"~genmulticb_questions_byTour_forGame_withTeamAnswers
 
 //	"productbypgroup" => array ("Ответы",
 //							"multicompositecontent", "m2m_team_questions",
@@ -82,11 +80,11 @@ $entity_fields = array (
 	
 //	"~3" => array ("Верные ответы", "multicb_questions_byTour_forGame_withTeamAnswers"),	
 	
-	"~3" => array ("Свойства", "multicompositeiccontent"
-		, $m2m_table, $m2m_fixedhash, $absorbing_fixedhash
+//	"~3" => array ("Свойства", "multicompositeiccontent"
+//		, $m2m_table, $m2m_fixedhash, $absorbing_fixedhash
 		//, "PRODUCT_PROPERTIES", "добавить новые свойства товара"
-		, "PERSON_PROPERTIES", "добавить новые свойства персоны"
-	),
+//		, "PERSON_PROPERTIES", "добавить новые свойства персоны"
+//	),
 
 	
 	"~service_layer-open" => array ("", "layer_open"),
@@ -100,9 +98,9 @@ $entity_fields = array (
 	"date_lastclick" => array ("", "timestampro", ""),
 	"lastsid" => array ("", "ro", ""),
 	"lastip" => array ("", "ro", ""),
-	"user_agent" => array ("", "ro", ""),
-	"lastip_login" => array ("Посл авторизация паролем", "ro", ""),
-	"lastip_auth" => array ("Посл авторизация токеном", "ro", ""),
+//	"user_agent" => array ("", "ro", ""),
+//	"lastip_login" => array ("Посл авторизация паролем", "ro", ""),
+//	"lastip_auth" => array ("Посл авторизация токеном", "ro", ""),
 	"~service_layer-close" => array ("", "layer_close"),
 	
 	//"published" => array ("", "checkbox", 1, "@bo_href_preview@"),

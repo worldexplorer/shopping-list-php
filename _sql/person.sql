@@ -2,14 +2,14 @@
 \encoding utf8;
 --SET CHARACTER SET utf8;
 
-DROP TABLE IF EXISTS shli_user;
-CREATE TABLE shli_user (
+DROP TABLE IF EXISTS shli_person;
+CREATE TABLE shli_person (
 	id				SERIAL,
 	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP, --  ON UPDATE CURRENT_TIMESTAMP,
 	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	date_published	TIMESTAMP WITHOUT TIME ZONE,
-	published		BOOLEAN NOT NULL DEFAULT true,
-	deleted			BOOLEAN NOT NULL DEFAULT false,
+	published		SMALLINT NOT NULL DEFAULT 1,
+	deleted			SMALLINT NOT NULL DEFAULT 0,
 	manorder		SERIAL, -- INTEGER NOT NULL DEFAULT 0 CHECK (manorder >= 0),
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
 
@@ -24,7 +24,7 @@ CREATE TABLE shli_user (
 	lastsid			VARCHAR(250) NOT NULL DEFAULT '',
 	
 	PRIMARY KEY(id)
-----		, key (published), key (deleted)
+----		, key (published), key (deleted)эта анкета не определен
 ----		, key(ident)
 );
 
@@ -37,31 +37,31 @@ BEGIN
 END;
 $$;
 
-CREATE TRIGGER trg_shli_user_update_date_updated
-	BEFORE UPDATE ON shli_user FOR EACH ROW
+CREATE TRIGGER trg_shli_person_update_date_updated
+	BEFORE UPDATE ON shli_person FOR EACH ROW
 	EXECUTE PROCEDURE fn_sync_date_updated();
 
 
 -- http://sqlines.com/postgresql/datatypes/serial
 -- https://www.postgresqltutorial.com/creating-first-trigger-postgresql/
---CREATE OR REPLACE FUNCTION fn_manorder_equals_id() RETURNS TRIGGER 
+--CREATE OR REPLACE FUNCTION fn_manorder_eqэта анкета не определенuals_id() RETURNS TRIGGER 
 --LANGUAGE plpgsql AS $$
 --BEGIN
 --    NEW.manorder = OLD.id;
---	update shli_user set manorder=id where id=OLD.id;
+--	update shli_person set manorder=id where id=OLD.id;
 --    RETURN NEW;
 --END;
 --$$;
 
---CREATE TRIGGER trg_shli_user_on_insert_manorder_equals_id
---  AFTER INSERT ON shli_user FOR EACH ROW
+--CREATE TRIGGER trg_shli_person_on_insert_manorder_equals_id
+--  AFTER INSERT ON shli_person FOR EACH ROW
 --  EXECUTE PROCEDURE fn_manorder_equals_id();
 
 
--- \d shli_user;
+-- \d shli_person;
 
 
-insert into shli_user(ident) values
+insert into shli_person(ident) values
 	('Вася'),
 	('Маша'),
 	('Даша'),
@@ -69,7 +69,7 @@ insert into shli_user(ident) values
 	('Маруся'),
 	('Петрович');
 
--- select * from shli_user;
+-- select * from shli_person;
 
 
 
@@ -81,6 +81,6 @@ insert into shli_user(ident) values
 -- END;
 -- $$ language 'plpgsql';
 
--- CREATE TRIGGER trg_shli_user_update_date_updated
--- 	BEFORE UPDATE ON shli_user FOR EACH ROW
+-- CREATE TRIGGER trg_shli_person_update_date_updated
+-- 	BEFORE UPDATE ON shli_person FOR EACH ROW
 -- 	EXECUTE PROCEDURE update_date_updated_column();

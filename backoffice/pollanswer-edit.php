@@ -11,10 +11,10 @@ function pollvote_table($row) {
 
 		if (count($id_fordelete) > 0) {
 			$del_query = "update pollvote set deleted=1 where id in (" . sqlin_fromarray($id_fordelete) . ")";
-			mysqli_query($cms_dbc, $del_query) or die("DELETE failed:<br>$del_query<br>");
+			pg_query($cms_dbc, $del_query) or die("DELETE failed:<br>$del_query<br>");
 
 			$upd_query = "update pollanswer set votes = (votes - " . count($id_fordelete) . ") where id=$id";
-			mysqli_query($cms_dbc, $upd_query) or die("DELETE failed:<br>$upd_query<br>");
+			pg_query($cms_dbc, $upd_query) or die("DELETE failed:<br>$upd_query<br>");
 		}
 
 	}

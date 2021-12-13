@@ -10,8 +10,8 @@ if (($action == "up" || $action == "down") && $id > 0) {
 		$query = "select $manorder_field, ident, date_updated from $entity where id=$id and deleted=0";
 	//	echo "move from: $query<br>";
 		$query = add_sql_table_prefix($query);
-		$result = mysqli_query($cms_dbc, $query) or die("Up\Down query1 failed:<br>$query");
-		$row = mysqli_fetch_assoc($result);
+		$result = pg_query($cms_dbc, $query) or die("Up\Down query1 failed:<br>$query");
+		$row = pg_fetch_assoc($result);
 		$sort1 = $row[$manorder_field];
 		$ident = $row["ident"];
 		$date_updated1 = $row["date_updated"];
@@ -110,8 +110,8 @@ if (($action == "up" || $action == "down") && $id > 0) {
 		}
 	
 		$query = add_sql_table_prefix($query);
-		$result = mysqli_query($cms_dbc, $query) or die("Up\Down query2 failed:<br>$query");
-		$row = mysqli_fetch_assoc($result);
+		$result = pg_query($cms_dbc, $query) or die("Up\Down query2 failed:<br>$query");
+		$row = pg_fetch_assoc($result);
 		if ($row != FALSE) {
 			$id2 = $row["id"];
 			$sort2 = $row["$manorder_field"];
@@ -123,11 +123,11 @@ if (($action == "up" || $action == "down") && $id > 0) {
 
 			$query_update = "update $entity set date_updated='$date_updated1', $manorder_field=$sort2 where id=$id";
 			$query_update = add_sql_table_prefix($query_update);
-			mysqli_query($cms_dbc, $query_update) or die("Query failed");
+			pg_query($cms_dbc, $query_update) or die("Query failed");
 
 			$query_update = "update $entity set date_updated='$date_updated2', $manorder_field=$sort1 where id=$id2";
 			$query_update = add_sql_table_prefix($query_update);
-			mysqli_query($cms_dbc, $query_update) or die("Query failed");
+			pg_query($cms_dbc, $query_update) or die("Query failed");
 			$errormsg .= "$msg_bo_updown_element [" . stripslashes($ident) . "] $msg_bo_updown_element_moved $direction";
 		} else {
 			$errormsg .= "$msg_bo_updown_element_move_unable";

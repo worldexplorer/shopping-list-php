@@ -1162,10 +1162,10 @@ function imgtype_layer($name, $field_txt, $default) {
 
 	$query = "select * from imgtype where published='1' order by manorder";
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query)
-		or die("SELECT IMGTYPE failed:<br>$query:<br>" . mysqli_error($cms_dbc));
+	$result = pg_query($cms_dbc, $query)
+		or die("SELECT IMGTYPE failed:<br>$query:<br>" . pg_last_error($cms_dbc));
 
-	while ($row = mysqli_fetch_assoc($result)) {
+	while ($row = pg_fetch_assoc($result)) {
 		$imgtype = $row["id"];
 		$imgtype_ident = $row["ident"];
 		$imgtype_content = $row["content"];
@@ -1212,11 +1212,11 @@ function img_layer($imgtype_row) {
 
 	$query = "select * from $img_table where owner_entity='$owner_entity' and owner_entity_id='$owner_entity_id' and imgtype=$imgtype_id and deleted=0 order by manorder";
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT IMG_LAYER failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$img_layer_imgcnt = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query) or die("SELECT IMG_LAYER failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$img_layer_imgcnt = pg_num_rows($result);
 
 	$i = 0;
-	while ($row = mysqli_fetch_assoc($result)) {
+	while ($row = pg_fetch_assoc($result)) {
 		$row["i"] = ++$i;
 		$row["pub_checked"] = ($row["published"] == '1') ? "checked" : "";
 		$row["main_checked"] = ($row["img_main"] == '1') ? "checked" : "";
@@ -2271,10 +2271,10 @@ function imglayer_update($imgtype_row = array()) {
 
 	$query = "select * from $img_table where owner_entity='$owner_entity' and owner_entity_id='$owner_entity_id' and imgtype=$imgtype_id and deleted=0 order by manorder";
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query)
-		or die("SELECT IMG_LAYER failed:<br>$query:<br>" . mysqli_error($cms_dbc));
+	$result = pg_query($cms_dbc, $query)
+		or die("SELECT IMG_LAYER failed:<br>$query:<br>" . pg_last_error($cms_dbc));
 
-	while ($row = mysqli_fetch_assoc($result)) {
+	while ($row = pg_fetch_assoc($result)) {
 		$img_id = $row["id"];
 		img_update($img_id, $imgtype_row);
 	}
@@ -2589,10 +2589,10 @@ function prepare_img($tpl, $imgtype_hashkey = "_global", $id_ = "_global", $enti
 	$query = "select * from $img_table where published=1 and deleted=0 and owner_entity='$entity_' and owner_entity_id='$id_' and imgtype='$imgtype' $imgid_sqlin order by manorder";
 	$query = add_sql_table_prefix($query);
 	if ($debug_query == 1) echo "<br>PREPARE_IMG[$query]<br>";
-	$result = mysqli_query($cms_dbc, $query)
-		or die("SELECT PREPARE_IMG failed:<br>$query:<br>" . mysqli_error($cms_dbc));
+	$result = pg_query($cms_dbc, $query)
+		or die("SELECT PREPARE_IMG failed:<br>$query:<br>" . pg_last_error($cms_dbc));
 
-	while ($row = mysqli_fetch_assoc($result)) {
+	while ($row = pg_fetch_assoc($result)) {
 //		pre($row);
 		$img_id = $row["id"];
 		$img_published = $row["published"];
@@ -2702,14 +2702,14 @@ function autoresize($row, $imgtype_hashkey = "IMG_PRODUCT", $autoresize_type = "
 	if ($limit_first > 0 && $get_next_until_ok == 0) $query .= " limit $limit_first";
 	$query = add_sql_table_prefix($query);
 	if ($debug_query == 1) echo "<br>AUTORESIZE[$query]<br>";
-	$result = mysqli_query($cms_dbc, $query) or die("autoresize(): SELECT_IMGLIST failed:<br>$query:<br>" . mysqli_error($cms_dbc));
+	$result = pg_query($cms_dbc, $query) or die("autoresize(): SELECT_IMGLIST failed:<br>$query:<br>" . pg_last_error($cms_dbc));
 
 
 	$autoresize_imghash = array();
 
 	$successful_images = 0;
 	$i = 0;
-	while ($img_row = mysqli_fetch_assoc($result)) {
+	while ($img_row = pg_fetch_assoc($result)) {
 //		pre($img_row);
 
 		$imgrow_updated = $img_row["date_updated"];

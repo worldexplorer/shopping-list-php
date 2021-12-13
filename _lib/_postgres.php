@@ -4,30 +4,44 @@
 
 $old_display_errors = ini_get("display_errors");
 ini_set("display_errors", 1);
-$cms_dbc = mysqli_connect(
-	$mysqli_info["host"],
-	$mysqli_info["login"],
-	$mysqli_info["passwd"],
-	$mysqli_info['db']);
+
+$host_port = isset($postgres_info["host"]) ? "host=" . $postgres_info["host"] : "";
+if (isset($postgres_info["port"])) {
+	$host_port .= " port=" . $postgres_info["port"];
+}
+
+$connStr = $host_port
+	. " dbname=" . $postgres_info["db"]
+	. " user=" . $postgres_info["login"]
+	. " password=" . $postgres_info["passwd"]
+	//. " options='--application_name=$site_name'"
+	;
+$cms_dbc = pg_connect($connStr);
 ini_set("display_errors", $old_display_errors);
-//echo "[$cms_dbc]";
-//if ($cms_dbc == "") die("cms_dbc: Cant mysqli_connect()");
-//mysqli_query($cms_dbc, "SET NAMES '" . $mysqli_info['charset'] . "'");
-//mysqli_query($cms_dbc, "SET CHARACTER SET " . $mysqli_info['charset'] . "");
+if ($debug_query == 1) {
+	echo "cms_dbc=[$cms_dbc]<br/>";
+}	
+//if ($cms_dbc == "") die("cms_dbc: Cant pg_connect()");
 
 
-if (mysqli_connect_errno()) {
-    printf("Connect failed: %s\n", mysqli_connect_error());
+if (pg_connection_status($cms_dbc) !== PGSQL_CONNECTION_OK) {
+	if ($debug_query == 1) {
+		echo "postgres connStr=[$connStr]<br/>";
+	}
+	printf("Connect failed: %s\n", pg_last_error());
     exit();
 }
 
+//pg_query($cms_dbc, "SET NAMES '" . $postgres_info['charset'] . "'");
+//pg_query($cms_dbc, "SET CHARACTER SET " . $postgres_info['charset'] . "");
+
 //https://www.php.net/manual/en/mysqli.set-charset.php
-//printf("Initial character set: %s\n", mysqli_character_set_name($cms_dbc));
-if (!mysqli_set_charset($cms_dbc, $mysqli_info['charset'])) {
-    printf("Error loading character set " . $mysqli_info['charset'] . ": %s\n", mysqli_error($cms_dbc));
+//printf("Initial character set: %s\n", pg_character_set_name($cms_dbc));
+if (pg_set_client_encoding($cms_dbc, $postgres_info['charset']) !== 0) {
+    printf("Error loading character set " . $postgres_info['charset'] . ": %s\n", pg_last_error($cms_dbc));
     exit();
 //} else {
-//    printf("Current character set: %s\n", mysqli_character_set_name($cms_dbc));
+//    printf("Current character set: %s\n", pg_character_set_name($cms_dbc));
 }
 
 
@@ -68,9 +82,9 @@ function select_published($field = "ident", $fields_cond = 0, $entity = "_global
 	$query = "select $field from $entity where $select_cond";
 	$query = add_sql_table_prefix($query);
 	if ($debug_query == 1) plog("SELECT_PUBLISHED[$query]");
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT UNIQUE failed:<br>$query<br>" . mysqli_error($cms_dbc));
-	if (mysqli_num_rows($result) > 0) {
-		$row = mysqli_fetch_row($result);
+	$result = pg_query($cms_dbc, $query) or die("SELECT UNIQUE failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	if (pg_num_rows($result) > 0) {
+		$row = pg_fetch_row($result);
 		$ret = $row[0];
 	}
 	
@@ -105,9 +119,9 @@ function select_field($field = "ident", $fields_cond = 0, $entity = "_global:ent
 	$query = "select $field from $entity $select_cond order by " . get_entity_orderby($entity) . " limit 1";
 	$query = add_sql_table_prefix($query);
 	if ($debug_query == 1) plog("SELECT_FIELD[$query]", "\n\n");
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT_FIELD failed:<br>$query<br>" . mysqli_error($cms_dbc));
-	if (mysqli_num_rows($result) > 0) {
-		$row = mysqli_fetch_row($result);
+	$result = pg_query($cms_dbc, $query) or die("SELECT_FIELD failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	if (pg_num_rows($result) > 0) {
+		$row = pg_fetch_row($result);
 		$ret = $row[0];
 //		$ret = stripslashes($ret);
 	}
@@ -127,8 +141,8 @@ function select_fieldarray($field = "ident", $fixed_hash = 0, $entity = "_global
 	$query = "select $field from $entity where $select_cond order by ". get_entity_orderby($entity);
 	$query = add_sql_table_prefix($query);
 	if ($debug_query == 1) plog("SELECT SELECT_FIELDARRAY[$query]", "\n\n");
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT SELECT_FIELDARRAY failed:\n$query" . mysqli_error($cms_dbc));
-	while ($row = mysqli_fetch_row($result)) {
+	$result = pg_query($cms_dbc, $query) or die("SELECT SELECT_FIELDARRAY failed:\n$query" . pg_last_error($cms_dbc));
+	while ($row = pg_fetch_row($result)) {
 		$ret[] = $row[0];
 	}
 	
@@ -147,11 +161,11 @@ function select_fieldlistarray($field_list = "ident", $fixed_hash = 0, $entity =
 	$query = "select $field_list from $entity $select_cond order by " . get_entity_orderby($entity);
 	$query = add_sql_table_prefix($query);
 	if ($debug_query == 1) plog("SELECT SELECT_FIELDARRAY[$query]", "\n\n");
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT SELECT_FIELDARRAY failed:\n$query<br>" . mysqli_error($cms_dbc));
-	$rows_total = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query) or die("SELECT SELECT_FIELDARRAY failed:\n$query<br>" . pg_last_error($cms_dbc));
+	$rows_total = pg_num_rows($result);
 	
 	$i = 0;
-	while ($row = mysqli_fetch_assoc($result)) {
+	while ($row = pg_fetch_assoc($result)) {
 		$row["entity"] = $entity;
 		$row["i"] = ++$i;
 		$row["rows_total"] = $rows_total;
@@ -171,11 +185,11 @@ function select_queryarray($query, $entity = "_global:entity", $cms_dbc = "_glob
 
 	$query = add_sql_table_prefix($query);
 	if ($debug_query == 1) plog("SELECT SELECT_QUERYARRAY[$query]", "\n\n");
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT_QUERYARRAY failed:<br>$query<br>" . mysqli_error($cms_dbc));
-	$rows_total = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query) or die("SELECT_QUERYARRAY failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	$rows_total = pg_num_rows($result);
 	
 	$i = 0;
-	while ($row = mysqli_fetch_assoc($result)) {
+	while ($row = pg_fetch_assoc($result)) {
 		$row["i"] = ++$i;
 		$row["rows_total"] = $rows_total;
 		if (!isset($row["entity"])) $row["entity"] = $entity;
@@ -229,9 +243,9 @@ function select_entity_row($fixed_hash = 0, $entity = "_global:entity") {
 		$query = "select * from $entity where $select_cond order by " . get_entity_orderby($entity);
 		$query = add_sql_table_prefix($query);
 		if ($debug_query == 1) plog("SELECT_ENTITY_ROW[$query]", "\n\n");
-		$result = mysqli_query($cms_dbc, $query) or die("SELECT_ENTITY_ROW failed:<br>$query<br>" . mysqli_error($cms_dbc));
-		if (mysqli_num_rows($result) > 0) {
-			$ret = mysqli_fetch_assoc($result);
+		$result = pg_query($cms_dbc, $query) or die("SELECT_ENTITY_ROW failed:<br>$query<br>" . pg_last_error($cms_dbc));
+		if (pg_num_rows($result) > 0) {
+			$ret = pg_fetch_assoc($result);
 			$ret["entity"] = $entity;
 		}
 	}
@@ -264,11 +278,14 @@ function insert ($fields = array(), $entity = "_global:entity", $cms_dbc = "_glo
 			}
 		}
 		
-		$query = "insert into $entity ($field_names) values ($field_values)";
+		$query = "insert into $entity ($field_names) values ($field_values)"
+			. " returning id";
 		$query = add_sql_table_prefix($query);
 		if ($debug_query == 1) plog("INSERT[$query]", "\n\n");
-		if (mysqli_query($cms_dbc, $query)) {
-			$id = mysqli_insert_id($cms_dbc);
+		if ($result = pg_query($cms_dbc, $query)) {
+			// $id = pg_insert_id($cms_dbc);
+			$inserted_row = pg_fetch_row($result);
+			$id = $insert_row[0];
 			if ($updatemanorder_whileinsert == 1) {
 //				$order_field = $order_fields[0];
 //				foreach ($order_fields as $order_field) {
@@ -276,12 +293,12 @@ function insert ($fields = array(), $entity = "_global:entity", $cms_dbc = "_glo
 					$query = "update $entity set $order_field=$id where id=$id";
 					$query = add_sql_table_prefix($query);
 					if ($debug_query == 1) plog("UPDATE_MANORDER_AFTER_INSERT[$query]", "\n\n");
-					mysqli_query($cms_dbc, $query)
-						or die("UPDATE ORDER $field failed:<br> $query<br>" . mysqli_error($cms_dbc));
+					pg_query($cms_dbc, $query)
+						or die("UPDATE ORDER $field failed:<br> $query<br>" . pg_last_error($cms_dbc));
 //				}
 			}
 		} else {
-			die("INSERT failed:<br> $query<br>" . mysqli_error($cms_dbc));
+			die("INSERT failed:<br> $query<br>" . pg_last_error($cms_dbc));
 		}
 	}
 		
@@ -329,8 +346,8 @@ function update ($fields, $fields_cond = 0, $entity = "_global:entity", $cms_dbc
 		
 		$query = "update $entity set $fields_update where $update_cond";
 		$query = add_sql_table_prefix($query);
-		mysqli_query($cms_dbc, $query) or die("UPDATE failed:<br>$query<br>" . mysqli_error($cms_dbc));
-		$ret = mysqli_affected_rows($cms_dbc);
+		pg_query($cms_dbc, $query) or die("UPDATE failed:<br>$query<br>" . pg_last_error($cms_dbc));
+		$ret = pg_affected_rows($cms_dbc);
 		if ($debug_query == 1) plog("UPDATE[$query]:[$ret]", "\n\n");
 	}
 
@@ -368,20 +385,24 @@ function delete ($fields_cond = 0, $entity = "_global:entity", $cms_dbc = "_glob
 
 	$query = add_sql_table_prefix($query);
 	if ($debug_query == 1) plog("DELETE[$query]");
-	mysqli_query($cms_dbc, $query) or die("DELETE failed:<br>$query<br>" . mysqli_error($cms_dbc));
+	pg_query($cms_dbc, $query) or die("DELETE failed:<br>$query<br>" . pg_last_error($cms_dbc));
 	
-	return mysqli_affected_rows($cms_dbc);
+	return pg_affected_rows($cms_dbc);
 }
 
 function entity_present_in_db($entity) {
-	global $mysqli_info, $cms_dbc;
+	global $postgres_info, $cms_dbc;
 	$ret = 0;
 
 	static $dbtables_prefixed = array();
 	if (count($dbtables_prefixed) == 0) {
-		$dbtables_result = mysqli_query($cms_dbc, 'SHOW TABLES FROM ' . $mysqli_info["db"])
-		 or die("SELECT_TABLES failed:<br>$query<br>" . mysqli_error($cms_dbc));
-		for ($i=1; $row = mysqli_fetch_array($dbtables_result); $i++) {
+		// $query = "'SHOW TABLES FROM ' . $postgres_info["db"]";
+		// https://stackoverflow.com/questions/769683/postgresql-show-tables-in-postgresql
+		$query = "select table_name from information_schema.tables where 
+table_schema='public'";
+		$dbtables_result = pg_query($cms_dbc, $query)
+		 or die("SELECT_TABLES failed:<br>$query<br>" . pg_last_error($cms_dbc));
+		for ($i=1; $row = pg_fetch_array($dbtables_result); $i++) {
 			$dbtables_prefixed[] = $row[0];
 		}
 	}
@@ -406,19 +427,23 @@ function entity_has_deleted_field($entity) {
 }
 
 function entity_has_field($entity, $field) {
-	global $mysqli_info, $non_prefixed_fields, $cms_dbc;
+	global $postgres_info, $non_prefixed_fields, $cms_dbc;
 	$ret = 0;
 
 	if (!entity_present_in_db($entity)) return $ret;
 	
 	static $entity_dbfields_array = array();
 	if (!isset($entity_dbfields_array[$entity])) {
-		$query = "SHOW COLUMNS FROM $entity";
-		$query = add_sql_table_prefix($query);
-		$entity_dbfields_result = mysqli_query($cms_dbc, $query)
-		 or die("SELECT_COLUMNS failed:<br>$query<br>" . mysqli_error($cms_dbc));
-		for ($i=1; $row = mysqli_fetch_assoc($entity_dbfields_result); $i++) {
-			$entity_dbfields_array[$entity][] = $row["Field"];
+		// $query = "SHOW COLUMNS FROM $entity";
+		// $query = add_sql_table_prefix($query);
+		// https://stackoverflow.com/questions/20194806/how-to-get-a-list-column-names-and-datatypes-of-a-table-in-postgresql
+		$query = "SELECT column_name, data_type FROM information_schema.columns"
+			. " WHERE table_name='$entity'";
+		$entity_dbfields_result = pg_query($cms_dbc, $query)
+			or die("SELECT_COLUMNS failed:<br>$query<br>" . pg_last_error($cms_dbc));
+		for ($i=1; $row = pg_fetch_assoc($entity_dbfields_result); $i++) {
+			// $entity_dbfields_array[$entity][] = $row["Field"];
+			$entity_dbfields_array[$entity][] = $row["column_name"];
 		}
 
 		//pre($entity_dbfields_result[$entity], "entity_dbfields_result[" . $entity_dbfields_result[$entity] . "]");
@@ -465,8 +490,8 @@ function select_root_tree($entity, $id, $init_static = 1) {
 
 	$query = "select parent_id from $entity where id=$id order by manorder";
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT_ROOT_TREE failed:<br>$query<br>" . mysqli_error($cms_dbc));
-	if ($row = mysqli_fetch_assoc($result)) {
+	$result = pg_query($cms_dbc, $query) or die("SELECT_ROOT_TREE failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	if ($row = pg_fetch_assoc($result)) {
 		$parent_id = $row["parent_id"];
 
 		if ($parent_id == 1) {
@@ -491,8 +516,8 @@ function select_root_tree_content($entity, $id, $init_static = 1) {
 
 	$query = "select * from $entity where id=$id order by manorder";
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT_ROOT_TREE_CONTENT failed:<br>$query<br>" . mysqli_error($cms_dbc));
-	if ($row = mysqli_fetch_assoc($result)) {
+	$result = pg_query($cms_dbc, $query) or die("SELECT_ROOT_TREE_CONTENT failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	if ($row = pg_fetch_assoc($result)) {
 		$row["entity"] = $entity;
 		$parent_id = $row["parent_id"];
 		$hash[$id] = $row;
@@ -517,9 +542,9 @@ function select_parent($field, $entity = "_global:entity", $id = "_global:id") {
 
 	$query = "select $field from $entity where id=$id";
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT PARENT failed:<br>$query<br>" . mysqli_error($cms_dbc));
-	if (mysqli_num_rows($result) > 0) {
-		$row = mysqli_fetch_row($result);
+	$result = pg_query($cms_dbc, $query) or die("SELECT PARENT failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	if (pg_num_rows($result) > 0) {
+		$row = pg_fetch_row($result);
 		$ret = $row[0];
 	}
 	
@@ -536,9 +561,9 @@ function select_first_child($field, $entity = "_global:entity", $id = "_global:i
 
 	$query = "select $field from $entity where parent_id=$id order by manorder";
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT CHILD failed:<br>$query<br>" . mysqli_error($cms_dbc));
-	if (mysqli_num_rows($result) > 0) {
-		$row = mysqli_fetch_row($result);
+	$result = pg_query($cms_dbc, $query) or die("SELECT CHILD failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	if (pg_num_rows($result) > 0) {
+		$row = pg_fetch_row($result);
 		$ret = $row[0];
 	}
 	
@@ -628,10 +653,10 @@ function select_entity_prevnext($fixed_hash = array(),
 
 		$query_prev = add_sql_table_prefix($query_prev);
 		if ($debug_query == 1) plog("SELECT_ENTITY_PREVNEXT: PREV[$query_prev]");
-		$result = mysqli_query($cms_dbc, $query_prev) or die("SELECT PREV failed:<br> $query_prev<br>" . mysqli_error($cms_dbc));
-		$cnt = mysqli_num_rows($result);
+		$result = pg_query($cms_dbc, $query_prev) or die("SELECT PREV failed:<br> $query_prev<br>" . pg_last_error($cms_dbc));
+		$cnt = pg_num_rows($result);
 		if ($cnt > 0) {
-			$row = mysqli_fetch_assoc($result);
+			$row = pg_fetch_assoc($result);
 			$row["cnt"] = $cnt;
 			$row["script_name"] = $_SERVER["SCRIPT_NAME"];
 			$row["fixed_suffix"] = $fixed_suffix;
@@ -648,10 +673,10 @@ function select_entity_prevnext($fixed_hash = array(),
 
 		$query_next = add_sql_table_prefix($query_next);
 		if ($debug_query == 1) plog(">SELECT_ENTITY_PREVNEXT: NEXT[$query_next]");
-		$result = mysqli_query($cms_dbc, $query_next) or die("SELECT NEXT failed:<br> $query_next<br>" . mysqli_error($cms_dbc));
-		$cnt = mysqli_num_rows($result);
+		$result = pg_query($cms_dbc, $query_next) or die("SELECT NEXT failed:<br> $query_next<br>" . pg_last_error($cms_dbc));
+		$cnt = pg_num_rows($result);
 		if ($cnt > 0) {
-			$row = mysqli_fetch_assoc($result);
+			$row = pg_fetch_assoc($result);
 			$row["cnt"] = $cnt;
 			$row["script_name"] = $_SERVER["SCRIPT_NAME"];
 			$row["fixed_suffix"] = $fixed_suffix;
@@ -712,9 +737,9 @@ function select_firstOrLast($field = "id", $fixed_hash = array(), $entity = "_gl
 //v1
 //	$query = add_sql_table_prefix($query);
 //	if ($debug_query == 1) echo "<br>SELECT_FIRST[$query]<br>";
-//	$result = mysql_query($query, $cms_dbc) or die("SELECT_FIRST failed:<br>$query<br>" . mysql_error($cms_dbc));
-//	if (mysql_num_rows($result) > 0) {
-//		$row = mysql_fetch_assoc($result);
+//	$result = pg_​query($cms_dbc, $query) or die("SELECT_FIRST failed:<br>$query<br>" . pg_last_error($cms_dbc));
+//	if (pg_num_rows($result) > 0) {
+//		$row = pg_​fetch_​assoc($result);
 //		$ret = $row[$field];
 ////		$ret = stripslashes($ret);
 //	}
@@ -738,12 +763,12 @@ function select_firstRow_byQuery($query, $invoker = "INVOKER_UNKNOWN") {
 	
 	$query = add_sql_table_prefix($query);
 	if ($debug_query == 1) echo "<br>${invoker}[$query]<br>";
-	$result = mysqli_query($cms_dbc, $query) or die("$invoker failed:<br>$query<br>" . mysqli_error($cms_dbc));
-	if (mysqli_num_rows($result) == 0) {
+	$result = pg_query($cms_dbc, $query) or die("$invoker failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	if (pg_num_rows($result) == 0) {
 		return array();
 	}
 	
-	$row = mysqli_fetch_assoc($result);
+	$row = pg_fetch_assoc($result);
 	if ($debug_query == 1) pre($row, " //select_firstRow_byQuery($invoker)");
 	return $row;
 }
@@ -832,11 +857,11 @@ function query_by_tpl($query, $tpl, $tpl_current = "_same", $entity = "_global:e
 	$current = absorb_variable($current);
 
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT QUERY_BY_TPL failed:<br>$query<br>" . mysqli_error($cms_dbc));
-	$rows_total = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query) or die("SELECT QUERY_BY_TPL failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	$rows_total = pg_num_rows($result);
 
 	$i = 0;
-	while ($row = mysqli_fetch_assoc($result)) {
+	while ($row = pg_fetch_assoc($result)) {
 		$item_tmp = $tpl;
 
 		if (isset($row["id"])) {
@@ -890,8 +915,8 @@ function entity_list_tpl($tpl, $tpl_current = "_same", $entity = "_global:entity
 		if (!in_array($entity, $no_pager_list)) {
 			$list_query_cnt = "select count(id) as cnt from $entity where $select_cond";
 			$list_query_cnt = add_sql_table_prefix($list_query_cnt);
-			$result = mysqli_query($cms_dbc, $list_query_cnt) or die("SELECT ENTITY_LIST_TPL_CNT failed:<br>$list_query_cnt<br>" . mysqli_error($cms_dbc));
-			$row = mysqli_fetch_array($result);
+			$result = pg_query($cms_dbc, $list_query_cnt) or die("SELECT ENTITY_LIST_TPL_CNT failed:<br>$list_query_cnt<br>" . pg_last_error($cms_dbc));
+			$row = pg_fetch_array($result);
 			$rows_total = $row["cnt"];
 		
 			if ($rows_total > $rows_per_page) {
@@ -952,11 +977,11 @@ function entity_tpl($tpl, $entity = "_global:entity", $fixed_hash = array(), $ha
 
 	$query = "select * from $entity $select_cond";
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT ENTITY_TPL failed:<br>$query<br>" . mysqli_error($cms_dbc));
-	$rows_total = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query) or die("SELECT ENTITY_TPL failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	$rows_total = pg_num_rows($result);
 
 	if ($rows_total > 0) {
-		$row = mysqli_fetch_assoc($result);
+		$row = pg_fetch_assoc($result);
 		$row["rows_total"] = $rows_total;
 		$row["entity"] = $entity;
 
@@ -996,11 +1021,11 @@ function tree_tpl($tpl, $tpl_current = "_same", $entity = "_global:entity", $cur
 
 	$query = add_sql_table_prefix($query);
 	if ($debug_query == 1) plog("SELECT TREE_TPL[$query]");
-	$result = mysqli_query($cms_dbc, $query) or die("TREE_TPL failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$rows_total = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query) or die("TREE_TPL failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$rows_total = pg_num_rows($result);
 
 	$i = 0;
-	while($row = mysqli_fetch_assoc($result)) {
+	while($row = pg_fetch_assoc($result)) {
 		$down_id = (isset($row["id"])) ? $row["id"] : 0;
 
 		$row["level"] = $level;
@@ -1052,8 +1077,8 @@ function multi_update($table, $value_arr, $m2m_table) {
 
 		$query = "select $table, id, deleted from $m2m_table where $entity=$id";
 		$query = add_sql_table_prefix($query);
-		$result = mysqli_query($cms_dbc, $query) or die("SELECT MULTI_UPDATE failed:<br>$query<br>" . mysqli_error($cms_dbc));
-		while ($row = mysqli_fetch_assoc($result)) {
+		$result = pg_query($cms_dbc, $query) or die("SELECT MULTI_UPDATE failed:<br>$query<br>" . pg_last_error($cms_dbc));
+		while ($row = pg_fetch_assoc($result)) {
 			$slave = $row[$table];
 
 //			echo "$m2m_table [$entity=$id]: $table = $slave<br>";
@@ -1134,12 +1159,12 @@ function pager($url, $rows_total, $addsuffix0_bytpl1 = 0) {
 
 	if ($rows_total > 10000 && $pages_per_frame == 0) {
 		$ret = "[<font color=" . OPTIONS_COLOR_GRAY . ">pager disabled: rows_total=[$rows_total], too much to calculate, may hang on...</font>]";
-		$limit_sql = " limit $rows_per_page";
+		$limit_sql = " offset 0 limit $rows_per_page";
 		return $ret;
 	}
 
 	$offset = $pg * $rows_per_page;
-	$limit_sql = " limit $offset, $rows_per_page";
+	$limit_sql = " offset $offset limit $rows_per_page";
 	if ($pg == 999999) $limit_sql = "";
 	
 	$pages_total = ($rows_total / $rows_per_page);
@@ -1724,8 +1749,8 @@ function multicompositepointer_multipleupdate($m2m_table, $fixed_hash, $pointerv
 //	$query = "select id, deleted, $pointer from $m2m_table where " . sqlcond_fromhash($fixed_hash);
 	$query = "select *, $pointer from $m2m_table where " . sqlcond_fromhash($fixed_hash);
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT4DELETE MULTICOMPOSITEPOINTER[$pointer]_MULTIPLEUPDATE failed:<br>$query<br>" . mysqli_error($cms_dbc));
-	while ($row = mysqli_fetch_assoc($result)) {
+	$result = pg_query($cms_dbc, $query) or die("SELECT4DELETE MULTICOMPOSITEPOINTER[$pointer]_MULTIPLEUPDATE failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	while ($row = pg_fetch_assoc($result)) {
 		$m2m_id = $row["id"];
 		$m2m_pointervalue = $row[$pointer];
 		$m2m_deleted = $row["deleted"];
@@ -1808,15 +1833,15 @@ function multicompositepointer_singleupdate($m2m_table, $fixed_hash, $pointerval
 
 	$query = "select id, deleted, $pointer from $m2m_table where " . sqlcond_fromhash($fixed_hash);
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT4DELETE MULTICOMPOSITEpointer_SINGLEUPDATE failed:<br>$query<br>" . mysqli_error($cms_dbc));
+	$result = pg_query($cms_dbc, $query) or die("SELECT4DELETE MULTICOMPOSITEpointer_SINGLEUPDATE failed:<br>$query<br>" . pg_last_error($cms_dbc));
 
-	if (mysqli_num_rows($result) > 1) {
-		pre ("SELECT4DELETE MULTICOMPOSITEPOINTER[$pointer]_SINGLEUPDATE failed: seleted " . mysqli_num_rows($result) . " rows, should be single");
+	if (pg_num_rows($result) > 1) {
+		pre ("SELECT4DELETE MULTICOMPOSITEPOINTER[$pointer]_SINGLEUPDATE failed: seleted " . pg_num_rows($result) . " rows, should be single");
 		return;
 	}
 
-	if (mysqli_num_rows($result) == 1) {
-		$row = mysqli_fetch_assoc($result);
+	if (pg_num_rows($result) == 1) {
+		$row = pg_fetch_assoc($result);
 		$m2m_id = $row["id"];
 		$m2m_deleted = $row["deleted"];
 		$m2m_pointervalue = $row[$pointer];
@@ -2205,12 +2230,12 @@ function check_uniquefield_dbtable($table = "person", $fname = "login", $value =
 	$ret = 0;
 	
 	$query = "select $id_field from " . TABLE_PREFIX . "$table where $fname='$value' and deleted=0";
-	$result = mysqli_query($cms_dbc, $query);
-	if (mysqli_num_rows($result) == 0) {
+	$result = pg_query($cms_dbc, $query);
+	if (pg_num_rows($result) == 0) {
 		$ret = 1;
 	} else {
 		if ($id_my > 0) {
-			$row = mysqli_fetch_assoc($result);
+			$row = pg_fetch_assoc($result);
 			if ($row[$id_field] == $id_my) $ret = 1;
 		}
 	}

@@ -29,11 +29,11 @@ function ic($m2m_entity_iccontent_tablename, $entity_ = "_global", $entity_id_ =
 		. " and ic.published=1 and ictype.published=1"
 		. " order by ic." . get_entity_orderfield("ic");
 
-	$result = mysqli_query($cms_dbc, $query)
-		or die("SELECT IC failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$size = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query)
+		or die("SELECT IC failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$size = pg_num_rows($result);
 
-	while ($row = mysqli_fetch_assoc($result)) {
+	while ($row = pg_fetch_assoc($result)) {
 //		pre ($row);
 		$ic_id = $row["ic_id"];
 		$ic_ident = $row["ic_ident"];
@@ -216,9 +216,9 @@ function icmulti($icdict, $value_array = array(), $ic_inputtype = "icmulticheckb
 		. " where icdict=$icdict and published=1 and deleted=0"
 		. " order by " . get_entity_orderby("icdictcontent");
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query)
-		or die("SELECT MULTI_VALUE failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$size = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query)
+		or die("SELECT MULTI_VALUE failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$size = pg_num_rows($result);
 
 	$tpl_icmultiselect_item_rw = "<option value='#ID#' #SELECTED# #LABEL_STYLE#>#IDENT#</option>";
 
@@ -353,7 +353,7 @@ EOT;
 
 	$items = "";
 	$items_array = array();
-	while ($row = mysqli_fetch_assoc($result)) {
+	while ($row = pg_fetch_assoc($result)) {
 //		pre($row);
 		$id_ = $row["id"];
 		$ident_ = $row["ident"];
@@ -474,11 +474,11 @@ function ic_update($m2m_entity_iccontent_tablename, $entity_ = "_global", $entit
 		. " and ictype.published=1 and ic.published=1"
 		. " order by ic.manorder";
 
-	$result = mysqli_query($cms_dbc, $query)
-		or die("SELECT IC failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$size = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query)
+		or die("SELECT IC failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$size = pg_num_rows($result);
 
-	while ($row = mysqli_fetch_assoc($result)) {
+	while ($row = pg_fetch_assoc($result)) {
 		$ic_id = $row["ic_id"];
 		$ic_ident = $row["ic_ident"];
 		$ic_published = $row["ic_published"];
@@ -632,9 +632,9 @@ function icradio($icdict, $it_value, $it_name = "_global", $read_only = 0) {
 
 	$query = "select id, ident, tf1_width, tf1_incolumn, label_style from icdictcontent where icdict=$icdict and published=1 order by manorder";
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query)
-		or die("SELECT MULTI_VALUE failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$size = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query)
+		or die("SELECT MULTI_VALUE failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$size = pg_num_rows($result);
 
 	$tpl_item_rw = <<<EOT
 <tr valign=middle>
@@ -717,7 +717,7 @@ EOT;
 
 
 	$items = "";
-	while ($row = mysqli_fetch_assoc($result)) {
+	while ($row = pg_fetch_assoc($result)) {
 //		pre($row);
 		
 		$id_ = $row["id"];

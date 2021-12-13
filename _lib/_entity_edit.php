@@ -55,8 +55,8 @@ if ($id > 0) {
 				$query = "update " . TABLE_PREFIX . "$entity set $sql_fields where id=$id";
 				$query = add_sql_table_prefix($query);
 				if ($debug_query == 1) $query;
-				mysqli_query($cms_dbc, $query) or die ("UPDATE ENTITY failed:<br>$query<br>" . mysqli_error($cms_dbc));
-				$rows_updated_onedit = mysqli_affected_rows($cms_dbc);
+				pg_query($cms_dbc, $query) or die ("UPDATE ENTITY failed:<br>$query<br>" . pg_last_error($cms_dbc));
+				$rows_updated_onedit = pg_affected_rows($cms_dbc);
 				update($update_basehash, array("id" => $id));
 			} else {
 //				echo "_entity_edit: nothing to update<br>";
@@ -74,8 +74,8 @@ if ($id > 0) {
 			
 					$query = "select $name from $entity where id=$id";
 					$query = add_sql_table_prefix($query);
-					$result = mysqli_query($cms_dbc, $query) or $errormsg .= "SELECT_FILE [$name] failed";
-					$row = mysqli_fetch_row($result);
+					$result = pg_query($cms_dbc, $query) or $errormsg .= "SELECT_FILE [$name] failed";
+					$row = pg_fetch_row($result);
 					$value_indb = $row[0];
 			
 					$del_cb_value = get_string("del_$name");
@@ -88,8 +88,8 @@ if ($id > 0) {
 						if (file_exists($file_dest) && unlink($file_dest)) {
 							$query = "update $entity set $name='' where id=$id";
 							$query = add_sql_table_prefix($query);
-							mysqli_query($cms_dbc, $query)
-								or $errormsg .= "DEL_FILE [$name] failed:<br>$query<br>" . mysqli_error($cms_dbc);
+							pg_query($cms_dbc, $query)
+								or $errormsg .= "DEL_FILE [$name] failed:<br>$query<br>" . pg_last_error($cms_dbc);
 						} else {
 							$errormsg .= "$msg_bo_file_delete_unable [" . $file_dest . "]<br>";
 						}
@@ -122,9 +122,9 @@ if ($id > 0) {
 							$query .= " where id=$id";
 							$query = add_sql_table_prefix($query);
 	//						echo $query;
-							mysqli_query($cms_dbc, $query)
-								or $errormsg .= "UPDATE_FILE [$name] failed:<br>$query<br>" . mysqli_error($cms_dbc);
-							$files_updated_onedit += mysqli_affected_rows($cms_dbc);
+							pg_query($cms_dbc, $query)
+								or $errormsg .= "UPDATE_FILE [$name] failed:<br>$query<br>" . pg_last_error($cms_dbc);
+							$files_updated_onedit += pg_affected_rows($cms_dbc);
 	//					} else {
 	//						$errormsg .= "$msg_bo_file_format_wrong [" . $_FILES["$name"]['type'] . "]<br>";
 	//					}
@@ -134,10 +134,10 @@ if ($id > 0) {
 				if ($input_type == "imgtype_layer") {
 					$query = "select * from imgtype where published='1' order by manorder";
 					$query = add_sql_table_prefix($query);
-					$result = mysqli_query($cms_dbc, $query, $cms_dbc)
+					$result = pg_query($cms_dbc, $query, $cms_dbc)
 						or die("SELECT IMGTYPE failed:<br>$query:<br>" . mysqli1_error($cms_dbc));
 	
-					while ($imgtype_row = mysqli_fetch_assoc($result)) {
+					while ($imgtype_row = pg_fetch_assoc($result)) {
 						imglayer_update($imgtype_row);
 					}
 				}

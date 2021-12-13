@@ -8,8 +8,8 @@ CREATE TABLE shli_ic (
 	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	date_published	TIMESTAMP WITHOUT TIME ZONE,
-	published		BOOLEAN NOT NULL DEFAULT true,
-	deleted			BOOLEAN NOT NULL DEFAULT false,
+	published		SMALLINT NOT NULL DEFAULT 1,
+	deleted			SMALLINT NOT NULL DEFAULT 0,
 	manorder		SERIAL, -- INTEGER NOT NULL DEFAULT 0 CHECK (manorder >= 0),
 
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
@@ -25,13 +25,13 @@ CREATE TABLE shli_ic (
 	graycomment		VARCHAR(250) NOT NULL DEFAULT '',
 
 	jsvalidator		INTEGER NOT NULL DEFAULT 0,
-	obligatory		BOOLEAN NOT NULL DEFAULT false,
-	obligatory_bo	BOOLEAN NOT NULL DEFAULT false,
+	obligatory		SMALLINT NOT NULL DEFAULT 0,
+	obligatory_bo	SMALLINT NOT NULL DEFAULT 0,
 
-	inbrief			BOOLEAN NOT NULL DEFAULT false,
-	sorting			BOOLEAN NOT NULL DEFAULT false,
+	inbrief			SMALLINT NOT NULL DEFAULT 0,
+	sorting			SMALLINT NOT NULL DEFAULT 0,
 
-	published_bo	BOOLEAN NOT NULL DEFAULT true,
+	published_bo	SMALLINT NOT NULL DEFAULT 1,
 
 	PRIMARY KEY(id)
 );
@@ -54,9 +54,9 @@ CREATE TRIGGER trg_shli_ic_update_date_updated
 
 insert into shli_ic(id, manorder, icwhose, ictype, ident) values(1, 1, 1, 1, 'Размеры: см');
 insert into shli_ic(id, manorder, icwhose, ictype, ident) values(2, 2, 1, 2, 'Масса: кг');
-insert into shli_ic(id, manorder, icwhose, ictype, icdict, inbrief, sorting, ident) values(3, 3, 1, 4, 1, true, true, 'Упаковка:');
-insert into shli_ic(id, manorder, icwhose, ictype, inbrief, sorting, ident) values(4, 4, 1, 2, true, true, 'Доставка: дней');
-insert into shli_ic(id, manorder, icwhose, ictype, inbrief, sorting, ident) values(5, 5, 1, 2, true, true, 'На складе: шт');
+insert into shli_ic(id, manorder, icwhose, ictype, icdict, inbrief, sorting, ident) values(3, 3, 1, 4, 1, 1, 1, 'Упаковка:');
+insert into shli_ic(id, manorder, icwhose, ictype, inbrief, sorting, ident) values(4, 4, 1, 2, 1, 1, 'Доставка: дней');
+insert into shli_ic(id, manorder, icwhose, ictype, inbrief, sorting, ident) values(5, 5, 1, 2, 1, 1, 'На складе: шт');
 
 --select * from shli_ic;
 

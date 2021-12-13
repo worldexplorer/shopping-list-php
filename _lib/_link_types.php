@@ -22,11 +22,11 @@ function options_pgroup($product_value,
 	$query = "select id, ident, published from $pgroup_table where parent_id=$parent_id order by " . get_entity_orderby($pgroup_table);
 	$query = add_sql_table_prefix($query);
 
-	$result = mysqli_query($cms_dbc, $query)
-			or die("OPTIONS_SQL_TREE failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$num_rows = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query)
+			or die("OPTIONS_SQL_TREE failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$num_rows = pg_num_rows($result);
 
-	while ($row = mysqli_fetch_array($result)) {
+	while ($row = pg_fetch_array($result)) {
 		$row["spaces"] = spaces_bylevel($level);
 		$row["option_color"] = OPTIONS_COLOR_GRAY;
 
@@ -52,11 +52,11 @@ function options_product($product_value, $product_table, $pgroup_table, $pgroup_
 	$query = "select id, ident, published from $product_table where $pgroup_inproduct_field=$pgroup_id order by " . get_entity_orderby($product_table);
 	$query = add_sql_table_prefix($query);
 
-	$result = mysqli_query($cms_dbc, $query)
-			or die("SELECT PRODUCT_VALUE failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$size = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query)
+			or die("SELECT PRODUCT_VALUE failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$size = pg_num_rows($result);
 
-	while ($row = mysqli_fetch_array($result)) {
+	while ($row = pg_fetch_array($result)) {
 		$row["spaces"] = spaces_bylevel($level);
 		$row["option_color"] =  ($row["published"] == '1') ? OPTIONS_COLOR_BLACK : OPTIONS_COLOR_GRAY;
 		$row["selected"] = ($row["id"] == $product_value) ?  "selected" : "";
@@ -92,11 +92,11 @@ function options_multipgroup($parent_id = 0, $level = 1,
 	$query = "select id, $pgroup_field from $pgroup_table where parent_id=$parent_id order by " . get_entity_orderby($pgroup_table);
 	$query = add_sql_table_prefix($query);
 
-	$result = mysqli_query($cms_dbc, $query)
-			or die("OPTIONS_SQL_TREE failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$num_rows = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query)
+			or die("OPTIONS_SQL_TREE failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$num_rows = pg_num_rows($result);
 
-	while ($row = mysqli_fetch_array($result)) {
+	while ($row = pg_fetch_array($result)) {
 		$pgroup_id = $row["id"];
 		$pgroup_ident = $row[$pgroup_field];
 		
@@ -123,11 +123,11 @@ function options_multisupplier($level = 1, $m2m_table, $m2m_master_field, $m2m_m
 	$query = "select id, $supplier_field from $supplier_table where deleted=0 order by " . get_entity_orderby($supplier_table);
 	$query = add_sql_table_prefix($query);
 
-	$result = mysqli_query($cms_dbc, $query)
-			or die("OPTIONS_MULTISUPPLIER failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$num_rows = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query)
+			or die("OPTIONS_MULTISUPPLIER failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$num_rows = pg_num_rows($result);
 
-	while ($row = mysqli_fetch_array($result)) {
+	while ($row = pg_fetch_array($result)) {
 		$supplier_id = $row["id"];
 		$supplier_ident = $row[$supplier_field];
 		
@@ -156,11 +156,11 @@ function options_multiproduct($pgroup_value, $level,
 	$query = "select id, ident, published from $product_table where $product_pgroup_field=$pgroup_value order by " . get_entity_orderby($product_table);
 	$query = add_sql_table_prefix($query);
 
-	$result = mysqli_query($cms_dbc, $query)
-			or die("SELECT PRODUCT_VALUE failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$size = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query)
+			or die("SELECT PRODUCT_VALUE failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$size = pg_num_rows($result);
 
-	while ($row = mysqli_fetch_array($result)) {
+	while ($row = pg_fetch_array($result)) {
 		$product_id = $row["id"];
 		$product_ident = $row["ident"];
 		$product_published = $row["published"];
@@ -171,9 +171,9 @@ function options_multiproduct($pgroup_value, $level,
 		$query2 = "select m2m.id from $m2m_table m2m where $m2m_slave_field = $product_id"
 				. " and $m2m_master_field = $m2m_master_value and m2m.deleted=0";
 		$query2 = add_sql_table_prefix($query2);
-		$result2 = mysqli_query($cms_dbc, $query2)
-				or die("SELECT PRODUCT_OPTION failed:<br>$query2:<br>" . mysqli_error($cms_dbc));
-		if (mysqli_num_rows($result2) > 0) $selected = "selected";
+		$result2 = pg_query($cms_dbc, $query2)
+				or die("SELECT PRODUCT_OPTION failed:<br>$query2:<br>" . pg_last_error($cms_dbc));
+		if (pg_num_rows($result2) > 0) $selected = "selected";
 	
 		$spaces = "";
 		for ($j=1; $j < $level; $j++) $spaces .= OPTIONS_ONE_SPACE;
@@ -253,7 +253,7 @@ function m2mtf_parent($dict_table, $value = "_global", $m2m_table = "_global", $
 			. " and d.deleted=0 and dp.deleted=0"
 			. " order by dp." . get_entity_orderby($parent_dict_table) . ", d." . get_entity_orderby($dict_table);
 		$query = add_sql_table_prefix($query);
-		$result = mysqli_query($cms_dbc, $query) or die("m2mtf_parent(): SELECT DICTIONARY failed:<br>$query:<br>" . mysqli_error($cms_dbc));
+		$result = pg_query($cms_dbc, $query) or die("m2mtf_parent(): SELECT DICTIONARY failed:<br>$query:<br>" . pg_last_error($cms_dbc));
 
 		$i = 1;
 		$bgcolor = ($i % 2) ? OPTIONS_COLOR_WHITE : OPTIONS_COLOR_LIGHTBLUE;
@@ -264,7 +264,7 @@ function m2mtf_parent($dict_table, $value = "_global", $m2m_table = "_global", $
 		$prev_dictparent_ident = 0;
 		$prev_dictparent_content = "";
 
-		while ($row = mysqli_fetch_assoc($result)) {
+		while ($row = pg_fetch_assoc($result)) {
 			$dict_id = $row["id"];
 			$dict_ident = $row["ident"];
 			$dictparent_id = $row["dp_id"];
@@ -380,10 +380,10 @@ EOT;
 	if ($debug_query == true) echo "<br>SELECT_m2mtfcontrolled: " . $query;
 
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT M2M_CONTROLLED failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$size = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query) or die("SELECT M2M_CONTROLLED failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$size = pg_num_rows($result);
 		
-	while ($row = mysqli_fetch_assoc($result)) {
+	while ($row = pg_fetch_assoc($result)) {
 		$row["dict_id"] = $row["id"];
 		$row["dict_ident"] = $row["ident"];
 		$row["dict_published"] = $row["published"];
@@ -524,10 +524,10 @@ EOT;
 		if ($debug_query) echo "m2mtfcontrolledgrouped query_inner [$query_inner]";
 		
 		
-		$result = mysqli_query($cms_dbc, $query_inner) or die("SELECT M2M_CONTROLLED_GROUPED_INNER failed:<br>$query_inner:<br>" . mysqli_error($cms_dbc));
+		$result = pg_query($cms_dbc, $query_inner) or die("SELECT M2M_CONTROLLED_GROUPED_INNER failed:<br>$query_inner:<br>" . pg_last_error($cms_dbc));
 
 		$i = 0;
-		while ($row = mysqli_fetch_assoc($result)) {
+		while ($row = pg_fetch_assoc($result)) {
 			$row["i"] = ++$i;
 			$row["dict_id"] = $row["id"];
 			$row["dict_ident"] = $row["ident"];
@@ -661,10 +661,10 @@ EOT;
 	}
 
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT M2MCONTENT_DISPLAY failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$rows_total = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query) or die("SELECT M2MCONTENT_DISPLAY failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$rows_total = pg_num_rows($result);
 
-	for ($i=0; $row = mysqli_fetch_assoc($result); $i++) {
+	for ($i=0; $row = pg_fetch_assoc($result); $i++) {
 		$row["rows_total"] = $rows_total;
 		$row["i"] = $i;
 
@@ -770,11 +770,11 @@ EOT;
 		;
 
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT M2MTFETHALON failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$rows_total = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query) or die("SELECT M2MTFETHALON failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$rows_total = pg_num_rows($result);
 
 	$table_rows = "";
-	for ($i=0; $row = mysqli_fetch_assoc($result); $i++) {
+	for ($i=0; $row = pg_fetch_assoc($result); $i++) {
 		$row["rows_total"] = $rows_total;
 		$row["i"] = $i;
 
@@ -799,9 +799,9 @@ EOT;
 
 /*
 	$query = "select id, ident from $dict_table where published='1' order by " . get_entity_orderby($dict_table);
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT M2MTFETHALON failed:<br>$query:<br>" . mysqli_error($cms_dbc));
+	$result = pg_query($cms_dbc, $query) or die("SELECT M2MTFETHALON failed:<br>$query:<br>" . pg_last_error($cms_dbc));
 
-	while ($row = mysqli_fetch_assoc($result)) {
+	while ($row = pg_fetch_assoc($result)) {
 		$dict_id = $row["id"];
 		$dict_ident = $row["ident"];
 
@@ -893,12 +893,12 @@ EOT;
 		. " order by d." . get_entity_orderby($dict_table);
 
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query)
-		or die("SELECT MULTI_VALUE failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$size = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query)
+		or die("SELECT MULTI_VALUE failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$size = pg_num_rows($result);
 
 	$i = 1;
-	while ($row = mysqli_fetch_assoc($result)) {
+	while ($row = pg_fetch_assoc($result)) {
 		$dict_id = $row["id"];
 		$m2m_id = $row["m2m_id"];
 
@@ -1191,11 +1191,11 @@ function options_sql_tree($table, $value, $field = "ident", $parent_id = 0, $lev
 	$query = "select id, $field, published from $table where parent_id=$parent_id $deleted_cond order by " . get_entity_orderby($table);
 	$query = add_sql_table_prefix($query);
 	if ($debug_query == 1) echo "<br>OPTIONS_SQL_TREE: [$query]<br>";
-	$result = mysqli_query($cms_dbc, $query) or die("OPTIONS_SQL_TREE failed:<br>$query:<br>" . mysqli_error($cms_dbc));
+	$result = pg_query($cms_dbc, $query) or die("OPTIONS_SQL_TREE failed:<br>$query:<br>" . pg_last_error($cms_dbc));
 //	echo "$query<br>";
-	$num_rows = mysqli_num_rows($result);
+	$num_rows = pg_num_rows($result);
 
-	for ($i=1; $row = mysqli_fetch_array($result); $i++) {
+	for ($i=1; $row = pg_fetch_array($result); $i++) {
 		$id = $row["id"];
 		$ident = $row[$field];
 		$published = $row["published"];
@@ -1278,14 +1278,14 @@ function options_sql_VERYSLOW($query, $default, $forcezero_option = "", $forceze
 //	echo "[$cms_dbc] / [$query]";
 
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query)
-		or die("OPTIONS_SQL failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-	$num_rows = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query)
+		or die("OPTIONS_SQL failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+	$num_rows = pg_num_rows($result);
 
 	$i = 0;
 	$was_selected = 0;
 
-	while ($row = mysqli_fetch_array($result)) {
+	while ($row = pg_fetch_array($result)) {
 		$row["i"] = $i++;
 		$row["published_style"] = ($row["published"] == 1) ? "" : " style='color: " . OPTIONS_COLOR_GRAY. "'";
 		$row["selected"] = ($row["id"] == $default) ? "selected" : "";
@@ -1321,12 +1321,12 @@ function options_sql($query, $default, $forcezero_option = "", $forcezero_evenif
 //	echo "[$cms_dbc] / [$query]";
 
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query) or die("OPTIONS_SQL failed:<br>$query:<br>"
-			. mysqli_error($cms_dbc));
-	$num_rows = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query) or die("OPTIONS_SQL failed:<br>$query:<br>"
+			. pg_last_error($cms_dbc));
+	$num_rows = pg_num_rows($result);
 
 	$was_selected = 0;
-	for ($i=1; $row = mysqli_fetch_array($result); $i++) {
+	for ($i=1; $row = pg_fetch_array($result); $i++) {
 		$id = $row["id"];
 		$ident = $row["ident"];
 
@@ -1425,12 +1425,12 @@ EOT;
 	if ($debug_query) pre($query);
 
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query) or die("RADIO_OPTIONS_SQL failed:<br>$query:<br>"
-			. mysqli_error($cms_dbc));
-	$num_rows = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query) or die("RADIO_OPTIONS_SQL failed:<br>$query:<br>"
+			. pg_last_error($cms_dbc));
+	$num_rows = pg_num_rows($result);
 
 	$was_selected = 0;
-	for ($i=1; $row = mysqli_fetch_array($result); $i++) {
+	for ($i=1; $row = pg_fetch_array($result); $i++) {
 		$id = $row["id"];
 		$ident = $row["ident"];
 
@@ -1506,9 +1506,9 @@ function o2m($table, $value = "_global", $o2m_table = "_global") {
 	if (isset($id)) {
 		$query = "select $table from $o2m_table where $entity = $id";
 		$query = add_sql_table_prefix($query);
-		$result = mysqli_query($cms_dbc, $query) or die("SELECT O2M_VALUE failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-		if (mysqli_num_rows($result) > 0) {
-			$row = mysqli_fetch_row($result);
+		$result = pg_query($cms_dbc, $query) or die("SELECT O2M_VALUE failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+		if (pg_num_rows($result) > 0) {
+			$row = pg_fetch_row($result);
 			$o2m_value = $row[0];
 		}
 	
@@ -1540,9 +1540,9 @@ function o2m_parent($table, $value = "_global", $o2m_table = "_global", $parent_
 	if (isset($id)) {
 		$query = "select $table from $o2m_table where $entity = $id";
 		$query = add_sql_table_prefix($query);
-		$result = mysqli_query($cms_dbc, $query) or die("SELECT O2M_VALUE failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-		if (mysqli_num_rows($result) > 0) {
-			$row = mysqli_fetch_row($result);
+		$result = pg_query($cms_dbc, $query) or die("SELECT O2M_VALUE failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+		if (pg_num_rows($result) > 0) {
+			$row = pg_fetch_row($result);
 			$o2m_value = $row[0];
 		}
 	
@@ -1572,11 +1572,11 @@ function multiro($table, $value = "_global", $m2m_table = "_global") {
 			. " where m2m.$table = e.id and m2m.$entity = $id"
 			. " order by e." . get_entity_orderby($table);
 		$query = add_sql_table_prefix($query);
-		$result = mysqli_query($cms_dbc, $query)
-				or die("SELECT MULTI_VALUE failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-		$size = mysqli_num_rows($result);
+		$result = pg_query($cms_dbc, $query)
+				or die("SELECT MULTI_VALUE failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+		$size = pg_num_rows($result);
 
-		while ($row = mysqli_fetch_assoc($result)) {
+		while ($row = pg_fetch_assoc($result)) {
 			$options .= "<option>" . $row["ident"] . "</option>";
 		}
 
@@ -1604,11 +1604,11 @@ function multi($table, $value = "_global", $m2m_table = "_global") {
 	if (isset($id)) {
 		$query = "select id, ident from $table order by " . get_entity_orderby($table);
 		$query = add_sql_table_prefix($query);
-		$result = mysqli_query($cms_dbc, $query)
-			or die("SELECT MULTI_VALUE failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-		$size = mysqli_num_rows($result);
+		$result = pg_query($cms_dbc, $query)
+			or die("SELECT MULTI_VALUE failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+		$size = pg_num_rows($result);
 
-		while ($row = mysqli_fetch_row($result)) {
+		while ($row = pg_fetch_row($result)) {
 			$id_ = $row[0];
 			$ident_ = $row[1];
 			
@@ -1621,9 +1621,9 @@ function multi($table, $value = "_global", $m2m_table = "_global") {
 
 			$query2 = "select m2m.id from $m2m_table m2m where $entity = $id and $table = $id_";
 			$query2 = add_sql_table_prefix($query2);
-			$result2 = mysqli_query($cms_dbc, $query2) or die("SELECT MULTI_OPTION failed:<br>$query2:<br>"
-					. mysqli_error($cms_dbc));
-			if (mysqli_num_rows($result2) > 0) {
+			$result2 = pg_query($cms_dbc, $query2) or die("SELECT MULTI_OPTION failed:<br>$query2:<br>"
+					. pg_last_error($cms_dbc));
+			if (pg_num_rows($result2) > 0) {
 				$options .= " selected";
 			}
 		
@@ -1655,10 +1655,10 @@ function multi_parent($table, $value = "_global", $m2m_table = "_global", $paren
 	if (isset($id)) {
 		$query = "select e.id, concat(p.ident, ' / ', e.ident) from $table e, $parent_entity_ p where e.$parent_entity_=p.id order by p." . get_entity_orderby($parent_entity_) . ", e." . get_entity_orderby($table);
 		$query = add_sql_table_prefix($query);
-		$result = mysqli_query($cms_dbc, $query) or die("SELECT MULTI_VALUE failed:<br>$query:<br>" . mysqli_error($cms_dbc));
-		$size = mysqli_num_rows($result);
+		$result = pg_query($cms_dbc, $query) or die("SELECT MULTI_VALUE failed:<br>$query:<br>" . pg_last_error($cms_dbc));
+		$size = pg_num_rows($result);
 
-		while ($row = mysqli_fetch_row($result)) {
+		while ($row = pg_fetch_row($result)) {
 			$id_ = $row[0];
 			$ident_ = $row[1];
 			
@@ -1671,9 +1671,9 @@ function multi_parent($table, $value = "_global", $m2m_table = "_global", $paren
 
 			$query2 = "select m2m.id from $m2m_table m2m where $entity = $id and $table = $id_";
 			$query2 = add_sql_table_prefix($query2);
-			$result2 = mysqli_query($cms_dbc, $query2) or die("SELECT MULTI_OPTION failed:<br>$query2:<br>"
-					. mysqli_error($cms_dbc));
-			if (mysqli_num_rows($result2) > 0) {
+			$result2 = pg_query($cms_dbc, $query2) or die("SELECT MULTI_OPTION failed:<br>$query2:<br>"
+					. pg_last_error($cms_dbc));
+			if (pg_num_rows($result2) > 0) {
 				$options .= " selected";
 			}
 		
@@ -1714,13 +1714,13 @@ function checkbox_table($table, $value_array = "_global", $sql_field = "ident", 
 	if ($debug_query == 1) echo "<br>CHECKBOX_TABLE: [$query]<br>";
 
 	$query = add_sql_table_prefix($query);
-	$result = mysqli_query($cms_dbc, $query) or die("CHECKBOX_TABLE_SQL failed:<br>$query:<br>"
-			. mysqli_error($cms_dbc));
-	$num_rows = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query) or die("CHECKBOX_TABLE_SQL failed:<br>$query:<br>"
+			. pg_last_error($cms_dbc));
+	$num_rows = pg_num_rows($result);
 
 	$was_checked = (count($value_array) > 0) ? 1 : 0;
 
-	for ($i=1; $row = mysqli_fetch_array($result); $i++) {
+	for ($i=1; $row = pg_fetch_array($result); $i++) {
 		$id = $row["id"];
 		$ident = $row["ident"];
 

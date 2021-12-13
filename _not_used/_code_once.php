@@ -390,8 +390,8 @@ function login_auth($auth, $sendcookie = 1) {
 	$person_id = 0;
 	$query = "select * from " . TABLE_PREFIX . "person where auth='$auth' and deleted=0";
 //	echo $query;
-	$result = mysqli_query($cms_dbc, $query) or die("SELECT person failed");
-	$num_rows = mysqli_num_rows($result);
+	$result = pg_query($cms_dbc, $query) or die("SELECT person failed");
+	$num_rows = pg_num_rows($result);
 	if ($num_rows == 0) {
 		$unhashed["person"] = 0;
 		$unhashed["person_ident"] = "";
@@ -405,7 +405,7 @@ function login_auth($auth, $sendcookie = 1) {
 		return $ret;
 	}
 
-	$row = mysqli_fetch_assoc($result);
+	$row = pg_fetch_assoc($result);
 //	pre($row);
 	$ret = user_found_set_cookie($row, $sendcookie);
 	$uprofile[$auth_cookie_name] = $auth;
