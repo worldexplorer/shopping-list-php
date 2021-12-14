@@ -10,29 +10,12 @@ $path_separator = $pagetitle_separator = " &raquo; ";
 $legend_separator = "&nbsp;&nbsp;|&nbsp;&nbsp;";
 
 
-// $mysqli_info = array (
-// 	"host" => "localhost",
-// 	"login" => "***********",
-// 	"passwd" => "***********",
-// 	"db" => "***********"
-// );
-
-
-// if ($_SERVER["SERVER_NAME"] == "localhost") {
-// 	$mysqli_info = array (
-// 		"host" => "localhost",
-// 		"login" => "shli",
-// 		"passwd" => "shli",
-// 		"db" => "shli",
-// 		"charset" => "utf8",
-// 	);
-// }
-
 $postgres_info = array (
-	"host" => "localhost",
-	"login" => "***********",
-	"passwd" => "***********",
-	"db" => "***********"
+	"host" => "PARSED_FROM__SERVER[DATABASE_URL]_HEROKU",
+	"login" => "PARSED_FROM__SERVER[DATABASE_URL]_HEROKU",
+	"passwd" => "PARSED_FROM__SERVER[DATABASE_URL]_HEROKU",
+	"db" => "PARSED_FROM__SERVER[DATABASE_URL]_HEROKU",
+	"charset" => "utf8"
 );
 
 
