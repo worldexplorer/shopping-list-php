@@ -5,27 +5,6 @@
 $old_display_errors = ini_get("display_errors");
 ini_set("display_errors", 1);
 
-if (isset($_SERVER['DATABASE_URL'])) {
-	$db_url = $_SERVER['DATABASE_URL'];
-	// local postgres://shli:shli@localhost/shli
-	$re = "~postgres:..(.*)\:(.*)@(.*)/(.*)~s";
-	$matches = array();
-	preg_match($re, $db_url, $matches);
-	if (count($matches) == 5) {
-		$postgres_info["login"] = $matches[1];
-		$postgres_info["passwd"] = $matches[2];
-		$postgres_info["host"] = $matches[3];
-		$postgres_info["db"] = $matches[4];
-		if ($debug_query == 1) {
-			pre("Parsed OK: _SERVER['DATABASE_URL']");
-		}
-	} else {
-		pre($matches, 
-			"Using postgres_info as _SERVER['DATABASE_URL']=[$db_url] parsing failed"
-		);
-	}
-}
-
 
 $host_port = isset($postgres_info["host"]) ? "host=" . $postgres_info["host"] : "";
 if (isset($postgres_info["port"])) {
@@ -38,11 +17,39 @@ $connStr = "user=" . $postgres_info["login"]
 		 . " dbname=" . $postgres_info["db"]
 	//	 . " options='--application_name=$site_name'"
 	;
+
+$debug_query = 1;
+if (isset($_SERVER['DATABASE_URL'])) {
+	$db_url = $_SERVER['DATABASE_URL'];
+	$db_url = "postgres://shli:shli@localhost:5432/shli";
+	$re = "~postgres:..(.+)\:(.+)@(.+)(\:([\d]+))/(.+)~s";
+	$matches = array();
+	preg_match($re, $db_url, $matches);
+	// pre($matches);
+	if (count($matches) == 7) {
+		$postgres_info["login"] = $matches[1];
+		$postgres_info["passwd"] = $matches[2];
+		$postgres_info["host"] = $matches[3];
+		$postgres_info["port"] = $matches[5];
+		$postgres_info["db"] = $matches[6]; // WILL_BE_NEEDED
+		// WILL_STAY_FOR_FURTHER_CONTROL: $postgres_info["charset"]
+		if ($debug_query == 1) {
+			pre($postgres_info,
+				"Parsed OK: _SERVER['DATABASE_URL']");
+		}
+		$connStr = $db_url;
+	} else {
+		pre(//$matches, 
+			"Using postgres_info as _SERVER['DATABASE_URL']=[$db_url] parsing failed"
+		);
+	}
+}
+
 $cms_dbc = pg_connect($connStr);
 ini_set("display_errors", $old_display_errors);
-if ($debug_query == 1) {
-	echo "cms_dbc=[$cms_dbc]<br/>";
-}	
+// if ($debug_query == 1) {
+//	pre($cms_dbc, "cms_dbc");
+//}	
 //if ($cms_dbc == "") die("cms_dbc: Cant pg_connect()");
 
 

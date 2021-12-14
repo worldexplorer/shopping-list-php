@@ -4,7 +4,7 @@ DirectoryIndex  index.php
 # https://blog.doppler.com/configuring-php-applications-using-environment-variables
 # https://stackoverflow.com/questions/35953019/expose-environment-variables-to-apache-and-php
 # is put to $_SERVER['DATABASE_URL']
-SetEnv DATABASE_URL "postgres://shli:shli@localhost/shli"
+#SetEnv DATABASE_URL "postgres://shli:shli@localhost:5432/shli"
 
 
 #php_value xdebug.mode debug
