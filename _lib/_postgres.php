@@ -18,7 +18,7 @@ $connStr = "user=" . $postgres_info["login"]
 	//	 . " options='--application_name=$site_name'"
 	;
 
-$debug_query = 1;
+//$debug_query = 1;
 if (isset($_SERVER['DATABASE_URL'])) {
 	$db_url = $_SERVER['DATABASE_URL'];
 	// $db_url = "postgres://shli:shli@localhost:5432/shli";
@@ -65,11 +65,14 @@ if (pg_connection_status($cms_dbc) !== PGSQL_CONNECTION_OK) {
 
 //https://www.php.net/manual/en/mysqli.set-charset.php
 //printf("Initial character set: %s\n", pg_character_set_name($cms_dbc));
-if (pg_set_client_encoding($cms_dbc, $postgres_info['charset']) !== 0) {
-    printf("Error loading character set " . $postgres_info['charset'] . ": %s\n", pg_last_error($cms_dbc));
-    exit();
-//} else {
-//    printf("Current character set: %s\n", pg_character_set_name($cms_dbc));
+if (isset($postgres_info['charset'])) {
+	$charset = $postgres_info['charset'];
+	if (pg_set_client_encoding($cms_dbc, $charset) !== 0) {
+    	printf("Error loading character set " . $postgres_info['charset'] . ": %s\n", pg_last_error($cms_dbc));
+    	exit();
+	// } else {
+   	//	plog("Current character set: %s\n", pg_character_set_name($cms_dbc));
+	}
 }
 
 
@@ -858,10 +861,18 @@ function hash_by_tpl ($row, $tpl, $entity = "_global:entity", $wrap_breaks = 1, 
 //					global $row_callback;
 //					return $matches[1]($row_callback);
 //				},
-				create_function(
-					'$matches',
-					'global $row_callback; if (function_exists($matches[1])) return $matches[1]($row_callback);'
-					),
+				// create_function(
+				//	'$matches',
+				//	'global $row_callback; if (function_exists($matches[1])) return $matches[1]($row_callback);'
+				//),
+				function($matches) use ($row_callback) {
+					$fname = $matches[1];
+					if (function_exists($fname)) {
+						return $fname($row_callback);
+					} else {
+						return "";
+					}
+				},
 				$ret);
 		}
 	
