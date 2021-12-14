@@ -5,16 +5,38 @@
 $old_display_errors = ini_get("display_errors");
 ini_set("display_errors", 1);
 
+if (isset($_SERVER['DATABASE_URL'])) {
+	$db_url = $_SERVER['DATABASE_URL'];
+	// local postgres://shli:shli@localhost/shli
+	$re = "~postgres:..(.*)\:(.*)@(.*)/(.*)~s";
+	$matches = array();
+	preg_match($re, $db_url, $matches);
+	if (count($matches) == 5) {
+		$postgres_info["login"] = $matches[1];
+		$postgres_info["passwd"] = $matches[2];
+		$postgres_info["host"] = $matches[3];
+		$postgres_info["db"] = $matches[4];
+		if ($debug_query == 1) {
+			pre("Parsed OK: _SERVER['DATABASE_URL']");
+		}
+	} else {
+		pre($matches, 
+			"Using postgres_info as _SERVER['DATABASE_URL']=[$db_url] parsing failed"
+		);
+	}
+}
+
+
 $host_port = isset($postgres_info["host"]) ? "host=" . $postgres_info["host"] : "";
 if (isset($postgres_info["port"])) {
 	$host_port .= " port=" . $postgres_info["port"];
 }
 
-$connStr = $host_port
-	. " dbname=" . $postgres_info["db"]
-	. " user=" . $postgres_info["login"]
-	. " password=" . $postgres_info["passwd"]
-	//. " options='--application_name=$site_name'"
+$connStr = "user=" . $postgres_info["login"]
+		 . " password=" . $postgres_info["passwd"]
+		 . " $host_port"
+		 . " dbname=" . $postgres_info["db"]
+	//	 . " options='--application_name=$site_name'"
 	;
 $cms_dbc = pg_connect($connStr);
 ini_set("display_errors", $old_display_errors);
@@ -28,8 +50,7 @@ if (pg_connection_status($cms_dbc) !== PGSQL_CONNECTION_OK) {
 	if ($debug_query == 1) {
 		echo "postgres connStr=[$connStr]<br/>";
 	}
-	printf("Connect failed: %s\n", pg_last_error());
-    exit();
+	die("Posgres pg_connect(********) failed");
 }
 
 //pg_query($cms_dbc, "SET NAMES '" . $postgres_info['charset'] . "'");

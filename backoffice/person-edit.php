@@ -54,6 +54,10 @@ $composite_inputtype = "multicheckbox";
 $multicompositecontent_pgroup_expanded = true;
 $multicompositecontent_product_expanded = true;
 
+$ahref_token_regenerate = 
+	"" //"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='?id=#ID#&mode=auth_regenerate'>[Перегенерировать Токен]</a>"
+	;
+
 $entity_fields = array (
 	"ident" => array ("", "textfield", ""),
 	
@@ -67,7 +71,7 @@ $entity_fields = array (
 	"password" => array ("", "textfield", ""),
 	"~login-password" => array ("", "ahref", "<a href=../auth.php?l_login=id#id# target=_blank>$msg_tag_shortcut войти с лица id+пароль</a>"),
 	"auth" => array ("", "textfield", ""),
-	"~login-auth" => array ("", "ahref", "<a href=../auth.php?l_auth=#AUTH# target=_blank>$msg_tag_shortcut войти с лица токеном</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='?id=#ID#&mode=auth_regenerate'>[Перегенерировать Токен]</a>"),
+	"~login-auth" => array ("", "ahref", "<a href=../auth.php?l_auth=#AUTH# target=_blank>$msg_tag_shortcut войти с лица токеном</a>$ahref_token_regenerate"),
 //	"~genmulticb_questions_byTour_forGame_withTeamAnswers
 
 //	"productbypgroup" => array ("Ответы",
