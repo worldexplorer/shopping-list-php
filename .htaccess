@@ -8,7 +8,7 @@ DirectoryIndex  index.php
 
 
 #php_value xdebug.mode debug
-#php_flag xdebug.start_with_request true
+#php_flag xdebug.start_with_request yes
 
 
 

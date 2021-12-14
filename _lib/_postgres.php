@@ -21,7 +21,7 @@ $connStr = "user=" . $postgres_info["login"]
 $debug_query = 1;
 if (isset($_SERVER['DATABASE_URL'])) {
 	$db_url = $_SERVER['DATABASE_URL'];
-	$db_url = "postgres://shli:shli@localhost:5432/shli";
+	// $db_url = "postgres://shli:shli@localhost:5432/shli";
 	$re = "~postgres:..(.+)\:(.+)@(.+)(\:([\d]+))/(.+)~s";
 	$matches = array();
 	preg_match($re, $db_url, $matches);
