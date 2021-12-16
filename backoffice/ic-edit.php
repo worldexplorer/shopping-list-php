@@ -109,7 +109,8 @@ if ($id > 0) {
 			break;
 			
 		case "AHREF":
-			$ctx_fields = array ("param1" => array ("Строка-шаблон", "textfield", ""));
+			$ctx_fields = array //	"~1" => array("װאיכ", "table_ro", "ident"),
+			("param1" => array ("Строка-шаблон", "textfield", ""));
 			break;
 			
 		case "IMAGE":

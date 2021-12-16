@@ -2,8 +2,8 @@
 \encoding utf8;
 --SET CHARACTER SET utf8;
 
-DROP TABLE IF EXISTS shli_m2m_person_iccontent;
-CREATE TABLE shli_m2m_person_iccontent (
+DROP TABLE IF EXISTS shli_m2m_room_person;
+CREATE TABLE shli_m2m_room_person (
 	id				SERIAL,
 	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -14,15 +14,11 @@ CREATE TABLE shli_m2m_person_iccontent (
 
 	ident			VARCHAR(250) DEFAULT '',
 
+	room			INTEGER NOT NULL DEFAULT 0,
 	person			INTEGER NOT NULL DEFAULT 0,
-
-	ic				INTEGER NOT NULL DEFAULT 0,
-	iccontent		TEXT,
-	iccontent_tf1	VARCHAR(250) DEFAULT '',
-
 	
 	PRIMARY KEY(id)
---	, key(person, ic),
+--	unique key(person, poll),
 );
 
 
@@ -35,10 +31,18 @@ BEGIN
 END;
 $$;
 
-CREATE TRIGGER trg_shli_m2m_person_iccontent_update_date_updated
-	BEFORE UPDATE ON shli_m2m_person_iccontent FOR EACH ROW
+CREATE TRIGGER trg_shli_m2m_room_person_update_date_updated
+	BEFORE UPDATE ON shli_m2m_room_person FOR EACH ROW
 	EXECUTE PROCEDURE fn_sync_date_updated();
 
 
---\d shli_m2m_person_iccontent;
---select * from shli_m2m_person_iccontent;
+
+--\d shli_m2m_room_person;
+
+insert into shli_m2m_room_person
+	(id, room, person, ident) values
+	(1, 1, 1, 'НашЧат - Петрович'),
+	(2, 1, 2, 'НашЧат - Дуся')
+;
+
+--select * from shli_m2m_room_person;

@@ -484,7 +484,8 @@ $layer_opened_nr = get_number("layer_opened_nr");
 
 
 if (!defined("TABLE_PREFIX")) define("TABLE_PREFIX", "");
-$non_prefixed_fields = array("id", "published", "deleted", "brief", "brief_no_freetext", "content", "content_no_freetext", "parent_id", "iccontent_tf1");
+$non_prefixed_fields = array("id", "published", "deleted", "brief",
+	"brief_no_freetext", "content", "content_no_freetext", "parent_id", "iccontent_tf1");
 // поля из-под fixed тоже non-prefixed оказываются
 
 
@@ -702,6 +703,7 @@ $list_query_cnt = "";
 //redefined in _lib/_messages.php $list_empty_msg = "<b>Нет данных</b>";
 
 $list_left_fields = "";
+$list_left_fields_groupby = "";
 $list_left_o2mjoins = "";
 $list_left_m2mjoins = "";
 $list_left_m2mjoins_got_backhref = 0;
@@ -1000,7 +1002,7 @@ function gethash_bytplhash($tplhash
 }
 
 function gethash_bytplhash_nocheckboxes($tplhash, $absorb_in_cookie = 1
-		, $get_first_from_cookie_instead_tpl = 0, $get_first_from_cookie_onsubmit = 0
+		, $get_first_from_cookie_instead_hash_bytpl = 0, $get_first_from_cookie_onsubmit = 0
 		, $mode_submit = 0, $handle_mode_submit_bymyself = 1) {
 			
 	global $debug_cookies, $mode, $msg_bo_empty;

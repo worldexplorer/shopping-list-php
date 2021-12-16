@@ -384,8 +384,8 @@ EOT;
 <th width=20></th>
 <th width=120 nowrap>Last update</th>
 <th width=100%>$entity_msg_h</th>
-<th width=10>ќпубл</th>
-<th width=70>”далить</th>
+<th width=10>$msg_bo_published</th>
+<th width=70>$msg_bo_delete</th>
 EOT;
 	}
 	
@@ -448,6 +448,7 @@ if (isset($entity_fixed_list[$entity])) {
 	
 			$list_left_fields .= ", $dependant_entity.ident as ${dependant_entity}_ident";
 			$list_left_joined_like_list[] = "$dependant_entity.ident";
+			$list_left_fields_groupby .= ", ${dependant_entity}_ident";
 	
 			$list_left_o2mjoins .=
 				" left join $dependant_entity $dependant_entity"
@@ -455,20 +456,29 @@ if (isset($entity_fixed_list[$entity])) {
 	
 		} else {
 
-// товары через m2m, вывести им¤ первой группы дл¤ товара
-// product.php: "pgroup_ident" => array("√руппа", "view")
+// товары через m2m, вывести имя первой группы для товара
+// product.php: "pgroup_ident" => array("Группа", "view")
 
 	//		. " left join pgroup pg on e.pgroup=pg.id"
 	
-			$list_left_fields .= ", $dependant_entity.ident as ${dependant_entity}_ident";
+//			$list_left_fields .= ", $dependant_entity.ident as ${dependant_entity}_ident";
+			
+			
+			
+			
 //			$list_left_fields .= ", concat($dependant_entity.ident) as ${dependant_entity}_ident_list";
 //			$list_left_fields .= ", group_concat(distinct $dependant_entity.ident order by $dependant_entity.ident separator '<br>') as ${dependant_entity}_ident";
 //GROUP_CONCAT(DISTINCT pgroup.id, '=', pgroup.ident order by pgroup.manorder separator '~~') 
-			$list_left_fields .= ", group_concat(distinct $dependant_entity.id, '=', $dependant_entity.ident order by $dependant_entity.ident separator '~~') as ${dependant_entity}_ident";
+//			$list_left_fields .= ", group_concat(distinct $dependant_entity.id, '=', $dependant_entity.ident order by $dependant_entity.ident separator '~~') as ${dependant_entity}_ident";
+// postgres:
+			$list_left_fields .= ", string_agg(DISTINCT CONCAT($dependant_entity.id, '=', $dependant_entity.ident), '~~') AS ${dependant_entity}_ident";
+			
 //			$charset_bug = "group_concat(distinct $dependant_entity.id, '=', $dependant_entity.ident order by $dependant_entity.ident separator '~~') as ${dependant_entity}_ident";
 //			$list_left_fields .= ", CAST($charset_bug) AS CHAR(10000) CHARACTER SET utf8";
 			
 
+//			$list_left_fields_groupby .= ", ${dependant_entity}_ident";
+			
 			$list_left_joined_like_list[] = "$dependant_entity.ident";
 
 			$list_left_m2mjoins .=
@@ -709,10 +719,10 @@ if ($list_query == "") {
 	}
 
 
-	$list_query = "select e.*"
-		. " from $entity e where $list_query_cond $list_query_like_cond"
-		. " order by e." . get_entity_orderby($entity)
-		;
+//	$list_query = "select e.*"
+//		. " from $entity e where $list_query_cond $list_query_like_cond"
+//		. " order by e." . get_entity_orderby($entity)
+//		;
 
 //improved list_query with left joins to fixed tables
 	$list_query = "select e.* $list_left_fields $list_left_additional_fields"
@@ -723,7 +733,7 @@ if ($list_query == "") {
 		. " where "
 		. $list_query_cond
 		. $list_query_like_cond
-		. " group by e.id"
+		. " group by e.id" . $list_left_fields_groupby
 		. " order by e." . get_entity_orderby($entity)
 		;
 }

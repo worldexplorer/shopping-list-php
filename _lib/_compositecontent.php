@@ -186,7 +186,7 @@ function optionscompositecontent_productbyfixed($m2m_table, $m2m_fixed, $composi
 	}
 	
 	$query = add_sql_table_prefix($query);
-	$result = pg_query($dbc_cms, $query)
+	$result = pg_query($cms_dbc, $query)
 			or die("SELECT OPTIONSCOMPOSITECONTENT_PRODUCTBYFIXED failed:<br>$query:<br>" . pg_last_error($cms_dbc));
 	$size = pg_num_rows($result);
 
@@ -240,7 +240,7 @@ EOT;
 					. " and $joinon";
 	
 			$query2 = add_sql_table_prefix($query2);
-			$result2 = pg_query($dbc_cms, $query2)
+			$result2 = pg_query($cms_dbc, $query2)
 					or die("SELECT PRODUCT_OPTION failed:<br>$query2:<br>" . pg_last_error($cms_dbc));
 			if (pg_num_rows($result2) > 0) {
 				$row["selected"] = "selected";
@@ -371,7 +371,7 @@ function optionscompositecontent_pgroupfromroot($m2m_table, $m2m_fixed, $composi
 	}
 
 	$query = add_sql_table_prefix($query);
-	$result = pg_query($dbc_cms, $query)
+	$result = pg_query($cms_dbc, $query)
 			or die("OPTIONSCOMPOSITECONTENT_PGROUP failed:<br>$query:<br>" . pg_last_error($cms_dbc));
 	$num_rows = pg_num_rows($result);
 
@@ -901,7 +901,7 @@ function multicompositecontent_update($m2m_table, $value_arr,
 	$query = add_sql_table_prefix($query);
 	pre($query);
 
-	$result = pg_query($dbc_cms, $query) or die("SELECT4DELETE MULTICOMPOSITECONTENT_UPDATE failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	$result = pg_query($cms_dbc, $query) or die("SELECT4DELETE MULTICOMPOSITECONTENT_UPDATE failed:<br>$query<br>" . pg_last_error($cms_dbc));
 	while ($row = pg_fetch_assoc($result)) {
 		$m2m_id = $row["id"];
 		$m2m_deleted = $row["deleted"];

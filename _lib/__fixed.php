@@ -83,8 +83,8 @@ foreach($fixed_fields as $fixed_field) {
 
 //$fixed_cond = sqlcond_fromhash($fixed_hash, "", " and ");
 
-$o2mfixed_cond = sqlcond_fromhash($o2mfixed_hash, "e", " and ");
-$m2mfixed_cond = sqlcond_fromhash($m2mfixed_hash, "$m2mfixed_dependtable_first", " and ");
+$o2mfixed_cond = sqlcond_fromhash($o2mfixed_hash, "e");		//, " and ");
+$m2mfixed_cond = sqlcond_fromhash($m2mfixed_hash, "$m2mfixed_dependtable_first");	//, " and ");
 
 $fixed_suffix = hrefsuffix_fromhash($fixed_hash);
 $fixed_hiddens = hidden_fromhash($fixed_hash);

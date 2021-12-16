@@ -55,8 +55,8 @@ if ($id > 0) {
 				$query = "update " . TABLE_PREFIX . "$entity set $sql_fields where id=$id";
 				$query = add_sql_table_prefix($query);
 				if ($debug_query == 1) $query;
-				pg_query($cms_dbc, $query) or die ("UPDATE ENTITY failed:<br>$query<br>" . pg_last_error($cms_dbc));
-				$rows_updated_onedit = pg_affected_rows($cms_dbc);
+				$result = pg_query($cms_dbc, $query) or die ("UPDATE ENTITY failed:<br>$query<br>" . pg_last_error($cms_dbc));
+				$rows_updated_onedit = pg_affected_rows($result);
 				update($update_basehash, array("id" => $id));
 			} else {
 //				echo "_entity_edit: nothing to update<br>";
@@ -122,9 +122,9 @@ if ($id > 0) {
 							$query .= " where id=$id";
 							$query = add_sql_table_prefix($query);
 	//						echo $query;
-							pg_query($cms_dbc, $query)
+							$result = pg_query($cms_dbc, $query)
 								or $errormsg .= "UPDATE_FILE [$name] failed:<br>$query<br>" . pg_last_error($cms_dbc);
-							$files_updated_onedit += pg_affected_rows($cms_dbc);
+							$files_updated_onedit += pg_affected_rows($result);
 	//					} else {
 	//						$errormsg .= "$msg_bo_file_format_wrong [" . $_FILES["$name"]['type'] . "]<br>";
 	//					}

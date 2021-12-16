@@ -7,7 +7,7 @@ $table_columns = array (
 	"icwhose_ident" => array("", "view", "22em"),
 	"ident" => array($entity_msg_h, "hrefedit"),
 	"icdictcontent" => array("", "cnt"),
-//	"hashkey" => array ("Ключ", "textfield", ""),
+//	"hashkey" => array ("", "textfield", ""),
 
 	"published" => array("", "checkbox"),
 	"~delete" => array("", "checkboxdel")

@@ -2,8 +2,8 @@
 \encoding utf8;
 --SET CHARACTER SET utf8;
 
-DROP TABLE IF EXISTS shli_m2m_person_pollanswer;
-CREATE TABLE shli_m2m_person_pollanswer (
+DROP TABLE IF EXISTS shli_pgroup;
+CREATE TABLE shli_pgroup (
 	id				SERIAL,
 	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -12,21 +12,15 @@ CREATE TABLE shli_m2m_person_pollanswer (
 	deleted			SMALLINT NOT NULL DEFAULT 0,
 	manorder		SERIAL, -- INTEGER NOT NULL DEFAULT 0 CHECK (manorder >= 0),
 
-	ident			VARCHAR(250) DEFAULT '',
+	ident			VARCHAR(250) NOT NULL DEFAULT '',
 
-	poll			INTEGER NOT NULL DEFAULT 0,
-	pollanswer		INTEGER NOT NULL DEFAULT 0,
-	person			INTEGER NOT NULL DEFAULT 0,
---	correct			SMALLINT NOT NULL DEFAULT 0,
+	parent_id		INTEGER NOT NULL DEFAULT 0,
 
-	ic				INTEGER NOT NULL DEFAULT 0,
-	icdictcontent	INTEGER NOT NULL DEFAULT 0,
-	iccontent		TEXT,
+	room			INTEGER NOT NULL DEFAULT 0,
 
-	remote_address	VARCHAR(250) NOT NULL DEFAULT '',
-	
+	purchase_origin	INTEGER NOT NULL DEFAULT 0, -- purchase in the room that first used this product group
+
 	PRIMARY KEY(id)
---	unique key(person, pollanswer),
 );
 
 
@@ -39,10 +33,19 @@ BEGIN
 END;
 $$;
 
-CREATE TRIGGER trg_shli_m2m_person_pollanswer_update_date_updated
-	BEFORE UPDATE ON shli_m2m_person_pollanswer FOR EACH ROW
+CREATE TRIGGER trg_shli_pgroup_update_date_updated
+	BEFORE UPDATE ON shli_pgroup FOR EACH ROW
 	EXECUTE PROCEDURE fn_sync_date_updated();
 
 
---\d shli_m2m_person_pollanswer;
---select * from shli_m2m_person_pollanswer;
+--\d shli_pgroup;
+
+insert into shli_pgroup
+	(id, parent_id, room, purchase_origin, ident) values
+	(1, 0, 1, 1, 'root'),
+	(2, 1, 1, 1, 'Бакалея'),
+	(3, 1, 1, 1, 'Выпечка'),
+	(4, 1, 1, 1, 'Молочка')
+;
+
+--select * from shli_pgroup;

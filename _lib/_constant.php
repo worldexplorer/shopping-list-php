@@ -12,6 +12,7 @@ $legend_separator = "&nbsp;&nbsp;|&nbsp;&nbsp;";
 
 $postgres_info = array (
 	"host" => "PARSED_FROM__SERVER[DATABASE_URL]_HEROKU",
+	"port" => "5432",
 	"login" => "PARSED_FROM__SERVER[DATABASE_URL]_HEROKU",
 	"passwd" => "PARSED_FROM__SERVER[DATABASE_URL]_HEROKU",
 	"db" => "PARSED_FROM__SERVER[DATABASE_URL]_HEROKU",
@@ -22,7 +23,7 @@ $postgres_info = array (
 if ($_SERVER["SERVER_NAME"] == "localhost") {
 	$postgres_info = array (
 		"host" => "localhost",
-		//"port" => "5432",
+		"port" => "5432",
 		"login" => "shli",
 		"passwd" => "shli",
 		"db" => "shli",
@@ -32,104 +33,28 @@ if ($_SERVER["SERVER_NAME"] == "localhost") {
 
 //pre($postgres_info);
 
-
-$menu_bo1 = array (
-	array (
-		"=search.php" => "Поиск",
-
-		"~21" => "&nbsp;",
-//		"~2" => "Материалы",
-//		array (
-			"product" => "Материалы",
-//		),
-
-		"~31" => "&nbsp;",
-		"~3" => "Справочники",
-		array (
-			"pgroup" => "Разделы",
-			"supplier" => "Носители",
-			"pmodel" => "Источники",
-			"=icdictcontent.php?icdict=1" => "Ключевые слова",
-		),
-
-		"~41" => "&nbsp;",
-		"~4" => "Анкеты",
-		array (
-			"icwhose" => "Анкеты",
-			"ic" => "Вопросы в анкете",
-			"icdict" => "Справочники",
-			"icdictcontent" => "Значения справочника",
-			"ictype" => "Типы полей ввода",
-		),
-
-		"~51" => "&nbsp;",
-		"~61" => "Системное",
-		array (
-			"imgtype" => "Типы картинок",
-			"img" => "Все картинки подряд",
-			"change_word" => "Заменить везде",
-			"=product-lost.php" => "Материалы без разделов",
-		),
-	),
-);
-
-
-// $menu_bo in _constants.php has empty values because of language dependency (filled at bottom of _messages.php)
-
-
-
-// after _messages.php was introduced, $entity_list is really large and not needed in $menu_bo
-//$menu_bo = $entity_list = array (
 $menu_bo = array (
-//	"mmenu" => "",
-//	"pgroup" => "",
-//	"=pgroup-onindex.php" => "",
-//	"product" => "",
-//	"=product-lost.php" => "",
-//	"supplier" => "",
-//	"pmodel" => "",
-//	"~8" => "&nbsp;",
-//	"news" => "",
-//	"ngroup" => "",
+	"m2m_room_person" => "",
+	"message" => "",
+	"m2m_puritem_person" => "",
 
-//	"faq" => "",
-//	"fgroup" => "",
-
-//	"~7" => "&nbsp;",
-	"person" => "",
-	"m2m_person_iccontent" => "",
-
-	"~8" => "&nbsp;",
-	"poll" => "",
-	"pollanswer" => "",
-//	"team" => "",
-//	"m2m_game_team" => "",
-	
-	"~9" => "&nbsp;",
-//	"game" => "",
-//	"tour" => "",
-//	"question" => "",
-	
 	"~10" => "&nbsp;",
-	"m2m_person_pollanswer" => "Все ответы",
+	"person" => "",
+	"room" => "",
 
-//	"~11" => "&nbsp;",
-//	"battle" => "Турнир",
-//	"=battle.php?fullscreen=1" => "Fullscreen",
-
-//	"~9" => "&nbsp;",
-//	"shop" => "",
-//	"currency" => "",
-
-//	"=../mailer/user/login.php?mlist=1&l_login=1234&l_passwd=1234&mode=login' target='_blank" => "Рассылка",
-//	"=mmenu-legend.php" => "",
+	"~9" => "&nbsp;",
+	"purchase" => "",
+	"puritem" => "",
+	"product" => "",
+	"pgroup" => "",
+	"punit" => "",
 
 	"~7" => "&nbsp;",
 	"constant" => "",
 //	"mtpl" => "",
 //	"sentlog" => "",
-//	"imgtype" => "",
-//	"img" => "",
+	"imgtype" => "",
+	"img" => "",
 //	"change_word" => "",
 //	"~5" => "&nbsp;",
 //	"jsvalidator" => "",
@@ -145,76 +70,22 @@ $menu_bo = array (
 
 
 $entity_orderby_list = array (
-	"article" => "manorder desc",
-	"agroup" => "manorder asc",
-
 	"product" => "manorder asc",
-	"supplier" => "ident asc",
-	"pmodel" => "ident asc",
-	"color" => "ident asc",
-
-	"package" => "ident asc",
-
-	"news" => "manorder desc",
-	"sentlog" => "manorder desc",
-	"pimportsource" => "manorder desc",
-	"importlog" => "manorder desc",
-	
-	"customer" => "manorder desc",
-	"corder" => "manorder desc",
-
-//	"icdictcontent" => "ident asc",
-
-	"m2m_product_rating" => "manorder asc",
-	"m2m_product_replic" => "manorder asc",
-
-	"m2m_article_rating" => "manorder asc",
-	"m2m_article_replic" => "manorder asc",
-
-	// mozgoboi
-	"team" => "ident asc",
-	"game" => "manorder asc",
-	"question" => "manorder asc",
+	"punit" => "ident asc",
+	"pgroup" => "manorder asc",
 );
 
 $entity_fixed_list = array (
-	"mmenu" => array("parent_id"),
-
-	"agroup" => array("parent_id"),
-//	"article" => array("issue", "agroup", "person"),
-
-	"pgroup" => array("parent_id"),
-//	"product" => array("pgroup", "supplier", "pmodel"),
-//	"product" => array("pgroup", "supplier", "country", "package", "saleunit", "taxrate", "pclass"),
-//	"product" => array("pgroup", "supplier"),
-	"product" => array("pgroup"),
-	"pmodel" => array("supplier"),
-
-	"sgroup" => array("parent_id"),
-	"spart" => array("sgroup", "supplier", "pmodel"),
-
-//	"caroption" => array("ogroup"),
-//	"ppgoption" => array("pgroup"),
-
-//	"corder" => array("customer"),
-
-//	"supplier" => array("country"),
-
-	"cgroup" => array("parent_id"),
-//	"customer" => array("cgroup"),
-
-	"ugroup" => array("parent_id"),
-
-	"bgroup" => array("parent_id"),
-	"banner" => array("bgroup"),
-	"review" => array("rgroup"),
-	"rgroup" => array("parent_id"),
-//	"news" => array("ngroup", "cgroup"),
-//	"news" => array("ngroup"),
-	"ngroup" => array("parent_id"),
-
-	"faq" => array("fgroup"),
-	"fgroup" => array("parent_id"),
+	"pgroup" => array("room", "parent_id"
+		//, "purchase_origin"
+	),
+	"product" => array("room",  "punit", "pgroup"
+		//, "purchase_origin"
+		),
+	"message" => array("room", "person", "purchase"),
+	"purchase" => array("room"),
+	"puritem" => array("room", "purchase", "pgroup", "product"),
+	"room" => array("person"),
 
 	"ic" => array("icwhose", "ictype"),
 	"icdict" => array("icwhose"),
@@ -224,40 +95,12 @@ $entity_fixed_list = array (
 //	"img" => array("imgtype"),
 
 	"sentlog" => array("mtpl"),
-
-//	"m2m_product_rating" => array("product", "customer"),
-//	"m2m_product_replic" => array("product", "customer"),
-//	"m2m_article_rating" => array("article", "person"),
-//	"m2m_article_replic" => array("article", "person"),
-
-	"tour" => array("game"),		//array("parent_id"),
-	"question" => array("game", "tour"),	
-	//hacky
-	"game" => array("team"),
-	"team" => array("game"),
-
-	//shli
-	"pollanswer" => array("poll", "parent_id"),
-//	"question" => array("game", "tour"),
-	
 );
 
 $entity_m2mfixed_list = array (
-//	"m2m_ugroup_pgroup" => array("ugroup", "pgroup"),
-//	"m2m_product_pgroup" => array("product", "pgroup"),
-//	"m2m_customer_ugroup" => array("customer", "ugroup"),
-//	"m2m_customer_cgroup" => array("customer", "cgroup"),
-//	"m2m_product_news" => array("product", "news"),
-//	"m2m_news_ugroup" => array("news", "ugroup"),
-//	"m2m_news_cgroup" => array("cgroup", "news"),
-//	"m2m_article_rating" => array("article", "person"),
-//	"m2m_article_replic" => array("article", "person"),
-//mozgoboi
-	"m2m_game_team" => array("game", "team"),
-//	"m2m_team_question" => array("team", "game"),
-//	"m2m_team_question" => array("team", "game", "tour", "question"),
-
-	"m2m_person_pollanswer" => array("person", "pollanswer"),
+	"m2m_room_person" => array("room", "person"),
+//	"m2m_puritem_person" => array(//"room",
+//		"purchase", "puritem", "person_bought", "product"),
 );
 
 $m2m_bidirect_insert_backward = array (
@@ -267,23 +110,7 @@ $m2m_bidirect_insert_backward = array (
 
 
 $entity_swapdbfields_list = array (
-	"article" => array (
-		array("file1", "file1_comment"),
-		array("file2", "file2_comment"),
-		array("file3", "file3_comment"),
-		array("file4", "file4_comment"),
-		array("file5", "file5_comment"),
-	),
-
 	"product" => array (
-		array("file1", "file1_comment"),
-		array("file2", "file2_comment"),
-		array("file3", "file3_comment"),
-		array("file4", "file4_comment"),
-		array("file5", "file5_comment"),
-	),
-
-	"news" => array (
 		array("file1", "file1_comment"),
 		array("file2", "file2_comment"),
 		array("file3", "file3_comment"),
@@ -294,7 +121,7 @@ $entity_swapdbfields_list = array (
 
 
 $no_entity_img_leftjoin = array (
-	"img", "imgtype", "client", "corder", "team", "game", "tour", "question",
+	"constant", "img", "imgtype", "client", "corder", "team", "game", "tour", "question",
 	"poll", "pollanswer", 
 	"ic", "icwhose", "ictype", "icsheet", "icdict", "icdictcontent", "jsvalidator",
 	"m2m_person_iccontent", "m2m_person_poll", "m2m_person_pollanswer", 
@@ -411,6 +238,48 @@ $dbfields_language_independant = array("id", "deleted", "manorder", "hashkey", "
 	);
 
 $dbfields_language_independant_strpos = array("case_debugging", "count(");
+
+
+
+$menu_bo1 = array (
+	array (
+		"=search.php" => "Поиск",
+
+		"~21" => "&nbsp;",
+//		"~2" => "Материалы",
+//		array (
+			"product" => "Материалы",
+//		),
+
+		"~31" => "&nbsp;",
+		"~3" => "Справочники",
+		array (
+			"pgroup" => "Разделы",
+			"supplier" => "Носители",
+			"pmodel" => "Источники",
+			"=icdictcontent.php?icdict=1" => "Ключевые слова",
+		),
+
+		"~41" => "&nbsp;",
+		"~4" => "Анкеты",
+		array (
+			"icwhose" => "Анкеты",
+			"ic" => "Вопросы в анкете",
+			"icdict" => "Справочники",
+			"icdictcontent" => "Значения справочника",
+			"ictype" => "Типы полей ввода",
+		),
+
+		"~51" => "&nbsp;",
+		"~61" => "Системное",
+		array (
+			"imgtype" => "Типы картинок",
+			"img" => "Все картинки подряд",
+			"change_word" => "Заменить везде",
+			"=product-lost.php" => "Материалы без разделов",
+		),
+	),
+);
 
 
 ?>

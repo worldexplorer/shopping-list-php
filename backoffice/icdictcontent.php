@@ -8,7 +8,7 @@ $table_columns = array (
 	//"~2" => array("Значения справочника", "ahref", "<a href=#ENTITY#-edit.php?id=#ID#>#IDENT#</a>"),
 	"~2" => array($entity_msg_h, "ahref", "<a href=#ENTITY#-edit.php?id=#ID#>#IDENT#</a>"),
 	"ident" => array("", "textfield", "", "17em", "16em"),
-//	"hashkey" => array ("Ключ", "textfield", "", "15em", "16em"),
+//	"hashkey" => array ("", "textfield", "", "15em", "16em"),
 
 	"published" => array("", "checkbox"),
 	"~delete" => array("", "checkboxdel")

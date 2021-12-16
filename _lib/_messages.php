@@ -36,7 +36,15 @@ switch ($lang_current) {
 			//slspicy
 			"poll" => "Опросники",
 			"pollanswer" => "Вопросы",
-		
+
+			//shopping-list-php
+			"room" => "Комнаты чата",
+			"m2m_room_person" => "Участники чатов",
+			"message" => "Сообщения",
+			"purchase" => "Закупки",
+			"puritem" => "Списки продуктов",
+			"m2m_puritem_person" => "Совершённые закупки",
+			"punit" => "Единицы измерения",
 		
 			"cgroup" => "Группы клиентов",
 			"customer" => "Клиенты",
@@ -111,6 +119,16 @@ switch ($lang_current) {
 			"poll" => "новый опросник",
 			"pollanswer" => "новый вопрос",
 
+			//shopping-list-php
+			"room" => "новую комнату чата",
+			"m2m_room_person" => "нового участника чата",
+			"message" => "новое сообщение",
+			"purchase" => "новую закупку",
+			"puritem" => "новый список продуктов",
+			"m2m_puritem_person" => "новую совершённую закупку",
+			"punit" => "новую единицу измерения",
+
+
 			"customer" => "нового клиента",
 			"сgroup" => "новую группу клиентов",
 		
@@ -181,6 +199,16 @@ switch ($lang_current) {
 			//slspicy
 			"poll" => "новый опросник",
 			"pollanswer" => "новый вопрос",
+
+			//shopping-list-php
+			"room" => "новая комната чата",
+			"m2m_room_person" => "новый участник чата",
+			"message" => "новое сообщение",
+			"purchase" => "новая закупка",
+			"puritem" => "новый список продуктов",
+			"m2m_puritem_person" => "новая совершённая закупка",
+			"punit" => "новая единица измерения",
+
 
 			"customer" => "новый клиент",
 			"cgroup" => "новая группа клиентов",
@@ -414,8 +442,12 @@ switch ($lang_current) {
 			"poll-save_button_label" => "Надпись на кнопке",
 			"poll-gender_explicit-list" => "М/Ж",
 			"poll-gender_explicit" => "С разбивкой М/Ж",
-			
-			
+
+// shopping-list-php
+			"person_created" => "Создал",
+			"person_purchased" => "Купил",
+
+
 // news
 //			"news-date_published" => "Дата",
 			"ngroup_ident-list" => "Лента",
@@ -851,6 +883,7 @@ switch ($lang_current) {
 			// _list.php
 		$msg_bo_depend_of_that_group = "данной группы";
 		$msg_bo_delete = "Удалить";
+		$msg_bo_published = "Опубл";
 		$msg_bo_delete_all = "все";
 		$msg_bo_delete_all_tip = "галочка относится только к кнопке УДАЛИТЬ";
 		$msg_bo_delete_unable = "нельзя удалить";

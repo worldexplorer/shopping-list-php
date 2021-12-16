@@ -61,13 +61,9 @@ CREATE TRIGGER trg_shli_person_update_date_updated
 -- \d shli_person;
 
 
-insert into shli_person(ident) values
-	('Вася'),
-	('Маша'),
-	('Даша'),
-	('Коля'),
-	('Маруся'),
-	('Петрович');
+insert into shli_person(id, ident) values
+	(1, 'Петрович'),
+	(2, 'Дуся');
 
 -- select * from shli_person;
 

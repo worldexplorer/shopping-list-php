@@ -1,9 +1,9 @@
---\connect shli;
+--\connect shli
 \encoding utf8;
 --SET CHARACTER SET utf8;
 
-DROP TABLE IF EXISTS shli_pollanswer;
-CREATE TABLE shli_pollanswer (
+DROP TABLE IF EXISTS shli_punit;
+CREATE TABLE shli_punit (
 	id				SERIAL,
 	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -11,29 +11,14 @@ CREATE TABLE shli_pollanswer (
 	published		SMALLINT NOT NULL DEFAULT 1,
 	deleted			SMALLINT NOT NULL DEFAULT 0,
 	manorder		SERIAL, -- INTEGER NOT NULL DEFAULT 0 CHECK (manorder >= 0),
+
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
+	brief			VARCHAR(250) NOT NULL DEFAULT '',
+	fpoint			SMALLINT NOT NULL DEFAULT 0,
 
-	tooltip			TEXT,
-	comment_above	TEXT,
-	comment_below	TEXT,
-	
-	
-	poll			INTEGER NOT NULL DEFAULT 0,
-	pollquestion	INTEGER NOT NULL DEFAULT 0,
-
-	
---Ты придёшь на урок в "пнд 13е, группа Л"?
--- - да:
---	-- приду на сальсу,
---	-- приду на бачату,
--- - не приду
-	parent_id		INTEGER NOT NULL DEFAULT 0,
-	multicb			SMALLINT NOT NULL DEFAULT 0,
-	
-	icdict			INTEGER NOT NULL DEFAULT 0,
-	
 	PRIMARY KEY(id)
 );
+
 
 -- https://stackoverflow.com/questions/2362871/postgresql-current-timestamp-on-update
 CREATE OR REPLACE FUNCTION fn_sync_date_updated() RETURNS TRIGGER 
@@ -44,10 +29,26 @@ BEGIN
 END;
 $$;
 
-CREATE TRIGGER trg_shli_pollanswer_update_date_updated
-	BEFORE UPDATE ON shli_pollanswer FOR EACH ROW
+CREATE TRIGGER trg_shli_punit_update_date_updated
+	BEFORE UPDATE ON shli_punit FOR EACH ROW
 	EXECUTE PROCEDURE fn_sync_date_updated();
 
--- \d shli_pollanswer;
 
--- select * from shli_pollanswer;
+--\d shli_punit;
+
+insert into shli_punit
+	(id, fpoint, ident, brief) values
+	(1, 0, 'Штука', 'шт'),
+	(2, 0, 'Упаковка', 'уп'),
+	(3, 0, 'Коробка', 'кор'),
+	(4, 0, 'Банка', 'бан'),
+	(5, 0, 'Пачка', 'пач'),
+
+	(20, 1, 'Килограмм', 'кг'),
+	(21, 1, 'Грамм', 'г'),
+	(22, 1, 'Литр', 'л'),
+	(23, 1, 'Метр', 'м'),
+	(24, 1, 'Миллиметр', 'см')
+;
+
+--select * from shli_punit;

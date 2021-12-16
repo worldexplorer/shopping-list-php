@@ -1,0 +1,15 @@
+Options         +Indexes
+DirectoryIndex  index.php
+
+AuthType        Basic
+AuthName        "Private"
+#htpasswd -b .htpasswd admin admin
+AuthUserFile	/app/backoffice/.htpasswd
+require         valid-user
+
+#CharsetDisable  on
+
+#php_value max_execution_time 60
+#php_value upload_max_filesize "5M"
+#php_value post_max_size "5M"
+#php_value memory_limit "16M"

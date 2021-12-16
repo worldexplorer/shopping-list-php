@@ -2,8 +2,8 @@
 \encoding utf8;
 --SET CHARACTER SET utf8;
 
-DROP TABLE IF EXISTS shli_poll;
-CREATE TABLE shli_poll (
+DROP TABLE IF EXISTS shli_room;
+CREATE TABLE shli_room (
 	id				SERIAL,
 	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -14,18 +14,11 @@ CREATE TABLE shli_poll (
 
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
 
-	tooltip				TEXT,
-	comment_above		TEXT,
-	comment_below		TEXT,
-	save_button_label	TEXT,
+	person_created	INTEGER NOT NULL DEFAULT 0,
+
+	message_pinned			INTEGER NOT NULL DEFAULT 0,
+	message_pinned_text		TEXT, -- deduplication
 	
-	icwhose			INTEGER NOT NULL DEFAULT 0,
-
-	admins_csv					VARCHAR(250) NOT NULL DEFAULT '',
-	admins_notify_after_votes	INTEGER NOT NULL DEFAULT 0,
-
-	gender_explicit	SMALLINT NOT NULL DEFAULT 0,
-
 	PRIMARY KEY(id)
 );
 
@@ -40,10 +33,16 @@ BEGIN
 END;
 $$;
 
-CREATE TRIGGER trg_shli_poll_update_date_updated
-	BEFORE UPDATE ON shli_poll FOR EACH ROW
+CREATE TRIGGER trg_shli_room_update_date_updated
+	BEFORE UPDATE ON shli_room FOR EACH ROW
 	EXECUTE PROCEDURE fn_sync_date_updated();
 
 
---\d shli_poll;
---select * from shli_poll;
+--\d shli_room;
+
+insert into shli_room
+	(id, person_created, ident) values
+	(1, 1, 'Наш чат')
+;
+
+--select * from shli_room;

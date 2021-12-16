@@ -46,7 +46,7 @@ $table_columns = array (
 	"~3" => array("Correct", 	"ahrefcenter", "<a href='m2m_team_question.php?question=#ID#'>#correct_cnt#</a>"),
 	"~4" => array("Incorrect", 	"ahrefcenter", "<a href='m2m_team_question.php?question=#ID#'>#incorrect_cnt#</a>"),
 	
-	  "correct_teams_ident" => array("Правильно ответили"	, "groupconcat_to_ahref", "", $tpl_single, $tpl_multiple),
+	"correct_teams_ident" => array("Правильно ответили"	, "groupconcat_to_ahref", "", $tpl_single, $tpl_multiple),
 	"incorrect_teams_ident" => array("Неправильно ответили"	, "groupconcat_to_ahref", "", $tpl_single, $tpl_multiple),
 	
 	"published" => array("", "checkbox"),

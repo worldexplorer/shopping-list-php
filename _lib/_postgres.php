@@ -147,10 +147,19 @@ function select_field($field = "ident", $fields_cond = 0, $entity = "_global:ent
 	}
 	
 	if ($select_cond != "") $select_cond = " where $select_cond";
-	$query = "select $field from $entity $select_cond order by " . get_entity_orderby($entity) . " limit 1";
+	$query = "select $field from $entity $select_cond";
+	if (strpos($field, "count(") == -1) {
+		$orderby_local = get_entity_orderby($entity);
+		$query .= " order by $orderby_local limit 1"; // POSTGRES pg_query(): Query failed: ERROR: column "shli_pgroup.manorder" must appear in the GROUP BY clause or be used in an aggregate function
+	} else {
+		$breakpoint = "here";
+	};
 	$query = add_sql_table_prefix($query);
-	if ($debug_query == 1) plog("SELECT_FIELD[$query]", "\n\n");
-	$result = pg_query($cms_dbc, $query) or die("SELECT_FIELD failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	if ($debug_query == 1) pre("SELECT_FIELD[$query]");
+	$result = pg_query($cms_dbc, $query);
+	if (!$result) {
+		die("SELECT_FIELD failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	}
 	if (pg_num_rows($result) > 0) {
 		$row = pg_fetch_row($result);
 		$ret = $row[0];
@@ -377,8 +386,8 @@ function update ($fields, $fields_cond = 0, $entity = "_global:entity", $cms_dbc
 		
 		$query = "update $entity set $fields_update where $update_cond";
 		$query = add_sql_table_prefix($query);
-		pg_query($cms_dbc, $query) or die("UPDATE failed:<br>$query<br>" . pg_last_error($cms_dbc));
-		$ret = pg_affected_rows($cms_dbc);
+		$result = pg_query($cms_dbc, $query) or die("UPDATE failed:<br>$query<br>" . pg_last_error($cms_dbc));
+		$ret = pg_affected_rows($result);
 		if ($debug_query == 1) plog("UPDATE[$query]:[$ret]", "\n\n");
 	}
 
@@ -416,9 +425,9 @@ function delete ($fields_cond = 0, $entity = "_global:entity", $cms_dbc = "_glob
 
 	$query = add_sql_table_prefix($query);
 	if ($debug_query == 1) plog("DELETE[$query]");
-	pg_query($cms_dbc, $query) or die("DELETE failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	$result = pg_query($cms_dbc, $query) or die("DELETE failed:<br>$query<br>" . pg_last_error($cms_dbc));
 	
-	return pg_affected_rows($cms_dbc);
+	return pg_affected_rows($result);
 }
 
 function entity_present_in_db($entity) {
@@ -469,7 +478,7 @@ function entity_has_field($entity, $field) {
 		// $query = add_sql_table_prefix($query);
 		// https://stackoverflow.com/questions/20194806/how-to-get-a-list-column-names-and-datatypes-of-a-table-in-postgresql
 		$query = "SELECT column_name, data_type FROM information_schema.columns"
-			. " WHERE table_name='$entity'";
+			. " WHERE table_name='" . TABLE_PREFIX. "$entity'";
 		$entity_dbfields_result = pg_query($cms_dbc, $query)
 			or die("SELECT_COLUMNS failed:<br>$query<br>" . pg_last_error($cms_dbc));
 		for ($i=1; $row = pg_fetch_assoc($entity_dbfields_result); $i++) {
@@ -477,14 +486,17 @@ function entity_has_field($entity, $field) {
 			$entity_dbfields_array[$entity][] = $row["column_name"];
 		}
 
-		//pre($entity_dbfields_result[$entity], "entity_dbfields_result[" . $entity_dbfields_result[$entity] . "]");
+		// pre($entity_dbfields_array, "entity_dbfields_array[$entity]");
 	}
 
 	if (!in_array($field, $non_prefixed_fields)) $field = TABLE_PREFIX . $field;
-	if (in_array($field, $entity_dbfields_array[$entity])) $ret = 1;
+	if (isset($entity_dbfields_array[$entity]) &&
+			in_array($field, $entity_dbfields_array[$entity])) {
+		$ret = 1;
+	}
 	
-	//pre($entity_dbfields_array, "entity_dbfields_array");
-	pr("entity_has_field($entity, $field) = $ret");
+	// pre($entity_dbfields_array, "entity_dbfields_array");
+	// pre("entity_has_field($entity, $field) = $ret");
 
 	return $ret;
 }
@@ -823,7 +835,13 @@ function hash_by_tpl ($row, $tpl, $entity = "_global:entity", $wrap_breaks = 1, 
 		$ret = $tpl;
 
 		foreach ($row as $field => $value) {
-			if (is_array($value)) continue;		// ������ ������ ������� ��������� �������� - ���
+			if ($value === null) {
+				$ret = str_replace("#".strtoupper($field)."#", "", $ret);
+				$ret = str_replace("#".strtolower($field)."#", "", $ret);
+				continue;
+			}
+
+			if (is_array($value)) continue;		// только первый уровень вложенных массивов - наш
 
 			// turn off for textarea not to eat typed \
 			if ($slashes_ok0_strip1 == 1) $value = stripslashes($value);
@@ -1240,10 +1258,14 @@ function pager($url, $rows_total, $addsuffix0_bytpl1 = 0) {
 			$left_beyond_frame = $frame_start-1;
 			$howmuch_beyond = $left_beyond_frame;
 			if ($addsuffix0_bytpl1 == 0) {
-				$frame_prev_html = "<a href='{$url}{$sign_url}pg={$left_beyond_frame}' title='������� " .  ($left_beyond_frame+1) . "-� ��������\n�� " . ($howmuch_beyond+1) . " ����������'> &laquo; </a>|";
+				$frame_prev_html = "<a href='{$url}{$sign_url}pg={$left_beyond_frame}' title='$msg_pager_open "
+					 . ($left_beyond_frame+1) . "$msg_pager_nth $msg_pager_page\n$msg_pager_from "
+					 . ($howmuch_beyond+1) . " $msg_pager_previous'> &laquo; </a>|";
 			} else {
 				$hash = array("pg" => $i);
-				$tpl = "<a href='{$url}' title='������� " .  ($left_beyond_frame+1) . "-� ��������\n�� " . ($howmuch_beyond+1) . " ����������'> &laquo; </a>|";
+				$tpl = "<a href='{$url}' title='$msg_pager_open " .  ($left_beyond_frame+1)
+					. "$msg_pager_nth $msg_pager_page\n$msg_pager_from "
+					. ($howmuch_beyond+1) . " $msg_pager_previous'> &laquo; </a>|";
 				$frame_prev_html = hash_by_tpl($hash, $tpl);
 			}
 		}
@@ -1252,10 +1274,12 @@ function pager($url, $rows_total, $addsuffix0_bytpl1 = 0) {
 			$right_beyond_frame = $frame_end;
 			$howmuch_beyond = $pages_total - $right_beyond_frame;
 			if ($addsuffix0_bytpl1 == 0) {
-				$frame_next_html = "|<a href='{$url}{$sign_url}pg={$right_beyond_frame}' title='������� " .  ($right_beyond_frame+1) . "-� ��������\n�� $howmuch_beyond ���������'> &raquo; </a>";
+				$frame_next_html = "|<a href='{$url}{$sign_url}pg={$right_beyond_frame}' title='$msg_pager_open ". ($right_beyond_frame+1)
+					 . "$msg_pager_nth $msg_pager_page\n$msg_pager_from $howmuch_beyond $msg_pager_next'> &raquo; </a>";
 			} else {
 				$hash = array("pg" => $i);
-				$tpl = "|<a href='{$url}' title='������� " .  ($right_beyond_frame+1) . "-� ��������\n�� $howmuch_beyond ���������'> &raquo; </a>";
+				$tpl = "|<a href='{$url}' title='$msg_pager_open " .  ($right_beyond_frame+1)
+					. "$msg_pager_nth $msg_pager_page\n$msg_pager_from $howmuch_beyond $msg_pager_next'> &raquo; </a>";
 				$frame_prev_html = hash_by_tpl($hash, $tpl);
 			}
 		}
@@ -1307,293 +1331,289 @@ function pager($url, $rows_total, $addsuffix0_bytpl1 = 0) {
 
 
 function mkupdatefields_fromform($entity_fields, $id = "_global:id", $entity = "_global:entity") {
-		global $multiflatcontent_mayupdate, $errormsg;
-		global $strip_from_freetext, $no_freetext, $freetext2textarea, $non_prefixed_fields;
-		global $selective_update_onedit;
+	global $multiflatcontent_mayupdate, $errormsg;
+	global $strip_from_freetext, $no_freetext, $freetext2textarea, $non_prefixed_fields;
+	global $selective_update_onedit;
 
-		$sql_fields = "";
-		$id = absorb_variable($id);
-		$entity = absorb_variable($entity);
-		
-		foreach ($entity_fields as $name => $entity_field) {
+	$sql_fields = "";
+	$id = absorb_variable($id);
+	$entity = absorb_variable($entity);
+
+	foreach ($entity_fields as $name => $entity_field) {
 // helps for skipping view and simple
 // but multicompositeiccontent starts also with ~...
 //			if (preg_match("/~.*/", $name)) continue;
 
-			$input_type = $entity_field[1];
-			$input_type_strict = $input_type;
+		$input_type = $entity_field[1];
+		$input_type_strict = $input_type;
 
-			if ($no_freetext == 1 && $input_type_strict == "freetext") {
-				$input_type = $freetext2textarea[$input_type];
-				$input_type_strict = makestrict($input_type);
-			}
+		if ($no_freetext == 1 && $input_type_strict == "freetext") {
+			$input_type = $freetext2textarea[$input_type];
+			$input_type_strict = makestrict($input_type);
+		}
 
-			$pos = strpos($input_type, "_");
-			$len = strlen($input_type);
-			if ($pos > 0) $input_type_strict = substr($input_type, 0, $pos);
-	
-			$form_value = "";
-			if (isset($_REQUEST[$name])) {
-				$form_value = $_REQUEST[$name];
+		$pos = strpos($input_type, "_");
+		$len = strlen($input_type);
+		if ($pos > 0) $input_type_strict = substr($input_type, 0, $pos);
+
+		$form_value = "";
+		if (isset($_REQUEST[$name])) {
+			$form_value = $_REQUEST[$name];
 //				print_r($form_value);
-			} else if (
-					isset($_REQUEST[$name . "_day"]) && isset($_REQUEST[$name . "_month"]) && isset($_REQUEST[$name . "_year"])
-				) {
-				$form_value = get_date($name);
-			} else {
-				if ($selective_update_onedit == 1) continue;
-			}
+		} else if (
+				isset($_REQUEST[$name . "_day"]) && isset($_REQUEST[$name . "_month"]) && isset($_REQUEST[$name . "_year"])
+			) {
+			$form_value = get_date($name);
+		} else {
+			if ($selective_update_onedit == 1) continue;
+		}
 
 
-/*
-			if ($form_value == "") {
-				echo "skipping [$name]: input is empty<br>";
-				continue;
-			}
-*/
+//		if ($form_value == "") {
+//			echo "skipping [$name]: input is empty<br>";
+//			continue;
+//		}
 
-//			$form_value = $$name;
-//			$form_value = str_replace("'", "\\'", $form_value);
-//			$form_value = str_replace('"', "&quot;", $form_value);
-//			$form_value = addslashes($form_value);
-//			echo "[$name/$input_type_strict] = [$form_value]<br>";
-	
-			$sql_field = "";
-			$skip_update = 0;
+//		$form_value = $$name;
+//		$form_value = str_replace("'", "\\'", $form_value);
+//		$form_value = str_replace('"', "&quot;", $form_value);
+//		$form_value = addslashes($form_value);
+//		echo "[$name/$input_type_strict] = [$form_value]<br>";
 
-			switch ($input_type_strict) {
-				case "boolean":
-				case "hidden":
-				case "textarea":
-				case "number":
-				case "textfield":
-					$form_value = addslashes($form_value);
+		$sql_field = "";
+		$skip_update = 0;
 
-					$tbu_name = $name . "_before_update";
-					if (function_exists($tbu_name)) $form_value = $tbu_name($form_value);
+		switch ($input_type_strict) {
+			case "boolean":
+			case "hidden":
+			case "textarea":
+			case "number":
+			case "textfield":
+				$form_value = addslashes($form_value);
+
+				$tbu_name = $name . "_before_update";
+				if (function_exists($tbu_name)) $form_value = $tbu_name($form_value);
 /*					if ($form_value == "" && $name == "ident") {
-						$skip_update = 1;
-						$errormsg .= "<b>�������� �� ����� ���� ������</b><br>";
-					}
+					$skip_update = 1;
+					$errormsg .= "<b>Название не может быть пустым</b><br>";
+				}
 */
-					if ($skip_update == 0) $sql_field .= "$name='$form_value'";
+				if ($skip_update == 0) $sql_field .= "$name='$form_value'";
 
-					break;
+				break;
 
-				case "freetext":
-					$form_value = addslashes($form_value);
-					$form_value = str_replace($strip_from_freetext, "", $form_value);
+			case "freetext":
+				$form_value = addslashes($form_value);
+				$form_value = str_replace($strip_from_freetext, "", $form_value);
 
-					if ($skip_update == 0) $sql_field .= "$name='$form_value'";
-					break;
-	
-				case "checkbox":
-					if (is_numeric($form_value)) {
-						$sql_field .= ($form_value == 1) ? "$name='1'" : "$name='0'";
-					} else {			//before value=1 in checkboxes 2008-03-16@gpstrack
-						if ($form_value == "on") {
-							$sql_field .= "$name='1'";
-						}
-						if ($form_value == "") {
-							$sql_field .= "$name='0'";
-						}
+				if ($skip_update == 0) $sql_field .= "$name='$form_value'";
+				break;
+
+			case "checkbox":
+				if (is_numeric($form_value)) {
+					$sql_field .= ($form_value == 1) ? "$name='1'" : "$name='0'";
+				} else {			//before value=1 in checkboxes 2008-03-16@gpstrack
+					if ($form_value == "on") {
+						$sql_field .= "$name='1'";
 					}
+					if ($form_value == "") {
+						$sql_field .= "$name='0'";
+					}
+				}
+				break;
+
+			case "select":
+			case "radio":
+			case "tristate":
+				if (
+					($input_type == "select_table_tree" || $input_type == "select_table_tree_root")
+					&& (
+						($form_value == $id && $name == $entity)
+						|| ($form_value == $id && $name == "parent_id")
+						)
+					) {
+//					echo "$input_type";
+					$errormsg .= $msg_bo_cant_be_parent_of_youself;
 					break;
-	
-				case "select":
-				case "radio":
-				case "tristate":
-					if (
-						($input_type == "select_table_tree" || $input_type == "select_table_tree_root")
-						&& (
-							($form_value == $id && $name == $entity)
-							|| ($form_value == $id && $name == "parent_id")
-							)
-						) {
-//						echo "$input_type";
-						$errormsg .= "������ ������� ��������� ������ ����";
+				}
+
+				$tmp_field = "$name='$form_value'";
+//				if (!in_array($name, $non_prefixed_fields)) $tmp_field = TABLE_PREFIX . $tmp_field;
+				$sql_field .= $tmp_field;
+				break;
+
+			case "o2m":
+				o2m_update($name, $form_value, $entity_field[2]);
+				break;
+
+			case "familyicwhose":
+				familyicwhose_update();
+				break;
+
+			case "ic":
+				ic_update($entity_field[2]);
+				break;
+
+			case "multi":
+			case "m2mcb":
+//				echo "multi_update($name, $form_value, $entity_field[2])";
+				if ($form_value == "") $form_value = array();
+				multi_update($name, $form_value, $entity_field[2]);
+				break;
+
+			case "m2mtf":
+			case "m2mta":
+//				echo "m2mtf_update($name, $form_value, $entity_field[2])";
+				m2mtf_update($name, $form_value, $entity_field[2]);
+				break;
+
+			case "m2mtfethalon":
+				$m2m_tablehash = $entity_field[2];
+				$m2m_updatabletable = "";
+				
+				foreach($m2m_tablehash as $m2m_table => $m2m_specifichash) {
+					$m2m_inputtype = $m2m_specifichash[1];
+					if ($m2m_inputtype == "textfield") {
+						$m2m_updatabletable = $m2m_table;
 						break;
 					}
-
-					$tmp_field = "$name='$form_value'";
-//					if (!in_array($name, $non_prefixed_fields)) $tmp_field = TABLE_PREFIX . $tmp_field;
-					$sql_field .= $tmp_field;
-					break;
-
-				case "o2m":
-					o2m_update($name, $form_value, $entity_field[2]);
-					break;
-
-				case "familyicwhose":
-					familyicwhose_update();
-					break;
-
-				case "ic":
-					ic_update($entity_field[2]);
-					break;
-
-				case "multi":
-				case "m2mcb":
-//					echo "multi_update($name, $form_value, $entity_field[2])";
-					if ($form_value == "") $form_value = array();
-					multi_update($name, $form_value, $entity_field[2]);
-					break;
-
-				case "m2mtf":
-				case "m2mta":
-//					echo "m2mtf_update($name, $form_value, $entity_field[2])";
-					m2mtf_update($name, $form_value, $entity_field[2]);
-					break;
-
-				case "m2mtfethalon":
-					$m2m_tablehash = $entity_field[2];
-					$m2m_updatabletable = "";
-					
-					foreach($m2m_tablehash as $m2m_table => $m2m_specifichash) {
-						$m2m_inputtype = $m2m_specifichash[1];
-						if ($m2m_inputtype == "textfield") {
-							$m2m_updatabletable = $m2m_table;
-							break;
-						}
-					}
-//					pre ($form_value);
-
-//					echo "m2mtf_update($name, $form_value, $m2m_updatabletable)";
-					m2mtf_update($name, $form_value, $m2m_updatabletable);
-					break;
-
-				case "multiflatcontent":
-					if ($multiflatcontent_mayupdate == 1) {
-//						echo "multiflatcontent($name, $form_value, $entity_field[2])";
-						if ($form_value == "") $form_value = array();
-						multiflatcontent_update($name, $form_value, $entity_field[2]);
-					}
-					break;
-
-				case "multicompositecontent":
-					$composite = $entity_field[3];
-
-					$it_name = "";
-					foreach($composite as $value) {
-						if ($it_name != "") $it_name .= "_";
-						$it_name .= $value;
-					}
-
-
-					if (isset($_REQUEST[$it_name])) {
-						$form_value = $_REQUEST[$it_name];
-					}
-
-					if ($form_value == "") $form_value = array();
-//					echo "multicompositecontent($entity_field[2], $form_value, $composite)";
-					multicompositecontent_update($entity_field[2], $form_value, $composite);
-					break;
-
-
-				case "multicompositebidirect":
-					$composite = $entity_field[3];
-					$m2m_table = $entity_field[2];
-
-					$it_name = $m2m_table;
-					foreach($composite as $value) {
-						if ($it_name != "") $it_name .= "_";
-						$it_name .= $value;
-					}
-					$it_name .= "_to";
-
-
-					if (isset($_REQUEST[$it_name])) {
-						$form_value = $_REQUEST[$it_name];
-					}
-
-					if ($form_value == "") $form_value = array();
-					
-/*					pre("multicompositebidirect_update($entity_field[2]"
-						. ", form_value=[" . pr($form_value) . "]"
-						. ", it_name=[$it_name]"
-						. ", composite=[" . pr($composite) . "]"
-						);
-*/					multicompositebidirect_update($entity_field[2], $form_value, $composite);
-					break;
-
-
-				case "multicompositeiccontent":
-					$default		= (isset($entity_field[2])) ? $entity_field[2] : "";
-					$param1			= (isset($entity_field[3])) ? $entity_field[3] : "";
-					$param2			= (isset($entity_field[4])) ? $entity_field[4] : "";
-					$param3			= (isset($entity_field[5])) ? $entity_field[5] : "";
-
-//					echo "multicompositeiccontent_updateall($default, $param1, $param2, $param3)";
-					multicompositeiccontent_updateall($default, $param1, $param2, $param3);
-					break;
-
-				case "notifier":
-					$cbname = "cb_notify_$name";
-					$notify_form_value = ${"notify_$name"};
-					if (isset($$cbname) && $$cbname == "on") {
-						if ($name == "photo_notified") {
-							$GLOBALS["$name"] = "<a href="
-								. "'http://cityflower.ru/upload/random/image/$notify_form_value'>"
-								. "http://cityflower.ru/upload/random/image/$notify_form_value"
-								. "</a>";
-						}
-
-						$notifier_to_form_name = "notifier_to_$name";
-						$notifier_to_form_value = $$notifier_to_form_name;
-						$notifier_to_ = $notifier_to_form_value;
-						
-//						echo "[$notifier_to_]";
-						
-						$is_sent = send_tpl($name, $notifier_to_);
-						if ($is_sent) {
-//							echo "[notify_$name] = [$notify_form_value]";
-							$sql_field .= "$name='$notify_form_value'";
-//							if ($sql_field != "" || $sql_field != ", ") $sql_fields .= $sql_field;
-//							$debug_query = 1;
-							update(array(
-								$name => $notify_form_value,
-								"${name}_to" => $notifier_to_), array("id" => $id));
-						}
-					}
-					break;
-
-				case "doubledate":
-					$form_value = mktime (
-						get_number("{$name}_hour"),
-						get_number("{$name}_minute"),
-						get_number("{$name}_second"),
-						get_number("{$name}_month"),
-						get_number("{$name}_day"),
-						get_number("{$name}_year"));
-					$sql_field .= "$name=$form_value";
-					break;
-
-				case "timestamp":
-				case "datetime":
-					$form_value = get_date($name);
-					$sql_field .= "$name='$form_value'";
-					break;
-
-				case "ro":
-				default:
-					$sql_field = "";
-			}
-			
-			if ($input_type_strict != "o2m"
-				&& $input_type_strict != "multi"
-				&& $input_type_strict != "notifier"
-				&& $input_type_strict != "ahref"
-//				&& $input_type_strict != "img_layer"
-//				&& $input_type_strict != "imgtype_layer"
-//				&& $skip_update == 0
-				) {
-
-				if ($sql_field != "") {
-					if ($sql_fields != "") $sql_field = ", " . $sql_field ;
-					$sql_fields .= $sql_field;
 				}
+//				pre ($form_value);
+
+//				echo "m2mtf_update($name, $form_value, $m2m_updatabletable)";
+				m2mtf_update($name, $form_value, $m2m_updatabletable);
+				break;
+
+			case "multiflatcontent":
+				if ($multiflatcontent_mayupdate == 1) {
+//					echo "multiflatcontent($name, $form_value, $entity_field[2])";
+					if ($form_value == "") $form_value = array();
+					multiflatcontent_update($name, $form_value, $entity_field[2]);
+				}
+				break;
+
+			case "multicompositecontent":
+				$composite = $entity_field[3];
+
+				$it_name = "";
+				foreach($composite as $value) {
+					if ($it_name != "") $it_name .= "_";
+					$it_name .= $value;
+				}
+
+
+				if (isset($_REQUEST[$it_name])) {
+					$form_value = $_REQUEST[$it_name];
+				}
+
+				if ($form_value == "") $form_value = array();
+//				echo "multicompositecontent($entity_field[2], $form_value, $composite)";
+				multicompositecontent_update($entity_field[2], $form_value, $composite);
+				break;
+
+
+			case "multicompositebidirect":
+				$composite = $entity_field[3];
+				$m2m_table = $entity_field[2];
+
+				$it_name = $m2m_table;
+				foreach($composite as $value) {
+					if ($it_name != "") $it_name .= "_";
+					$it_name .= $value;
+				}
+				$it_name .= "_to";
+
+
+				if (isset($_REQUEST[$it_name])) {
+					$form_value = $_REQUEST[$it_name];
+				}
+
+				if ($form_value == "") $form_value = array();
+//				pre("multicompositebidirect_update($entity_field[2]"
+//				. ", form_value=[" . pr($form_value) . "]"
+//				. ", it_name=[$it_name]"
+//				. ", composite=[" . pr($composite) . "]");
+				multicompositebidirect_update($entity_field[2], $form_value, $composite);
+				break;
+
+
+			case "multicompositeiccontent":
+				$default		= (isset($entity_field[2])) ? $entity_field[2] : "";
+				$param1			= (isset($entity_field[3])) ? $entity_field[3] : "";
+				$param2			= (isset($entity_field[4])) ? $entity_field[4] : "";
+				$param3			= (isset($entity_field[5])) ? $entity_field[5] : "";
+
+//				echo "multicompositeiccontent_updateall($default, $param1, $param2, $param3)";
+				multicompositeiccontent_updateall($default, $param1, $param2, $param3);
+				break;
+
+			case "notifier":
+				$cbname = "cb_notify_$name";
+				$notify_form_value = ${"notify_$name"};
+				if (isset($$cbname) && $$cbname == "on") {
+					if ($name == "photo_notified") {
+						$GLOBALS["$name"] = "<a href="
+							. "'http://cityflower.ru/upload/random/image/$notify_form_value'>"
+							. "http://cityflower.ru/upload/random/image/$notify_form_value"
+							. "</a>";
+					}
+
+					$notifier_to_form_name = "notifier_to_$name";
+					$notifier_to_form_value = $$notifier_to_form_name;
+					$notifier_to_ = $notifier_to_form_value;
+
+//					echo "[$notifier_to_]";
+
+					$is_sent = send_tpl($name, $notifier_to_);
+					if ($is_sent) {
+//						echo "[notify_$name] = [$notify_form_value]";
+						$sql_field .= "$name='$notify_form_value'";
+//						if ($sql_field != "" || $sql_field != ", ") $sql_fields .= $sql_field;
+//						$debug_query = 1;
+						update(array(
+							$name => $notify_form_value,
+							"${name}_to" => $notifier_to_), array("id" => $id));
+					}
+				}
+				break;
+
+			case "doubledate":
+				$form_value = mktime (
+					get_number("{$name}_hour"),
+					get_number("{$name}_minute"),
+					get_number("{$name}_second"),
+					get_number("{$name}_month"),
+					get_number("{$name}_day"),
+					get_number("{$name}_year"));
+				$sql_field .= "$name=$form_value";
+				break;
+
+			case "timestamp":
+			case "datetime":
+				$form_value = get_date($name);
+				$sql_field .= "$name='$form_value'";
+				break;
+
+			case "ro":
+			default:
+				$sql_field = "";
+		}
+		
+		if ($input_type_strict != "o2m"
+			&& $input_type_strict != "multi"
+			&& $input_type_strict != "notifier"
+			&& $input_type_strict != "ahref"
+//			&& $input_type_strict != "img_layer"
+//			&& $input_type_strict != "imgtype_layer"
+//			&& $skip_update == 0
+			) {
+
+			if ($sql_field != "") {
+				if ($sql_fields != "") $sql_field = ", " . $sql_field ;
+				$sql_fields .= $sql_field;
 			}
 		}
+	}
 	return $sql_fields;
 }
 
@@ -1872,7 +1892,8 @@ function multicompositepointer_singleupdate($m2m_table, $fixed_hash, $pointerval
 
 	$query = "select id, deleted, $pointer from $m2m_table where " . sqlcond_fromhash($fixed_hash);
 	$query = add_sql_table_prefix($query);
-	$result = pg_query($cms_dbc, $query) or die("SELECT4DELETE MULTICOMPOSITEpointer_SINGLEUPDATE failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	$result = pg_query($cms_dbc, $query)
+		or die("SELECT4DELETE MULTICOMPOSITEpointer_SINGLEUPDATE failed:<br>$query<br>" . pg_last_error($cms_dbc));
 
 	if (pg_num_rows($result) > 1) {
 		pre ("SELECT4DELETE MULTICOMPOSITEPOINTER[$pointer]_SINGLEUPDATE failed: seleted " . pg_num_rows($result) . " rows, should be single");

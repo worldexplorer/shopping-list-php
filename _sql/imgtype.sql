@@ -214,7 +214,12 @@ CREATE TRIGGER trg_shli_imgtype_update_date_updated
 
 
 --\d shli_imgtype;
-insert into shli_imgtype (id, manorder, ident, hashkey, first_autoresize_width, first_autoresize_apply, every_autoresize_width, every_autoresize_apply)
-	values (1, 1, 'Картинки в контент', 'IMG_CONTENT', 100, 1, '', 1);
-	
+
+insert into shli_imgtype
+	(id, ident, hashkey, first_autoresize_width, first_autoresize_apply, every_autoresize_width, every_autoresize_apply) values
+	(1, 'Картинки в контент', 'IMG_CONTENT', 100, 1, '', 1),
+	(2, 'Фото пользователей', 'IMG_PERSON', 100, 1, '', 1),
+	(3, 'Аватар чата', 'IMG_ROOM', 100, 1, '', 1),
+	(4, 'Фото продукта', 'IMG_PRODUCT', 100, 1, '', 1);
+
 --select * from shli_imgtype;
