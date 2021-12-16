@@ -34,38 +34,38 @@ if ($_SERVER["SERVER_NAME"] == "localhost") {
 //pre($postgres_info);
 
 $menu_bo = array (
-	"m2m_room_person" => "",
-	"message" => "",
-	"m2m_puritem_person" => "",
-
-	"~10" => "&nbsp;",
+//	"m2m_room_person" => "",
 	"person" => "",
 	"room" => "",
+	"message" => "",
 
 	"~9" => "&nbsp;",
 	"purchase" => "",
 	"puritem" => "",
-	"product" => "",
+	"m2m_puritem_person" => "",
+
+	"~10" => "&nbsp;",
 	"pgroup" => "",
+	"product" => "",
 	"punit" => "",
 
 	"~7" => "&nbsp;",
-	"constant" => "",
-//	"mtpl" => "",
-//	"sentlog" => "",
-	"imgtype" => "",
-	"img" => "",
-//	"change_word" => "",
-//	"~5" => "&nbsp;",
-//	"jsvalidator" => "",
+//	"constant" => "",
+////	"mtpl" => "",
+////	"sentlog" => "",
+//	"imgtype" => "",
+//	"img" => "",
+////	"change_word" => "",
+////	"~5" => "&nbsp;",
+////	"jsvalidator" => "",
 
-	"~12" => "&nbsp;",
-	"icwhose" => "",
-	"ic" => "",
-	"icdict" => "",
-	"icdictcontent" => "",
-	"ictype" => "",
-	"icsheet" => "",
+//	"~12" => "&nbsp;",
+//	"icwhose" => "",
+//	"ic" => "",
+//	"icdict" => "",
+//	"icdictcontent" => "",
+//	"ictype" => "",
+//	"icsheet" => "",
 );
 
 
@@ -121,11 +121,19 @@ $entity_swapdbfields_list = array (
 
 
 $no_entity_img_leftjoin = array (
-	"constant", "img", "imgtype", "client", "corder", "team", "game", "tour", "question",
-	"poll", "pollanswer", 
+	"constant", "img", "imgtype", //"client", "corder", "team", "game", "tour", "question",
+	//"poll", "pollanswer", 
 	"ic", "icwhose", "ictype", "icsheet", "icdict", "icdictcontent", "jsvalidator",
-	"m2m_person_iccontent", "m2m_person_poll", "m2m_person_pollanswer", 
-	);
+	//"m2m_person_iccontent", "m2m_person_poll", "m2m_person_pollanswer", 
+// shopping-list-php:
+	"m2m_puritem_person", "m2m_room_person",
+	"message", 
+	//"person", "pgroup", "product", 
+	"punit", 
+	//"purchase", 
+	"puritem"
+	//, "room"
+);
 //$no_entity_img_leftjoin = array_keys($entity_list);
 
 $no_addentity_list = $no_delentity_list = array (

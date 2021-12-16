@@ -9,6 +9,7 @@ $table_columns = array (
 	"pgroup" => array("", "ahref", "<a href=pgroup-edit.php?id=#PGROUP#>#PGROUP_IDENT#</a>"),
 	"ident" => array("", "textfield", "", "11em", "10em"),
 
+	"punit" => array("", "ahref", "<a href=punit.php?id=#PUNIT#>#PUNIT_IDENT#</a>"),
 	"weight" => array("weight", "textfield", "", "6em", "5em"),
 	"price_avg" => array("price_avg", "textfield", "", "6em", "5em"),
 

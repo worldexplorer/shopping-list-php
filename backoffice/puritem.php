@@ -2,6 +2,20 @@
 
 require_once "../_lib/_init.php";
 
+$list_left_fields .=
+	  ", punit.brief as punit_ident"
+;
+
+$list_left_additional_joins .=
+	  " left join punit punit"
+		. " on punit.id=product.punit and punit.deleted=0"
+;
+
+$list_left_fields_groupby =
+	 ", punit_ident"
+;
+
+
 $table_columns = array (
 	"id" => array("", "sernoupdown"),
 	"ident" => array("Словами", "view"),
@@ -12,6 +26,8 @@ $table_columns = array (
 	"product" => array("", "ahref", "<a href=purchase-edit.php?id=#PRODUCT#>#PRODUCT_IDENT#</a>"),
 
 	"qnty" => array("qnty", "textfield", "", "6em", "5em"),
+	"punit" => array("Ед", "ahref", "<a href=punit.php?id=#PUNIT#>#PUNIT_IDENT#</a>"),
+
 	"comment" => array("comment", "textfield", "", "11em", "10em"),
 
 	"published" => array("", "checkbox"),
