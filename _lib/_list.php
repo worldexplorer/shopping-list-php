@@ -471,6 +471,8 @@ if (isset($entity_fixed_list[$entity])) {
 //GROUP_CONCAT(DISTINCT pgroup.id, '=', pgroup.ident order by pgroup.manorder separator '~~') 
 //			$list_left_fields .= ", group_concat(distinct $dependant_entity.id, '=', $dependant_entity.ident order by $dependant_entity.ident separator '~~') as ${dependant_entity}_ident";
 // postgres:
+// https://stackoverflow.com/questions/2560946/postgresql-group-concat-equivalent
+// https://www.postgresql.org/docs/9.1/sql-expressions.html#SYNTAX-AGGREGATES
 			$list_left_fields .= ", string_agg(DISTINCT CONCAT($dependant_entity.id, '=', $dependant_entity.ident), '~~') AS ${dependant_entity}_ident";
 			
 //			$charset_bug = "group_concat(distinct $dependant_entity.id, '=', $dependant_entity.ident order by $dependant_entity.ident separator '~~') as ${dependant_entity}_ident";

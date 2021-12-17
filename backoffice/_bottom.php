@@ -61,7 +61,14 @@ if (isset($importlog) && $importlog != "" && isset($start_import) && $start_impo
 
 <? if ($entity == "m2m_team_question" && get_number("team") > 0) { ?>
 <? } else { ?>
-<p align=right>[<?= round(getmicrotime() - $start_execution_time, 2) ?> sec]</p>
+<p align=right>[<?= round(getmicrotime() - $start_execution_time, 2) ?> sec]
+<?
+	$error_log_file = ini_get("error_log");
+	if ($error_log_file) {
+		echo "<br />error_log[$error_log_file]";
+	}	
+?>
+</p>
 <? } ?>
 
 <? if ($layers_total > 0) echo "<script>layers_total=$layers_total</script>" ?>

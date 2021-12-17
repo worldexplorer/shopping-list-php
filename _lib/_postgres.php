@@ -150,7 +150,9 @@ function select_field($field = "ident", $fields_cond = 0, $entity = "_global:ent
 	$query = "select $field from $entity $select_cond";
 	if (strpos($field, "count(") == -1) {
 		$orderby_local = get_entity_orderby($entity);
-		$query .= " order by $orderby_local limit 1"; // POSTGRES pg_query(): Query failed: ERROR: column "shli_pgroup.manorder" must appear in the GROUP BY clause or be used in an aggregate function
+		$query .= " order by $orderby_local limit 1";
+		// POSTGRES pg_query(): Query failed: ERROR: column "shli_pgroup.manorder"
+		// must appear in the GROUP BY clause or be used in an aggregate function
 	} else {
 		$breakpoint = "here";
 	};
