@@ -446,7 +446,12 @@ switch ($lang_current) {
 // shopping-list-php
 			"person_created" => "Создал",
 			"person_purchased" => "Купил",
-
+			"show_pgroup" => "show_pgroup",
+			"show_price" => "show_price",
+			"show_qnty" => "show_qnty",
+			"show_weight" => "show_weight",
+			"comment_above" => "Comment Above",
+			"comment_below" => "Comment Below",
 
 // news
 //			"news-date_published" => "Дата",

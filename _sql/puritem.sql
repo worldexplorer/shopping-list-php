@@ -5,26 +5,29 @@
 DROP TABLE IF EXISTS shli_puritem;
 CREATE TABLE shli_puritem (
 	id				SERIAL,
-	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	date_updated	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	date_created	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	date_published	TIMESTAMP WITHOUT TIME ZONE, -- date_purchased
 	published		SMALLINT NOT NULL DEFAULT 1,
 	deleted			SMALLINT NOT NULL DEFAULT 0,
 	manorder		SERIAL, -- INTEGER NOT NULL DEFAULT 0 CHECK (manorder >= 0),
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
 
-	room			INTEGER NOT NULL DEFAULT 0,
-	purchase		INTEGER NOT NULL DEFAULT 0,
-	"product" => array("", "cnt"),
+	room			INTEGER NOT NULL,
+	purchase		INTEGER NOT NULL,
 
-	pgroup			INTEGER NOT NULL DEFAULT 0,	-- dragging is saved to pgroup:manorder(room=X)
-	product			INTEGER NOT NULL DEFAULT 0,	-- dragging is saved to product:manorder(room=X)
+	pgroup			INTEGER,	-- dragging is saved to pgroup:manorder(room=X)
+	product			INTEGER,	-- dragging is saved to product:manorder(room=X)
 	qnty			NUMERIC(7,2),
---	punit			INTEGER NOT NULL DEFAULT 0,
+--	punit			INTEGER,
 
 	comment			TEXT,
 	
 	PRIMARY KEY(id)
+	,FOREIGN KEY ("room") REFERENCES "shli_room"(id)
+	,FOREIGN KEY ("purchase") REFERENCES "shli_purchase"(id)
+	,FOREIGN KEY ("product") REFERENCES "shli_product"(id)
+	,FOREIGN KEY ("pgroup") REFERENCES "shli_pgroup"(id)
 );
 
 -- https://stackoverflow.com/questions/2362871/postgresql-current-timestamp-on-update

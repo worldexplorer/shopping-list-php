@@ -31,7 +31,8 @@ $table_columns = array (
 	"person_purchased" => array("", "ahref",
 		"<a href=person.php?id=#PERSON_PURCHASED#>#PERSON_PURCHASED_IDENT#</a>"),
 
-	"ident" => array("", "textfield", "", "11em", "10em"),
+	"ident" => array('', "hrefedit"),
+//	"~ident" => array("", "textfield", "", "11em", "10em"),
 
 	"puritem" => array("Позиций", "cnt"),
 	

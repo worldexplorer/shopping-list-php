@@ -2,11 +2,11 @@
 \encoding utf8;
 --SET CHARACTER SET utf8;
 
-DROP TABLE IF EXISTS shli_person;
+DROP TABLE IF EXISTS shli_person CASCADE;
 CREATE TABLE shli_person (
 	id				SERIAL,
-	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP, --  ON UPDATE CURRENT_TIMESTAMP,
-	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	date_updated	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP, --  ON UPDATE CURRENT_TIMESTAMP,
+	date_created	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	date_published	TIMESTAMP WITHOUT TIME ZONE,
 	published		SMALLINT NOT NULL DEFAULT 1,
 	deleted			SMALLINT NOT NULL DEFAULT 0,
@@ -61,9 +61,9 @@ CREATE TRIGGER trg_shli_person_update_date_updated
 -- \d shli_person;
 
 
-insert into shli_person(id, ident) values
-	(1, 'Петрович'),
-	(2, 'Дуся');
+insert into shli_person(id, ident, phone) values
+	(1, 'Петрович', '+1-555-555-55-55'),
+	(2, 'Дуся', '+1-555-555-55-56');
 
 -- select * from shli_person;
 

@@ -2,11 +2,11 @@
 \encoding utf8;
 --SET CHARACTER SET utf8;
 
-DROP TABLE IF EXISTS shli_m2m_room_person;
+DROP TABLE IF EXISTS shli_m2m_room_person CASCADE;
 CREATE TABLE shli_m2m_room_person (
 	id				SERIAL,
-	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	date_updated	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	date_created	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	date_published	TIMESTAMP WITHOUT TIME ZONE,
 	published		SMALLINT NOT NULL DEFAULT 1,
 	deleted			SMALLINT NOT NULL DEFAULT 0,
@@ -18,6 +18,8 @@ CREATE TABLE shli_m2m_room_person (
 	person			INTEGER NOT NULL DEFAULT 0,
 	
 	PRIMARY KEY(id)
+	,FOREIGN KEY ("person") REFERENCES "shli_person"(id)
+	,FOREIGN KEY ("room") REFERENCES "shli_room"(id)
 --	unique key(person, poll),
 );
 

@@ -2,11 +2,11 @@
 \encoding utf8;
 --SET CHARACTER SET utf8;
 
-DROP TABLE IF EXISTS shli_purchase;
+DROP TABLE IF EXISTS shli_purchase CASCADE;
 CREATE TABLE shli_purchase (
 	id				SERIAL,
-	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	date_updated	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	date_created	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	date_published	TIMESTAMP WITHOUT TIME ZONE, -- date_purchased
 	published		SMALLINT NOT NULL DEFAULT 1,
 	deleted			SMALLINT NOT NULL DEFAULT 0,
@@ -17,8 +17,8 @@ CREATE TABLE shli_purchase (
 	comment_above	TEXT,
 	comment_below	TEXT,
 
-	room			INTEGER NOT NULL DEFAULT 0,
-	message			INTEGER NOT NULL DEFAULT 0,
+	room			INTEGER NOT NULL,
+	message			INTEGER NOT NULL,
 
 	show_pgroup		SMALLINT NOT NULL DEFAULT 0,
 	show_price		SMALLINT NOT NULL DEFAULT 0,
@@ -26,14 +26,18 @@ CREATE TABLE shli_purchase (
 	show_weight		SMALLINT NOT NULL DEFAULT 0,
 
 
-	person_created		INTEGER NOT NULL DEFAULT 0,
-	person_purchased	INTEGER NOT NULL DEFAULT 0,
+	person_created		INTEGER NOT NULL,
+	person_purchased	INTEGER,
 
 	price_total			NUMERIC(7,2),
 	weight_total		NUMERIC(7,2),
 
 
 	PRIMARY KEY(id)
+	,FOREIGN KEY ("person_created") REFERENCES "shli_person"(id)
+	,FOREIGN KEY ("person_purchased") REFERENCES "shli_person"(id)
+	,FOREIGN KEY ("room") REFERENCES "shli_room"(id)
+	,FOREIGN KEY ("message") REFERENCES "shli_room"(id)
 );
 
 
@@ -55,8 +59,8 @@ CREATE TRIGGER trg_shli_purchase_update_date_updated
 --\d shli_purchase;
 
 insert into shli_purchase
-	(id, room, show_pgroup, show_price, person_created, ident) values
-	(1, 1, 1, 1, 1, 'Фуд Сити')
+	(id, room, message, show_pgroup, show_price, person_created, ident) values
+	(1, 1, 1, 1, 1, 1, 'Фуд Сити')
 ;
 
 --select * from shli_purchase;

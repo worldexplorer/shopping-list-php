@@ -2,11 +2,11 @@
 \encoding utf8;
 --SET CHARACTER SET utf8;
 
-DROP TABLE IF EXISTS shli_product;
+DROP TABLE IF EXISTS shli_product CASCADE;
 CREATE TABLE shli_product (
 	id				SERIAL,
-	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	date_updated	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	date_created	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	date_published	TIMESTAMP WITHOUT TIME ZONE,
 	published		SMALLINT NOT NULL DEFAULT 1,
 	deleted			SMALLINT NOT NULL DEFAULT 0,
@@ -14,16 +14,20 @@ CREATE TABLE shli_product (
 
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
 
-	room			INTEGER NOT NULL DEFAULT 0,
-	pgroup			INTEGER NOT NULL DEFAULT 0,
+	pgroup			INTEGER,
+	room			INTEGER NOT NULL,
 
-	purchase_origin	INTEGER NOT NULL DEFAULT 0, -- purchase in the room that first used this product
+	purchase_origin	INTEGER NOT NULL, -- purchase in the room that first used this product
 
-	punit			INTEGER NOT NULL DEFAULT 0,
+	punit			INTEGER,
 	weight			NUMERIC(7,2) NOT NULL DEFAULT 0,
 	price_avg		NUMERIC(7,2) NOT NULL DEFAULT 0, -- avg price per unit / kg / liter
 
 	PRIMARY KEY(id)
+	,FOREIGN KEY ("pgroup") REFERENCES "shli_pgroup"(id)
+	,FOREIGN KEY ("room") REFERENCES "shli_room"(id)
+	,FOREIGN KEY ("purchase_origin") REFERENCES "shli_purchase"(id)
+	,FOREIGN KEY ("punit") REFERENCES "shli_punit"(id)
 );
 
 

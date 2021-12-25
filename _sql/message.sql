@@ -2,11 +2,11 @@
 \encoding utf8;
 --SET CHARACTER SET utf8;
 
-DROP TABLE IF EXISTS shli_message;
+DROP TABLE IF EXISTS shli_message CASCADE;
 CREATE TABLE shli_message (
 	id				SERIAL,
-	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	date_updated	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	date_created	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	date_published	TIMESTAMP WITHOUT TIME ZONE,
 	published		SMALLINT NOT NULL DEFAULT 1,
 	deleted			SMALLINT NOT NULL DEFAULT 0,
@@ -14,13 +14,16 @@ CREATE TABLE shli_message (
 
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
 
-	room			INTEGER NOT NULL DEFAULT 0,
-	person			INTEGER NOT NULL DEFAULT 0,
+	room			INTEGER NOT NULL,
+	person			INTEGER NOT NULL,
 
 	content			TEXT,
-	purchase		INTEGER NOT NULL DEFAULT 0,
+	purchase		INTEGER,
 	
 	PRIMARY KEY(id)
+	,FOREIGN KEY ("person") REFERENCES "shli_person"(id)
+	,FOREIGN KEY ("room") REFERENCES "shli_room"(id)
+	,FOREIGN KEY ("purchase") REFERENCES "shli_purchase"(id)
 );
 
 
@@ -42,9 +45,9 @@ CREATE TRIGGER trg_shli_message_update_date_updated
 --\d shli_message;
 
 insert into shli_message(id, room, person, purchase, content) values
-	(1, 1, 2, 0, 'Привет, вот список'),
+	(1, 1, 2, NULL, 'Привет, вот список'),
 	(2, 1, 2, 1, ''),
-	(3, 1, 1, 0, 'Готово, купил')
+	(3, 1, 1, NULL, 'Готово, купил')
 ;
 
 --select * from shli_message;

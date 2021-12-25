@@ -2,11 +2,11 @@
 \encoding utf8;
 --SET CHARACTER SET utf8;
 
-DROP TABLE IF EXISTS shli_pgroup;
+DROP TABLE IF EXISTS shli_pgroup CASCADE;
 CREATE TABLE shli_pgroup (
 	id				SERIAL,
-	date_updated	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-	date_created	TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	date_updated	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	date_created	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	date_published	TIMESTAMP WITHOUT TIME ZONE,
 	published		SMALLINT NOT NULL DEFAULT 1,
 	deleted			SMALLINT NOT NULL DEFAULT 0,
@@ -14,13 +14,16 @@ CREATE TABLE shli_pgroup (
 
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
 
-	parent_id		INTEGER NOT NULL DEFAULT 0,
+	parent_id		INTEGER NOT NULL,
 
-	room			INTEGER NOT NULL DEFAULT 0,
+	room			INTEGER NOT NULL,
 
-	purchase_origin	INTEGER NOT NULL DEFAULT 0, -- purchase in the room that first used this product group
+	purchase_origin	INTEGER NOT NULL, -- purchase in the room that first used this product group
 
 	PRIMARY KEY(id)
+--	,FOREIGN KEY ("parent_id") REFERENCES "shli_pgroup"(id)
+	,FOREIGN KEY ("room") REFERENCES "shli_room"(id)
+	,FOREIGN KEY ("purchase_origin") REFERENCES "shli_purchase"(id)
 );
 
 
