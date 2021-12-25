@@ -57,4 +57,6 @@ insert into shli_product
 	(6, 1, 4, 1, 22, 'Сгущёнка')
 ;
 
+ALTER SEQUENCE shli_product_id_seq RESTART WITH 7;
+
 --select * from shli_product;

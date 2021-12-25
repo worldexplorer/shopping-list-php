@@ -41,6 +41,11 @@ CREATE TRIGGER trg_shli_icwhose_update_date_updated
 
 --\d shli_icwhose;
 
-insert into shli_icwhose (id, manorder, ident, hashkey) values (1, 1, 'Cвойства продуктов', 'PRODUCT_PROPERTIES');
+insert into shli_icwhose
+	(id, manorder, ident, hashkey) values
+	(1, 1, 'Cвойства продуктов', 'PRODUCT_PROPERTIES')
+;
+
+ALTER SEQUENCE shli_icwhose_id_seq RESTART WITH 2;
 
 --select * from shli_icwhose;

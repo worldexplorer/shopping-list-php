@@ -61,9 +61,12 @@ CREATE TRIGGER trg_shli_person_update_date_updated
 -- \d shli_person;
 
 
-insert into shli_person(id, ident, phone) values
+insert into shli_person
+	(id, ident, phone) values
 	(1, 'Петрович', '+1-555-555-55-55'),
 	(2, 'Дуся', '+1-555-555-55-56');
+
+ALTER SEQUENCE shli_person_id_seq RESTART WITH 3;
 
 -- select * from shli_person;
 

@@ -37,7 +37,8 @@ CREATE TRIGGER trg_shli_ictype_update_date_updated
 --\d shli_ictype;
 --insert into shli_ictype(id, ident) values(1, 'NONE');
 
-INSERT INTO shli_ictype (id, manorder, ident, hashkey) VALUES
+INSERT INTO shli_ictype
+	(id, manorder, ident, hashkey) VALUES
 	(1,2,'текстовое поле','TEXTFIELD'),
 	(2,3,'числовое поле','NUMBER'),
 	(7,8,'дата и время','DATETIME'),
@@ -58,6 +59,8 @@ INSERT INTO shli_ictype (id, manorder, ident, hashkey) VALUES
 	(18,18,'textarea WxH','TEXTAREA_SCROLL');
 
 
+
+ALTER SEQUENCE shli_ictype_id_seq RESTART WITH 19;
 
 --select * from shli_ictype;
 

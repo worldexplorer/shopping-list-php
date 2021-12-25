@@ -38,7 +38,8 @@ CREATE TRIGGER trg_shli_jsvalidator_update_date_updated
 
 --\d shli_jsvalidator;
 --insert into shli_jsvalidator(id, ident) values(1, 'NONE');
-INSERT INTO shli_jsvalidator (id, manorder, ident, hashkey, content) VALUES
+INSERT INTO shli_jsvalidator
+	(id, manorder, ident, hashkey, content) VALUES
 	(1,2,'хотя бы один символ','JSV_TF_CHAR','/./'),
 	(2,3,'одна цифра','JSV_TF_DIGIT','/^d$/'),
 	(3,6,'слово из латинских букв','JSV_TF_ELETTERS','/[a-z]/i'),
@@ -51,5 +52,7 @@ INSERT INTO shli_jsvalidator (id, manorder, ident, hashkey, content) VALUES
 	(9,10,'выбрано значение != 0','JSV_SELECT_SELECTED','/[1-9][0-9]*/'),
 	(10,12,'выбран хоть один чекбокс из группы','JSV_MULTICHECKBOX_CHECKED',''),
 	(11,11,'выбрано хоть одно значение из multi#select','JSV_MULTISELECT_SELECTED','позже');
+
+ALTER SEQUENCE shli_jsvalidator_id_seq RESTART WITH 12;
 
 --select * from shli_jsvalidator;

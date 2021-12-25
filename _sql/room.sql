@@ -46,4 +46,7 @@ insert into shli_room
 	(1, 1, 'Наш чат')
 ;
 
+
+ALTER SEQUENCE shli_room_id_seq RESTART WITH 2;
+
 --select * from shli_room;

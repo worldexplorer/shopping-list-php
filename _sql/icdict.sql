@@ -38,6 +38,11 @@ CREATE TRIGGER trg_shli_icdict_update_date_updated
 
 --\d shli_icdict;
 
-insert into shli_icdict(id, manorder, icwhose, ident) values(1, 1, 1, '”паковка');
+insert into shli_icdict
+	(id, manorder, icwhose, ident) values
+	(1, 1, 1, 'Yпаковка')
+;
+
+ALTER SEQUENCE shli_icdict_id_seq RESTART WITH 2;
 
 --select * from shli_icdict;

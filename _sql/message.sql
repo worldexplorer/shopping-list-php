@@ -18,6 +18,8 @@ CREATE TABLE shli_message (
 	person			INTEGER NOT NULL,
 
 	content			TEXT,
+	edited			BOOLEAN NOT NULL DEFAULT false,
+
 	purchase		INTEGER,
 	
 	PRIMARY KEY(id)
@@ -44,10 +46,14 @@ CREATE TRIGGER trg_shli_message_update_date_updated
 
 --\d shli_message;
 
-insert into shli_message(id, room, person, purchase, content) values
-	(1, 1, 2, NULL, 'Привет, вот список'),
-	(2, 1, 2, 1, ''),
-	(3, 1, 1, NULL, 'Готово, купил')
+insert into shli_message
+	(id, room, person, purchase, content, edited) values
+	(1, 1, 2, NULL, 'Привет, вот список', true),
+	(2, 1, 2, 1, '', false),
+	(3, 1, 1, NULL, 'Готово, купил', false)
 ;
+
+
+ALTER SEQUENCE shli_message_id_seq RESTART WITH 4;
 
 --select * from shli_message;

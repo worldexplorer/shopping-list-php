@@ -222,4 +222,6 @@ insert into shli_imgtype
 	(3, 'Аватар чата', 'IMG_ROOM', 100, 1, '', 1),
 	(4, 'Фото продукта', 'IMG_PRODUCT', 100, 1, '', 1);
 
+ALTER SEQUENCE shli_imgtype_id_seq RESTART WITH 5;
+
 --select * from shli_imgtype;

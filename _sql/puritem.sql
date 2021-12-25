@@ -57,4 +57,6 @@ insert into shli_puritem
 ;
 
 
+ALTER SEQUENCE shli_puritem_id_seq RESTART WITH 8;
+
 -- select * from shli_puritem;

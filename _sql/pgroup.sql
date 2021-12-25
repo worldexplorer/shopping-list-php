@@ -51,4 +51,6 @@ insert into shli_pgroup
 	(4, 1, 1, 1, 'Молочка')
 ;
 
+ALTER SEQUENCE shli_pgroup_id_seq RESTART WITH 5;
+
 --select * from shli_pgroup;

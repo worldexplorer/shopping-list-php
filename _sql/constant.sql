@@ -42,4 +42,6 @@ CREATE TRIGGER trg_shli_constant_update_date_updated
 --	(3,3,'Контент в шапке','CONTENT_TOP','Шапка сайта')
 --	(4,4,'Контент в подвале','CONTENT_BOTTOM','Подвал сайта');
 
+--ALTER SEQUENCE shli_constant_id_seq RESTART WITH 5;
+
 --select * from shli_constant;

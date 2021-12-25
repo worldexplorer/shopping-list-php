@@ -52,11 +52,22 @@ CREATE TRIGGER trg_shli_ic_update_date_updated
 
 --\d shli_ic;
 
-insert into shli_ic(id, manorder, icwhose, ictype, ident) values(1, 1, 1, 1, 'Размеры: см');
-insert into shli_ic(id, manorder, icwhose, ictype, ident) values(2, 2, 1, 2, 'Масса: кг');
-insert into shli_ic(id, manorder, icwhose, ictype, icdict, inbrief, sorting, ident) values(3, 3, 1, 4, 1, 1, 1, 'Упаковка:');
-insert into shli_ic(id, manorder, icwhose, ictype, inbrief, sorting, ident) values(4, 4, 1, 2, 1, 1, 'Доставка: дней');
-insert into shli_ic(id, manorder, icwhose, ictype, inbrief, sorting, ident) values(5, 5, 1, 2, 1, 1, 'На складе: шт');
+insert into shli_ic
+	(id, manorder, icwhose, ictype, ident) values
+	(1, 1, 1, 1, 'Размеры: см'),
+	(2, 2, 1, 2, 'Масса: кг')
+;
+insert into shli_ic
+	(id, manorder, icwhose, ictype, icdict, inbrief, sorting, ident) values
+	(3, 3, 1, 4, 1, 1, 1, 'Упаковка:')
+;
+insert into shli_ic
+	(id, manorder, icwhose, ictype, inbrief, sorting, ident) values
+	(4, 4, 1, 2, 1, 1, 'Доставка: дней'),
+	(5, 5, 1, 2, 1, 1, 'На складе: шт')
+;
+
+ALTER SEQUENCE shli_ic_id_seq RESTART WITH 6;
 
 --select * from shli_ic;
 

@@ -46,9 +46,14 @@ CREATE TRIGGER trg_shli_icdictcontent_update_date_updated
 
 --\d shli_icdictcontent;
 
-insert into shli_icdictcontent(id, manorder, icdict, ident) values(1, 1, 1, 'Бумага');
-insert into shli_icdictcontent(id, manorder, icdict, ident) values(2, 2, 1, 'Картон');
-insert into shli_icdictcontent(id, manorder, icdict, ident) values(3, 3, 1, 'Пластик');
-insert into shli_icdictcontent(id, manorder, icdict, ident) values(4, 4, 1, 'Подарочная');
+insert into shli_icdictcontent
+	(id, manorder, icdict, ident) values
+	(1, 1, 1, 'Бумага'),
+	(2, 2, 1, 'Картон'),
+	(3, 3, 1, 'Пластик'),
+	(4, 4, 1, 'Подарочная')
+;
+
+ALTER SEQUENCE shli_icdictcontent_id_seq RESTART WITH 5;
 
 --select * from shli_icdictcontent;

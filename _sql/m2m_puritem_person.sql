@@ -56,4 +56,6 @@ insert into shli_m2m_puritem_person
 	(6, 	6, 		1, 		1, 		1, 				6, 		105,	3, 		'НашЧат АшанНГ Молочка Сгущёнка 3 (шт)')
 ;
 
+ALTER SEQUENCE shli_m2m_puritem_person_id_seq RESTART WITH 7;
+
 --select * from shli_m2m_puritem_person;

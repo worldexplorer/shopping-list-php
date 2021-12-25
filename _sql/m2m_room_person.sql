@@ -47,4 +47,6 @@ insert into shli_m2m_room_person
 	(2, 1, 2, 'НашЧат - Дуся')
 ;
 
+ALTER SEQUENCE shli_m2m_room_person_id_seq RESTART WITH 3;
+
 --select * from shli_m2m_room_person;

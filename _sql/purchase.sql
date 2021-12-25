@@ -63,4 +63,6 @@ insert into shli_purchase
 	(1, 1, 1, 1, 1, 1, 'Фуд Сити')
 ;
 
+ALTER SEQUENCE shli_purchase_id_seq RESTART WITH 2;
+
 --select * from shli_purchase;

@@ -51,4 +51,6 @@ insert into shli_punit
 	(24, 1, 'Миллиметр', 'см')
 ;
 
+ALTER SEQUENCE shli_punit_id_seq RESTART WITH 30;
+
 --select * from shli_punit;
