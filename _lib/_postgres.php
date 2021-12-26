@@ -347,30 +347,34 @@ function insert ($fields = array(), $entity = "_global:entity", $cms_dbc = "_glo
 	return $id;
 }
 
-function update ($fields, $fields_cond = 0, $entity = "_global:entity", $cms_dbc = "_global:cms_dbc") {
+function update($fields, $fields_cond = 0, $entity = "_global:entity", $cms_dbc = "_global:cms_dbc") {
 	global $id, $debug_query;
 	$ret = "";
 	$fields_update = "";
 	$update_cond = "";
 	
 	$entity = absorb_variable($entity);
-	$entity = prefixed_entity ($entity);
+	$entity_prefixed = prefixed_entity($entity);
 	$cms_dbc = absorb_variable($cms_dbc);
 
 	if (is_array($fields) && sizeof($fields) > 0) {
 		foreach ($fields as $key => $value) {
 			if ($fields_update != "") $fields_update .= ", ";
 			
+
+			$db_field_type = entity_field_type($entity, $key);
+
 //			if (is_numeric($value) || ($value == "CURRENT_TIMESTAMP") || ($value == "LAST_INSERT_ID()")) {
 
 			if (
 				strpos($value, "CURRENT_TIMESTAMP") !== false
 				|| $value == "LAST_INSERT_ID()"
+				|| $db_field_type == "boolean"
 				) {
 				$fields_update .= "$key=$value";
 			} else {
 				if (is_array($value)) {
-//					echo "$key is array(" . pr ($value) . ")<br>";
+					echo "$key is array(" . pr ($value) . ")<br>";
 					continue;
 				}
 				$fields_update .= "$key='" . addslashes($value) . "'";
@@ -380,15 +384,19 @@ function update ($fields, $fields_cond = 0, $entity = "_global:entity", $cms_dbc
 		if (is_array($fields_cond)) {
 			foreach ($fields_cond as $key => $value) {
 				if ($update_cond != "") $update_cond .= " and ";
-				$update_cond .= "$key='$value'";
+				$update_cond .= "$key='$valcb_field_typeue'";
 			}
 		} else {
 			if (isset($id)) $update_cond = "id=$id";
 		}	
 		
-		$query = "update $entity set $fields_update where $update_cond";
+		$query = "update $entity_prefixed set $fields_update where $update_cond";
 		$query = add_sql_table_prefix($query);
-		$result = pg_query($cms_dbc, $query) or die("UPDATE failed:<br>$query<br>" . pg_last_error($cms_dbc));
+		if ($debug_query == 1) {
+			pre($query, "UPDATE_GENERIC[$entity] update_hash=[" . pr($fields) . "]");
+		}
+		$result = pg_query($cms_dbc, $query)
+			or die("UPDATE failed:<br>$query<br>" . pg_last_error($cms_dbc));
 		$ret = pg_affected_rows($result);
 		if ($debug_query == 1) plog("UPDATE[$query]:[$ret]", "\n\n");
 	}
@@ -462,43 +470,108 @@ table_schema='public'";
 function entity_has_deleted_field($entity) {
 	$ret = 0;
 
-	if (TABLE_PREFIX != "" && strpos($entity, TABLE_PREFIX) !== 0) $entity = TABLE_PREFIX . $entity;
+	// if (TABLE_PREFIX != "" && strpos($entity, TABLE_PREFIX) !== 0) $entity = TABLE_PREFIX . $entity;
 	$ret = entity_has_field($entity, "deleted");
 	
 	return $ret;
 }
 
 function entity_has_field($entity, $field) {
-	global $postgres_info, $non_prefixed_fields, $cms_dbc;
+	global $non_prefixed_fields;
+	$entity_fields_hash = entity_field_types($entity);
+	$entity_field_names = array_keys($entity_fields_hash);
+
 	$ret = 0;
-
-	if (!entity_present_in_db($entity)) return $ret;
-	
-	static $entity_dbfields_array = array();
-	if (!isset($entity_dbfields_array[$entity])) {
-		// $query = "SHOW COLUMNS FROM $entity";
-		// $query = add_sql_table_prefix($query);
-		// https://stackoverflow.com/questions/20194806/how-to-get-a-list-column-names-and-datatypes-of-a-table-in-postgresql
-		$query = "SELECT column_name, data_type FROM information_schema.columns"
-			. " WHERE table_name='" . TABLE_PREFIX. "$entity'";
-		$entity_dbfields_result = pg_query($cms_dbc, $query)
-			or die("SELECT_COLUMNS failed:<br>$query<br>" . pg_last_error($cms_dbc));
-		for ($i=1; $row = pg_fetch_assoc($entity_dbfields_result); $i++) {
-			// $entity_dbfields_array[$entity][] = $row["Field"];
-			$entity_dbfields_array[$entity][] = $row["column_name"];
-		}
-
-		// pre($entity_dbfields_array, "entity_dbfields_array[$entity]");
-	}
-
-	if (!in_array($field, $non_prefixed_fields)) $field = TABLE_PREFIX . $field;
-	if (isset($entity_dbfields_array[$entity]) &&
-			in_array($field, $entity_dbfields_array[$entity])) {
+	// if (!in_array($field, $non_prefixed_fields)) $field = TABLE_PREFIX . $field;
+	if (in_array($field, $entity_field_names)) {
 		$ret = 1;
 	}
 	
 	// pre($entity_dbfields_array, "entity_dbfields_array");
 	// pre("entity_has_field($entity, $field) = $ret");
+
+	return $ret;
+}
+
+function entity_field_accepts_NULL($entity, $field) {
+	$field_type = entity_field_type($entity, $field);
+
+	$ret = 0;
+	$has_nullable = $field_type.strstr($field_type, "NULLABLE");
+	if ($has_nullable) {
+		$ret = 1;
+	}
+
+	// pre("entity_field_accepts_NULL($entity, $field) = $ret");
+
+	return $ret;
+}
+
+function entity_field_type($entity, $field) {
+	// global $non_prefixed_fields;
+	$entity_fields_hash = entity_field_types($entity);
+
+	$ret = "";
+	// if (!in_array($field, $non_prefixed_fields)) $field = TABLE_PREFIX . $field;
+	if (isset($entity_fields_hash[$field])) {
+		$ret = $entity_fields_hash[$field];
+	}
+
+	// pre("entity_field_type($entity, $field) = $ret");
+
+	return $ret;
+}
+
+function entity_field_types($entity) {
+	global $postgres_info, $non_prefixed_fields, $cms_dbc, $debug_query;
+	$ret = [];
+
+	if (!entity_present_in_db($entity)) {
+		pre("!entity_present_in_db($entity)");
+		return $ret;
+	}
+	
+	static $entity_dbfields_array = array();
+	if (isset($entity_dbfields_array[$entity])) {
+		return $entity_dbfields_array[$entity];
+	}
+
+	// $query = "SHOW COLUMNS FROM $entity";
+	// $query = add_sql_table_prefix($query);
+	// https://stackoverflow.com/questions/20194806/how-to-get-a-list-column-names-and-datatypes-of-a-table-in-postgresql
+	$query = "SELECT column_name, data_type, is_nullable, udt_name FROM information_schema.columns"
+		. " WHERE table_name='" . TABLE_PREFIX. "$entity'";
+	if ($debug_query) {
+		pre($query, "entity_field_types[$entity]");
+	}
+	$entity_dbfields_result = pg_query($cms_dbc, $query)
+		or die("SELECT_COLUMNS failed:<br>$query<br>" . pg_last_error($cms_dbc));
+	for ($i=1; $row = pg_fetch_assoc($entity_dbfields_result); $i++) {
+		$type = $row["data_type"];
+		if ($type == "ARRAY") {
+			switch ($row["udt_name"]) {
+				case "_int2":
+					$type .= " smallint[]";
+					break;
+				case "_int4":
+					$type .= " integer[]";
+					break;
+				default:
+					break;
+			}
+		}
+		if ($row["is_nullable"] == "YES") {
+			$type .= " NULLABLE";
+		}
+		$entity_dbfields_array[$entity][$row["column_name"]] = $type;
+	}
+
+	$ret = $entity_dbfields_array[$entity];
+	if ($ret == null) {
+		// pre($ret, "NULL entity_dbfields_array[$entity]");
+	}
+
+	// pre($ret, "entity_dbfields_array[$entity]");
 
 	return $ret;
 }
@@ -1400,7 +1473,36 @@ function mkupdatefields_fromform($entity_fields, $id = "_global:id", $entity = "
 					$errormsg .= "<b>Название не может быть пустым</b><br>";
 				}
 */
-				if ($skip_update == 0) $sql_field .= "$name='$form_value'";
+				$nullify = 0;
+				if ($form_value == "") {
+					$nullify = entity_field_accepts_NULL($entity, $name);
+				}
+
+				if ($skip_update == 0) {
+					$sql_field .= $nullify == 1
+						? "$name=NULL"
+						: "$name='$form_value'";
+				}
+
+				break;
+
+			case "arrayint":
+				$form_value = addslashes($form_value);
+				$form_value = str_replace($strip_from_freetext, "", $form_value);
+
+				$nullify = 0;
+				if ($form_value == "") {
+					$nullify = entity_field_accepts_NULL($entity, $name);
+					$nameValue = $nullify == 1
+						? "$name=NULL"
+						: "$name='{}'";
+				} else {
+					$nameValue = "$name='$form_value'";
+				}
+
+				// pre("MKUPDATE_FIELDS: arrayint: $nameValue skip_update[$skip_update]");
+
+				if ($skip_update == 0) $sql_field .= $nameValue;
 
 				break;
 
@@ -1413,13 +1515,19 @@ function mkupdatefields_fromform($entity_fields, $id = "_global:id", $entity = "
 
 			case "checkbox":
 				if (is_numeric($form_value)) {
+					pre("$input_type_strict:checkbox:is_numeric($form_value)");
 					$sql_field .= ($form_value == 1) ? "$name='1'" : "$name='0'";
+				} else if (is_bool($form_value)) {
+					pre("$input_type_strict:checkbox:is_bool($form_value)");
+					$sql_field .= ($form_value == true) ? "$name=true" : "$name=false";
 				} else {			//before value=1 in checkboxes 2008-03-16@gpstrack
+					$db_field_type = entity_field_type($entity, $name);
+//					pre("$name:$db_field_type:checkbox:is_string($form_value)");
 					if ($form_value == "on") {
-						$sql_field .= "$name='1'";
+						$sql_field .= $db_field_type == "boolean" ? "$name=true": "$name='1'";
 					}
 					if ($form_value == "") {
-						$sql_field .= "$name='0'";
+						$sql_field .= $db_field_type == "boolean" ? "$name=false": "$name='0'";
 					}
 				}
 				break;

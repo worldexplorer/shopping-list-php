@@ -13,9 +13,14 @@ CREATE TABLE shli_message (
 	manorder		SERIAL, -- INTEGER NOT NULL DEFAULT 0 CHECK (manorder >= 0),
 
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
+	replyto_id		INTEGER,
+	forwardfrom_id	INTEGER,
 
 	room			INTEGER NOT NULL,
 	person			INTEGER NOT NULL,
+
+	persons_sent	INTEGER[],
+	persons_read	INTEGER[],
 
 	content			TEXT,
 	edited			BOOLEAN NOT NULL DEFAULT false,
@@ -26,6 +31,10 @@ CREATE TABLE shli_message (
 	,FOREIGN KEY ("person") REFERENCES "shli_person"(id)
 	,FOREIGN KEY ("room") REFERENCES "shli_room"(id)
 	,FOREIGN KEY ("purchase") REFERENCES "shli_purchase"(id)
+	,FOREIGN KEY ("replyto_id") REFERENCES "shli_message"(id)
+	,FOREIGN KEY ("forwardfrom_id") REFERENCES "shli_message"(id)
+--	,FOREIGN KEY ("persons_sent") REFERENCES "shli_person"(id)
+--	,FOREIGN KEY ("persons_read") REFERENCES "shli_person"(id)
 );
 
 

@@ -485,7 +485,10 @@ $layer_opened_nr = get_number("layer_opened_nr");
 
 if (!defined("TABLE_PREFIX")) define("TABLE_PREFIX", "");
 $non_prefixed_fields = array("id", "published", "deleted", "brief",
-	"brief_no_freetext", "content", "content_no_freetext", "parent_id", "iccontent_tf1");
+	"brief_no_freetext", "content", "content_no_freetext", "parent_id", "iccontent_tf1"
+	// shopping-list
+	, "edited", "replyto_id", "forwardfrom_id"
+);
 // поля из-под fixed тоже non-prefixed оказываются
 
 

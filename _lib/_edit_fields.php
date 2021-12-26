@@ -175,8 +175,8 @@ if ($id > 0) {
 	}
 }
 
-//pre($entity_dbfields_array, "_edit-fields.php:entity_dbfields_array");
-//pre($db_values_array, "db_values_array");
+// pre($entity_dbfields_array, "_edit-fields.php:entity_dbfields_array");
+// pre($db_values_array, "db_values_array");
 $columned_inside = 0;
 
 foreach ($entity_fields as $name => $it_params) {
@@ -725,7 +725,7 @@ EOT;
 			break;
 
 		case "checkbox":
-//			echo "[$field_txt: $input_type($name, $value, $default, $param1, $param2)]: ";
+//			pre("[$field_txt: $input_type($name, $value, $default, $param1, $param2)]");
 			$param2 = hash_by_tpl($db_values_array, $param2);
 			$input_type_wrapped = checkbox($name, $value, $default, $param1, $param2);
 			$back_row = back_row($input_type_wrapped, $field_txt, $name);
@@ -908,13 +908,19 @@ EOT;
 			break;
 
 		case "table_ro":
-//			echo "[$field_txt: $input_type($name, $value, $default)]: ";
+//			pre("[$field_txt: $input_type($name, $value, $default)]");
+			$input_type_wrapped = $input_type($name, $value);
+			$back_row = back_row($input_type_wrapped, $field_txt, $name, 0);
+			break;
+
+		case "arrayint":
+//			pre("[$field_txt: $input_type($name, $value, $default)]");
 			$input_type_wrapped = $input_type($name, $value);
 			$back_row = back_row($input_type_wrapped, $field_txt, $name, 0);
 			break;
 
 		default:
-//			echo "[$field_txt: $input_type($name, $value, $default, $param1, $param2, $param3)]: ";
+//			pre("[$field_txt: $input_type($name, $value, $default, $param1, $param2, $param3)]");
 			$param1 = hash_by_tpl($db_values_array, $param1);
 			$input_type_wrapped = $input_type($name, $value, $default, $param1, $param2, $param3);
 			$back_row = back_row($input_type_wrapped, $field_txt, $name);

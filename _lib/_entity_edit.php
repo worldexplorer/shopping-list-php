@@ -54,7 +54,9 @@ if ($id > 0) {
 			if ($sql_fields != "") {
 				$query = "update " . TABLE_PREFIX . "$entity set $sql_fields where id=$id";
 				$query = add_sql_table_prefix($query);
-				if ($debug_query == 1) $query;
+				if ($debug_query == 1) {
+					pre($query, "_entity_edit.php:UPDATE_QUERY");
+				}
 				$result = pg_query($cms_dbc, $query) or die ("UPDATE ENTITY failed:<br>$query<br>" . pg_last_error($cms_dbc));
 				$rows_updated_onedit = pg_affected_rows($result);
 				update($update_basehash, array("id" => $id));

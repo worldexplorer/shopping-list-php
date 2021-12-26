@@ -1041,6 +1041,20 @@ function ahref($name, $value = "_global", $default = "[AHREF TEMPLATE ERROR]") {
 	return $ret;
 }
 
+function arrayint($name, $value, $default = "", $graycomment = "", $tag_attr = "") {
+	global $input_size, $layer_inside;
+	
+	$tf_size = $input_size["text"];
+	if ($layer_inside == 1) $tf_size = $input_size["text_insidelayer"];
+
+//	if ($value == "") $value = $default;
+	$value = htmlspecialchars($value, ENT_QUOTES);
+	$ret = "<input type=text class='text w100' size=$tf_size name='$name' value=\"$value\" $tag_attr>";
+	if ($graycomment != "") $ret .= "<br><font style='color: " . OPTIONS_COLOR_GRAY . "'>$graycomment</font>";
+
+	return $ret;
+}
+
 function textfield($name, $value, $default = "", $graycomment = "", $tag_attr = "") {
 	global $input_size, $layer_inside;
 	
@@ -1146,8 +1160,9 @@ function textarea_3($name, $value, $default = "", $graycomment = "", $tag_attr =
 }
 
 function checkbox($name, $value, $default = "", $graycomment = "", $tag_attr = "") {
+	// pre("checkbox($name, $value, $default, $graycomment, $tag_attr)");
 	if ($value == "") $value = $default;
-	if ($value == 1) $value = "checked";
+	if ($value == "t" || $value == 1) $value = "checked";
 	
 	$ret = "<input type=checkbox name='$name' id='$name' $value $tag_attr>";
 	if ($graycomment != "") $ret .= "&nbsp;&nbsp;&nbsp;&nbsp;<font style='color: " . OPTIONS_COLOR_GRAY . "'>$graycomment</font>";
@@ -1158,7 +1173,7 @@ function checkbox_ro($name, $value, $default = "", $graycomment = "", $tag_attr 
 	global $input_size, $layer_inside, $columned_inside;
 	if ($value == "") $value = $default;
 	$value = intval($value);
-	$checked = ($value == 1) ? "checked" : "";
+	$checked = ($value == "t" || $value == 1) ? "checked" : "";
 	$before_gray_space = ($columned_inside == 0) ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "";
 
 	$ret = "<input type=checkbox name='$name' id='$name' value=1 $checked $tag_attr disabled>";

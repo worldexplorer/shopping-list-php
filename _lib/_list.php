@@ -780,13 +780,20 @@ if ($mode == "update") {
 				switch ($column_type) {
 					case "checkbox":
 						$sumbitted_value = get_string($it_name);
-						$sumbitted_value = ($sumbitted_value == "on") ? 1 : 0;
+
+						$db_field_type = entity_field_type($entity, $table_column);
+
+						$sumbitted_value = ($sumbitted_value == "on")
+							? ($db_field_type == "boolean" ? "true": 1)
+							: ($db_field_type == "boolean" ? "false": 0);
+						// pre("$it_name:$db_field_type:checkbox:sumbitted_value($sumbitted_value)");
+
 						$msg = "it_name=[$it_name] row[$table_column]=[" . $row[$table_column] . "] sumbitted_value=[$sumbitted_value]";
 						if ($row[$table_column] != $sumbitted_value) {
 							$update_hash[$table_column] = $sumbitted_value;
 							$msg .= " will update";
 						}
-//						pre($msg);
+						// pre($msg);
 						break;
 
 					case "number":
@@ -796,7 +803,7 @@ if ($mode == "update") {
 							$update_hash[$table_column] = $sumbitted_value;
 							$msg .= " will update";
 						}
-//						pre($msg);
+						// pre($msg);
 						break;
 		
 					case "textfield":
@@ -818,7 +825,9 @@ if ($mode == "update") {
 				$entity_before_rowupdate_function = $entity . "_before_rowupdate";
 				if (function_exists($entity_before_rowupdate_function)) $update_hash = $entity_before_rowupdate_function($row, $update_hash);
 
-//				pre($update_hash);
+				if ($debug_query == 1) {
+					pre($update_hash, "LIST_UPDATE_HASH for $it_name");
+				}
 				update($update_hash);
 //				update($update_hash, array("id" => $id), $entity);
 				$items_updated = 1;
@@ -891,8 +900,10 @@ for ($i=1; $row = pg_fetch_assoc($result); $i++) {
 	
 			case "checkbox":
 			case "checkboxro":
-				$row[$table_column . "_checked"] = ($row[$table_column] == 1) ? "checked" : "";
-				$row[$table_column . "_checked_imgsrc"] = ($row[$table_column] == 1) ? "checked.gif" : "unchecked.gif";
+				$db_field_type = entity_field_type($entity, $table_column);
+				$checked_ethalon = $db_field_type == "boolean" ? "t" : "1";
+				$row[$table_column . "_checked"] = ($row[$table_column] == $checked_ethalon) ? "checked" : "";
+				$row[$table_column . "_checked_imgsrc"] = ($row[$table_column] == $checked_ethalon) ? "checked.gif" : "unchecked.gif";
 				break;
 	
 			case "view":
