@@ -14,7 +14,9 @@ $list_left_m2mjoins .=
 
 
 $table_columns = array (
-	"id" => array("", "sernoupdown"),
+	// "id" => array("", "sernoupdown"),
+	"id" => array("", "ahrefcenter", "#ID#"),
+
 	"date_created" => array("", "date"),
 	"room_ident" => array("", "ahref", "<a href=room.php?id=#ROOM#>#ROOM_IDENT#</a>"),
 	"person_ident" => array("", "ahref", "<a href=person.php?id=#PERSON#>#PERSON_IDENT#</a>"),
@@ -28,7 +30,7 @@ $table_columns = array (
 	//"ident" => array($entity_msg_h, "hrefedit"),
 	"~2" => array($entity_msg_h, "ahref", "<a href=#ENTITY#-edit.php?id=#ID#>#CONTENT#</a>"),
 	// "ident" => array("", "textfield", "", "17em", "16em"),
-	"content" => array("", "textfield", "", "17em", "16em"),
+	// "content" => array("", "textfield", "", "17em", "16em"),
 
 	//"tour" => array("", "cnt", "подпункты: "),
 	// "question" => array("", "cnt"),

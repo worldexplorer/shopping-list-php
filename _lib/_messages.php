@@ -285,6 +285,7 @@ switch ($lang_current) {
 			"published-edit" => "Опубликовано",
 			"i_published-list" => "НаГлав",
 			"i_published-edit" => "На главной",
+			"deleted-edit" => "Удалено",
 
 			"~delete" => "Удал",
 			"parent_id" => "Родитель",

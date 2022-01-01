@@ -22,6 +22,7 @@ $entity_fields = array (
 
 	"edited" => array ("", "checkbox", false),
 	"published" => array ("", "checkbox", 1),
+	"deleted" => array ("", "checkbox", "", 0),
 );
 
 // $debug_query = 1;
