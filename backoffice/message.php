@@ -21,8 +21,11 @@ $table_columns = array (
 	"room_ident" => array("", "ahref", "<a href=room.php?id=#ROOM#>#ROOM_IDENT#</a>"),
 	"person_ident" => array("", "ahref", "<a href=person.php?id=#PERSON#>#PERSON_IDENT#</a>"),
 
-	"persons_sent" => array("", "view"),
-	"persons_read" => array("", "view"),
+	// "persons_sent" => array("", "view"),
+	// "persons_read" => array("", "view"),
+
+	"persons_sent" => array("", "textfield", "", "4em", "3em"),
+	"persons_read" => array("", "textfield", "", "4em", "3em"),
 
 	"replyto_id" => array("", "textfield", "", "4em", "3em"),
 	"forwardfrom_id" => array("", "textfield", "", "4em", "3em"),
