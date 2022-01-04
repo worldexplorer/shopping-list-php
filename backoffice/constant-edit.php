@@ -10,7 +10,7 @@ $entity_fields = array (
 	"hashkey" => array ("", "textfield", $hashkey),
 	"content" => array ("", "textarea_18", ""),
 
-	"published" => array ("", "checkbox", 1)
+	"published" => array ("", "checkbox", "", true)
 );
 
 

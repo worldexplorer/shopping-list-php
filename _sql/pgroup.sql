@@ -8,8 +8,8 @@ CREATE TABLE shli_pgroup (
 	date_updated	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	date_created	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	date_published	TIMESTAMP WITHOUT TIME ZONE,
-	published		SMALLINT NOT NULL DEFAULT 1,
-	deleted			SMALLINT NOT NULL DEFAULT 0,
+	published		BOOLEAN NOT NULL DEFAULT true,
+	deleted			BOOLEAN NOT NULL DEFAULT false,
 	manorder		SERIAL, -- INTEGER NOT NULL DEFAULT 0 CHECK (manorder >= 0),
 
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
@@ -45,10 +45,10 @@ CREATE TRIGGER trg_shli_pgroup_update_date_updated
 
 insert into shli_pgroup
 	(id, parent_id, room, purchase_origin, ident) values
-	(1, 0, 1, 1, 'root'),
-	(2, 1, 1, 1, 'Бакалея'),
-	(3, 1, 1, 1, 'Выпечка'),
-	(4, 1, 1, 1, 'Молочка')
+	(1, 	0, 		1, 		1, 				'root'),
+	(2, 	1, 		1, 		1, 				'Бакалея'),
+	(3, 	1, 		1, 		1, 				'Выпечка'),
+	(4, 	1, 		1, 		1, 				'Молочка')
 ;
 
 ALTER SEQUENCE shli_pgroup_id_seq RESTART WITH 5;

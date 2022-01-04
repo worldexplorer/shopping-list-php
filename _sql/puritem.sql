@@ -8,8 +8,8 @@ CREATE TABLE shli_puritem (
 	date_updated	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	date_created	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	date_published	TIMESTAMP WITHOUT TIME ZONE, -- date_purchased
-	published		SMALLINT NOT NULL DEFAULT 1,
-	deleted			SMALLINT NOT NULL DEFAULT 0,
+	published		BOOLEAN NOT NULL DEFAULT true,
+	deleted			BOOLEAN NOT NULL DEFAULT false,
 	manorder		SERIAL, -- INTEGER NOT NULL DEFAULT 0 CHECK (manorder >= 0),
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
 
@@ -19,7 +19,13 @@ CREATE TABLE shli_puritem (
 	pgroup			INTEGER,	-- dragging is saved to pgroup:manorder(room=X)
 	product			INTEGER,	-- dragging is saved to product:manorder(room=X)
 	qnty			NUMERIC(7,2),
---	punit			INTEGER,
+	--punit			INTEGER,
+
+	bought			BOOLEAN NOT NULL DEFAULT false,
+	bought_qnty		NUMERIC(7,2),
+	bought_price	NUMERIC(7,2),
+	bought_weight	NUMERIC(7,2),
+
 
 	comment			TEXT,
 	

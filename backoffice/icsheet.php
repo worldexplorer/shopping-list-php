@@ -18,7 +18,7 @@ require_once "../_lib/__fixed.php";
 $list_query = "select ics.*, icw.ident as icwhose_ident"
 	. " from icsheet ics"
 	. " left outer join icwhose icw on ics.icwhose=icw.id"
-	. " where ics.deleted=0 " . sqlcond_fromhash($fixed_hash, "ics", " and ")
+	. " where ics.deleted=false " . sqlcond_fromhash($fixed_hash, "ics", " and ")
 	. " order by ics." . get_entity_orderby("icsheet")
 	;
 

@@ -8,7 +8,7 @@ $list_left_fields .=
 
 $list_left_additional_joins .=
 	  " left join punit punit"
-		. " on punit.id=product.punit and punit.deleted=0"
+		. " on punit.id=product.punit and punit.deleted=false"
 ;
 
 $list_left_fields_groupby =

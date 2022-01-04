@@ -16,9 +16,9 @@ $orderby_person = get_entity_orderby("person");
 $query_person = <<<EOT
 select t.*
 from person t
-inner join m2m_person_pollanswer m2m on m2m.person=t.id	and m2m.published=1 and m2m.deleted=0
-inner join poll g on g.id=m2m.poll				and   g.published=1 and   g.deleted=0
-where m2m.poll=$poll							and   t.published=1 and   t.deleted=0
+inner join m2m_person_pollanswer m2m on m2m.person=t.id	and m2m.published=true and m2m.deleted=false
+inner join poll g on g.id=m2m.poll				and   g.published=true and   g.deleted=false
+where m2m.poll=$poll							and   t.published=true and   t.deleted=false
 order by t.$orderby_person
 EOT;
 
@@ -34,9 +34,9 @@ $orderby_pollanswer = get_entity_orderby("pollanswer");
 $query_answers = <<<EOT
 select pa.id, pa.ident, m2m.poll, m2m.pollanswer, m2m.person, m2m.iccontent as person_answer
 from pollanswer pa
-left join m2m_person_pollanswer		m2m on m2m.pollanswer=pa.id		and m2m.published=1 and m2m.deleted=0
+left join m2m_person_pollanswer		m2m on m2m.pollanswer=pa.id		and m2m.published=true and m2m.deleted=false
 	and m2m.person=$person		and m2m.pollanswer=$pollanswer		and m2m.poll=$poll
-where pa.id=$pollanswer										and   pa.published=1 and   pa.deleted=0
+where pa.id=$pollanswer										and   pa.published=true and   pa.deleted=false
 order by pa.$orderby_pollanswer
 EOT;
 
@@ -92,7 +92,7 @@ EOT;
 $table_poll = "";
 //for ($i=10; $i <= 12; $i++) {
 //	$row["id"] = $i;
-$query_poll = "select * from poll where published=1 and deleted=0 order by " . get_entity_orderby("poll");
+$query_poll = "select * from poll where published=true and deleted=false order by " . get_entity_orderby("poll");
 $qa_poll = select_queryarray($query_poll, "poll");
 foreach ($qa_poll as $row) {
 	$row["checked"] = $row["id"] == $poll ? "checked" : "";
@@ -119,7 +119,7 @@ EOT;
 $table_pollanswer = "";
 //for ($i=1; $i <= 7; $i++) {
 //	$row["id"] = $i;
-$query_pollanswer = "select * from pollanswer where poll=$poll and published=1 and deleted=0 order by " . get_entity_orderby("pollanswer");
+$query_pollanswer = "select * from pollanswer where poll=$poll and published=true and deleted=false order by " . get_entity_orderby("pollanswer");
 $qa_pollanswer = select_queryarray($query_pollanswer, "pollanswer");
 foreach ($qa_pollanswer as $row) {
 	$row["checked"] = $row["id"] == $pollanswer ? "checked" : "";

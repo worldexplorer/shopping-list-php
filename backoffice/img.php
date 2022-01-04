@@ -63,8 +63,8 @@ function img_ident($row) {
 	return $ret;
 }
 
-$list_query = "select * from $entity where deleted=0 order by manorder desc";
-$list_query_cnt = "select count(*) as cnt from $entity where deleted=0";
+$list_query = "select * from $entity where deleted=false order by manorder desc";
+$list_query_cnt = "select count(*) as cnt from $entity where deleted=false";
 
 $owner_entity = get_string("owner_entity");
 $owner_entity_id = get_number("owner_entity_id");
@@ -75,19 +75,19 @@ if ($owner_entity != "" && $owner_entity != "0") {
 	$list_query = "select i.*, it.ident as imgtype_ident from $entity i"
 		. " left outer join imgtype it on i.imgtype=it.id"
 		. " where i.owner_entity='$owner_entity'"
-		. " and i.deleted=0"
+		. " and i.deleted=false"
 		. " order by i.manorder desc";
-	$list_query_cnt = "select count(*) as cnt from $entity where owner_entity='$owner_entity' and deleted=0";
+	$list_query_cnt = "select count(*) as cnt from $entity where owner_entity='$owner_entity' and deleted=false";
 
 	if ($owner_entity_id > 0) {
 		$fixed_hash["owner_entity_id"] = $owner_entity_id;
 		$list_query = "select i.*, it.ident as imgtype_ident from $entity i"
 			. " left outer join imgtype it on i.imgtype=it.id"
 			. " where i.owner_entity='$owner_entity' and owner_entity_id='$owner_entity_id'"
-			. " and i.deleted=0"
+			. " and i.deleted=false"
 			. " order by i.manorder desc";
 
-		$list_query_cnt = "select count(*) as cnt from $entity where owner_entity='$owner_entity' and owner_entity_id='$owner_entity_id' and deleted=0";
+		$list_query_cnt = "select count(*) as cnt from $entity where owner_entity='$owner_entity' and owner_entity_id='$owner_entity_id' and deleted=false";
 	}
 }
 

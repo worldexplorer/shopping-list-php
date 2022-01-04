@@ -9,10 +9,10 @@ $entity_fields = array (
 	"hashkey" => array ("", "textfield", ""),
 	"label_style" => array ("", "textfield", ""),
 	"tf1_width" => array ("", "number", 0),
-	"tf1_incolumn" => array ("", "checkbox", 0),
+	"tf1_incolumn" => array ("", "checkbox", "", false),
 	"icdict" => array ("", "select_hard", "ident"),
 
-	"published" => array ("", "checkbox", 1)
+	"published" => array ("", "checkbox", "", true)
 );
 ?>
 

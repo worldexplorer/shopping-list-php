@@ -9,6 +9,7 @@ $entity_fields = array (
 	
 	"room" => array ("", "select_soft"),
 	"person" => array ("", "select_soft"),
+	// 0 => NULL in _postgres"purchase" => array ("", "select_soft"),
 
 	"persons_sent" => array("", "arrayint"),
 	"persons_read" => array("", "arrayint"),
@@ -20,9 +21,10 @@ $entity_fields = array (
 	"date_created" => array ("", "timestampro", ""),
 	"date_updated" => array ("", "timestampro", ""),
 
-	"edited" => array ("", "checkbox", false),
-	"published" => array ("", "checkbox", 1),
-	"deleted" => array ("", "checkbox", "", 0),
+	"archived" => array ("", "checkbox", "", false),
+	"edited" => array ("", "checkbox", "", false),
+	// "published" => array ("", "checkbox", "", true),
+	"deleted" => array ("", "checkbox", "", false),
 );
 
 // $debug_query = 1;

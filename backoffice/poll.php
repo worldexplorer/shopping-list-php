@@ -35,9 +35,9 @@ $table_columns = array (
 
 //$debug_query = 1;
 $list_left_additional_fields = " , count(distinct icd.id) as icdict_cnt, count(distinct icdc.id) as icdictcontent_cnt, count(distinct pre.id) as person_replied_cnt";
-$list_left_additional_joins = " left outer join icdict icd on e.icwhose=icd.icwhose and icd.deleted=0 and icd.icwhose=e.icwhose"
-	. " left outer join icdictcontent icdc on icdc.icdict=icd.id and icdc.deleted=0"
-	. " left outer join m2m_person_pollanswer pre on pre.poll=e.id and pre.deleted=0"
+$list_left_additional_joins = " left outer join icdict icd on e.icwhose=icd.icwhose and icd.deleted=false and icd.icwhose=e.icwhose"
+	. " left outer join icdictcontent icdc on icdc.icdict=icd.id and icdc.deleted=false"
+	. " left outer join m2m_person_pollanswer pre on pre.poll=e.id and pre.deleted=false"
 	;
 
 ?>

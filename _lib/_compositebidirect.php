@@ -48,12 +48,12 @@ function multicompositebidirect ($compositetype = "supplierbypgroup",
 				$query = "select pg.id, pg.ident, pg.published"
 					. ", count(distinct pg_down.id) as pgroup_down_cnt, count(distinct p.id) as product_cnt"
 					. " from $pgroup_table pg"
-					. " right join $m2m_dependtable m2m_dep on m2m_dep.$pgroup_table=pg.id and m2m_dep.deleted=0"
-					. " right join $product_table p on p.id=m2m_dep.$product_table and p.deleted=0"
-					. " right join $m2m_table m2m on m2m.published=1 and m2m.deleted=0 and m2m.product_to=p.id $m2m_fixed_cond"
+					. " right join $m2m_dependtable m2m_dep on m2m_dep.$pgroup_table=pg.id and m2m_dep.deleted=false"
+					. " right join $product_table p on p.id=m2m_dep.$product_table and p.deleted=false"
+					. " right join $m2m_table m2m on m2m.published=true and m2m.deleted=false and m2m.product_to=p.id $m2m_fixed_cond"
 
-					. " left outer join $pgroup_table pg_down on pg_down.parent_id=pg.id and pg_down.deleted=0"
-					. " where pg.deleted=0"
+					. " left outer join $pgroup_table pg_down on pg_down.parent_id=pg.id and pg_down.deleted=false"
+					. " where pg.deleted=false"
 					. " group by p.id"
 					. " order by pg." . get_entity_orderby($pgroup_table);
 		
@@ -147,9 +147,9 @@ function options_pgrouptreeproductselectable($m2m_table, $m2m_fixed, $composite,
 
 	$query = "select pg.id, pg.ident, pg.published, count(pg_down.id) as pgroup_down_cnt, count(p.id) as product_cnt"
 		. " from $pgroup_table pg"
-		. " left outer join $product_table p on p.pgroup=pg.id and p.deleted=0"
-		. " left outer join $pgroup_table pg_down on pg_down.parent_id=pg.id and pg_down.deleted=0"
-		. " where pg.parent_id=$parent_id and pg.deleted=0"
+		. " left outer join $product_table p on p.pgroup=pg.id and p.deleted=false"
+		. " left outer join $pgroup_table pg_down on pg_down.parent_id=pg.id and pg_down.deleted=false"
+		. " where pg.parent_id=$parent_id and pg.deleted=false"
 		. " group by pg.id"
 		. " order by pg." . get_entity_orderby($pgroup_table)
 		. " limit 3"
@@ -163,11 +163,11 @@ function options_pgrouptreeproductselectable($m2m_table, $m2m_fixed, $composite,
 		$query = "select pg.id, pg.ident, pg.published, count(distinct pg_down.id) as pgroup_down_cnt, count(distinct p.id) as product_cnt"
 			. ", count(distinct m2m.id) as product_m2mlinked_cnt"
 			. " from $pgroup_table pg"
-			. " left outer join $pgroup_table pg_down on pg_down.parent_id=pg.id and pg_down.deleted=0"
-			. " left join $m2m_dependtable m2m_dep on m2m_dep.$pgroup_table=pg.id and m2m_dep.deleted=0"
-			. " left join $product_table p on p.id=m2m_dep.$product_table and p.deleted=0"
-			. " left join $m2m_table m2m on m2m.published=1 and m2m.deleted=0 and m2m.product_to=p.id $m2m_fixed_cond"
-			. " where pg.parent_id=$parent_id and pg.deleted=0"
+			. " left outer join $pgroup_table pg_down on pg_down.parent_id=pg.id and pg_down.deleted=false"
+			. " left join $m2m_dependtable m2m_dep on m2m_dep.$pgroup_table=pg.id and m2m_dep.deleted=false"
+			. " left join $product_table p on p.id=m2m_dep.$product_table and p.deleted=false"
+			. " left join $m2m_table m2m on m2m.published=true and m2m.deleted=false and m2m.product_to=p.id $m2m_fixed_cond"
+			. " where pg.parent_id=$parent_id and pg.deleted=false"
 			. " group by pg.id"
 			. " order by pg." . get_entity_orderby($pgroup_table)
 //			. " limit 5"
@@ -274,9 +274,9 @@ EOT;
 	
 			$query_product = "select p.id, p.ident, p.article, p.published, m2m.id as m2m_id"
 				. " from $product_table p"
-				. " inner join $m2m_dependtable m2m_dep on m2m_dep.$product_table=p.id and m2m_dep.deleted=0"
-				. " left join $m2m_table m2m on m2m.published=1 and m2m.deleted=0 and m2m.product_to=p.id $m2m_fixed_cond"
-				. " where m2m_dep.$pgroup_table=$pgroup_id and p.deleted=0"
+				. " inner join $m2m_dependtable m2m_dep on m2m_dep.$product_table=p.id and m2m_dep.deleted=false"
+				. " left join $m2m_table m2m on m2m.published=true and m2m.deleted=false and m2m.product_to=p.id $m2m_fixed_cond"
+				. " where m2m_dep.$pgroup_table=$pgroup_id and p.deleted=false"
 				. " group by p.id"
 				. " order by p." . get_entity_orderby($product_table);
 			$query_product = add_sql_table_prefix($query_product);
@@ -428,12 +428,12 @@ function options_pgroupflatproductselectable($m2m_table, $m2m_fixed, $composite,
 	$m2m_fixed_cond = sqlcond_fromhash($m2m_fixed, "m2m", " and ");
 	$query_product = "select p.*, pg.id as pgroup, pg.ident as pgroup_ident, pg.published as pgroup_published, m2m.id as m2m_id"
 		. " from $product_table p"
-		. " right join $m2m_dependtable m2m_dep on m2m_dep.$product_table=p.id and m2m_dep.deleted=0"
-		. " right join $pgroup_table pg on m2m_dep.$pgroup_table=pg.id and pg.deleted=0"
-		. " right join $m2m_table m2m on m2m.published=1 and m2m.deleted=0 and m2m.product_to=p.id $m2m_fixed_cond"
+		. " right join $m2m_dependtable m2m_dep on m2m_dep.$product_table=p.id and m2m_dep.deleted=false"
+		. " right join $pgroup_table pg on m2m_dep.$pgroup_table=pg.id and pg.deleted=false"
+		. " right join $m2m_table m2m on m2m.published=true and m2m.deleted=false and m2m.product_to=p.id $m2m_fixed_cond"
 
-//		. " left outer join $pgroup_table pg_down on pg_down.parent_id=pg.id and pg_down.deleted=0"
-		. " where pg.deleted=0"
+//		. " left outer join $pgroup_table pg_down on pg_down.parent_id=pg.id and pg_down.deleted=false"
+		. " where pg.deleted=false"
 		. " group by p.id"
 		. " order by pg." . get_entity_orderby($product_table);
 

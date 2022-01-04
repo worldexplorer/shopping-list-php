@@ -58,9 +58,9 @@ $entity_fields_footer = array (
 
 	"inbrief" => array ("", "checkbox", 0, " "),	//""
 	"sorting" => array ("", "checkbox", 0, ""),
-	"obligatory" => array ("", "checkbox", 1),
-	//"published_bo" => array ("", "checkbox", 1),
-	"published" => array ("", "checkbox", 1)
+	"obligatory" => array ("", "checkbox", "", true),
+	//"published_bo" => array ("", "checkbox", "", true),
+	"published" => array ("", "checkbox", "", true)
 );
 
 
@@ -119,7 +119,7 @@ if ($id > 0) {
 			break;
 			
 		case "CHECKBOX":
-			$ctx_fields = array ("param1" => array ("Default состояние", "checkbox", 0));
+			$ctx_fields = array ("param1" => array ("Default состояние", "checkbox", false));
 			break;
 			
 		default:

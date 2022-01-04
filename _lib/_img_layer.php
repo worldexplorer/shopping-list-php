@@ -1061,7 +1061,7 @@ function img_exists($row, $field, $fail_if_not_image = 0) {
 }
 
 function delete_img_forowner($owner_entity, $owner_entity_id, $img_table = "img") {
-	$query = "select * from $img_table where owner_entity='$owner_entity' and owner_entity_id='$owner_entity_id' and deleted=0 order by manorder";
+	$query = "select * from $img_table where owner_entity='$owner_entity' and owner_entity_id='$owner_entity_id' and deleted=false order by manorder";
 	$qa = select_queryarray($query);
 	foreach ($qa as $img_row) {
 		img_unlink_allrest_possible($img_row);
@@ -1210,7 +1210,7 @@ function img_layer($imgtype_row) {
 
 	$ret = "";
 
-	$query = "select * from $img_table where owner_entity='$owner_entity' and owner_entity_id='$owner_entity_id' and imgtype=$imgtype_id and deleted=0 order by manorder";
+	$query = "select * from $img_table where owner_entity='$owner_entity' and owner_entity_id='$owner_entity_id' and imgtype=$imgtype_id and deleted=false order by manorder";
 	$query = add_sql_table_prefix($query);
 	$result = pg_query($cms_dbc, $query) or die("SELECT IMG_LAYER failed:<br>$query:<br>" . pg_last_error($cms_dbc));
 	$img_layer_imgcnt = pg_num_rows($result);
@@ -2269,7 +2269,7 @@ function imglayer_update($imgtype_row = array()) {
 		 else pre("imgtype[" . $imgtype_row["hashkey"] . "] has img_table=[" . $imgtype_row["img_table"] . "] which does not exists in database.");
 	}
 
-	$query = "select * from $img_table where owner_entity='$owner_entity' and owner_entity_id='$owner_entity_id' and imgtype=$imgtype_id and deleted=0 order by manorder";
+	$query = "select * from $img_table where owner_entity='$owner_entity' and owner_entity_id='$owner_entity_id' and imgtype=$imgtype_id and deleted=false order by manorder";
 	$query = add_sql_table_prefix($query);
 	$result = pg_query($cms_dbc, $query)
 		or die("SELECT IMG_LAYER failed:<br>$query:<br>" . pg_last_error($cms_dbc));
@@ -2586,7 +2586,7 @@ function prepare_img($tpl, $imgtype_hashkey = "_global", $id_ = "_global", $enti
 	if (count($imgid_list) > 0) $imgid_sqlin = sqlin_fromarray($imgid_list);
 	if ($imgid_sqlin != "") $imgid_sqlin = " and id in ($imgid_sqlin)";
 
-	$query = "select * from $img_table where published=1 and deleted=0 and owner_entity='$entity_' and owner_entity_id='$id_' and imgtype='$imgtype' $imgid_sqlin order by manorder";
+	$query = "select * from $img_table where published=true and deleted=false and owner_entity='$entity_' and owner_entity_id='$id_' and imgtype='$imgtype' $imgid_sqlin order by manorder";
 	$query = add_sql_table_prefix($query);
 	if ($debug_query == 1) echo "<br>PREPARE_IMG[$query]<br>";
 	$result = pg_query($cms_dbc, $query)
@@ -2686,7 +2686,7 @@ function autoresize($row, $imgtype_hashkey = "IMG_PRODUCT", $autoresize_type = "
 	if (count($imgid_list) > 0) $imgid_sqlin = sqlin_fromarray($imgid_list);
 	if ($imgid_sqlin != "") $imgid_sqlin = " and id in ($imgid_sqlin)";
 
-	$query = "select * from $img_table where owner_entity='$entity' and owner_entity_id='$id' and imgtype='$imgtype' and published=1 and deleted=0 $imgid_sqlin";
+	$query = "select * from $img_table where owner_entity='$entity' and owner_entity_id='$id' and imgtype='$imgtype' and published=true and deleted=false $imgid_sqlin";
 	if ($imgid_sqlin == "") {
 		if ($autoresize_type == "first") {
 			$query .= " order by img_main desc, $manorder_field " . get_entity_orderdir($img_table);

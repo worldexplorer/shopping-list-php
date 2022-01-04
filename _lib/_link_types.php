@@ -120,7 +120,7 @@ function options_multisupplier($level = 1, $m2m_table, $m2m_master_field, $m2m_m
 	global $cms_dbc;
 	$options = "";
 
-	$query = "select id, $supplier_field from $supplier_table where deleted=0 order by " . get_entity_orderby($supplier_table);
+	$query = "select id, $supplier_field from $supplier_table where deleted=false order by " . get_entity_orderby($supplier_table);
 	$query = add_sql_table_prefix($query);
 
 	$result = pg_query($cms_dbc, $query)
@@ -169,7 +169,7 @@ function options_multiproduct($pgroup_value, $level,
 		$published = ($product_published == '1') ? "" : "style='color: " . OPTIONS_COLOR_GRAY . "'";
 
 		$query2 = "select m2m.id from $m2m_table m2m where $m2m_slave_field = $product_id"
-				. " and $m2m_master_field = $m2m_master_value and m2m.deleted=0";
+				. " and $m2m_master_field = $m2m_master_value and m2m.deleted=false";
 		$query2 = add_sql_table_prefix($query2);
 		$result2 = pg_query($cms_dbc, $query2)
 				or die("SELECT PRODUCT_OPTION failed:<br>$query2:<br>" . pg_last_error($cms_dbc));
@@ -250,7 +250,7 @@ function m2mtf_parent($dict_table, $value = "_global", $m2m_table = "_global", $
 			. " from $dict_table d, $parent_dict_table dp "
 			. " left outer join $m2m_table m2m on m2m.$entity=$id and m2m.$dict_table=d.id"
 			. " where d.$parent_dict_table=dp.id"
-			. " and d.deleted=0 and dp.deleted=0"
+			. " and d.deleted=false and dp.deleted=false"
 			. " order by dp." . get_entity_orderby($parent_dict_table) . ", d." . get_entity_orderby($dict_table);
 		$query = add_sql_table_prefix($query);
 		$result = pg_query($cms_dbc, $query) or die("m2mtf_parent(): SELECT DICTIONARY failed:<br>$query:<br>" . pg_last_error($cms_dbc));
@@ -356,7 +356,7 @@ EOT;
 //		. " from $dict_table d, $m2m_controlling_table m2mc "
 //		. " left outer join $m2m_content_table m2m on m2m.$dict_table=d.id"
 //		. " and m2m.$entity=$id"
-//		. " where d.published=1 and d.deleted=0"
+//		. " where d.published=true and d.deleted=false"
 //		. " and m2mc.$dict_table=d.id and " . sqlcond_fromhash($m2m_controlling_fixedhash, "m2mc")
 //		. " order by d." . get_entity_orderby($dict_table);
 	
@@ -371,10 +371,10 @@ EOT;
 	$query = "select d.id, d.ident, d.published, m2m.content as m2m_content $questionnaire_fields" . $additional_fields_csv
 		. " from $dict_table d"
 		. " inner join $m2m_controlling_table m2mc on m2mc.$dict_table=d.id and " . sqlcond_fromhash($m2m_controlling_fixedhash, "m2mc")
-			. " and m2mc.published=1 and m2mc.deleted=0"
+			. " and m2mc.published=true and m2mc.deleted=false"
 		. " left join $m2m_content_table m2m on m2m.$dict_table=d.id"
 		. " and m2m.$entity=$id"
-		. " where d.published=1 and d.deleted=0"
+		. " where d.published=true and d.deleted=false"
 		. " order by d." . get_entity_orderby($dict_table);
 	
 	if ($debug_query == true) echo "<br>SELECT_m2mtfcontrolled: " . $query;
@@ -493,8 +493,8 @@ EOT;
 		. " from $grouping_table team"
 		. " inner join $m2m_controlling_table m2m_team4game on m2m_team4game.$grouping_table=$grouping_table.id"
 		. $m2mtfcontrolledgrouped_outer_leftjoin_tables
-		. " where team.published=1 and team.deleted=0"
-				. " and m2m_team4game.published=1 and m2m_team4game.deleted=0"
+		. " where team.published=true and team.deleted=false"
+				. " and m2m_team4game.published=true and m2m_team4game.deleted=false"
 				. sqlcond_fromhash($m2m_controlling_fixedhash, "m2m_team4game", " and ")
 		. $m2mtfcontrolledgrouped_outer_leftjoin_groupby
 		. " order by $m2mtfcontrolledgrouped_outer_leftjoin_sorting team." . get_entity_orderby($grouping_table)
@@ -517,7 +517,7 @@ EOT;
 			. " from $dict_table q"
 			. " left join $m2m_content_table m2m on m2m.$dict_table=q.id"
 				. " and m2m.$grouping_table=" . $row_outer["id"]
-			. " where q.published=1 and q.deleted=0"
+			. " where q.published=true and q.deleted=false"
 				. " and q.$entity=$id"
 			. " order by q." . get_entity_orderby($dict_table);
 		$query_inner = add_sql_table_prefix($query_inner);
@@ -644,8 +644,8 @@ EOT;
 	$query = "select d.*, m2m.content as m2m_content"
 		. " from $dict_table d"
 		. " left outer join $m2m_table m2m on m2m.$dict_table=d.id"
-		. " and " . sqlcond_fromhash($fixed_hash, "m2m") . " and m2m.published=1"
-		. " where d.published=1 and d.deleted=0"
+		. " and " . sqlcond_fromhash($fixed_hash, "m2m") . " and m2m.published=true"
+		. " where d.published=true and d.deleted=false"
 		. " order by d." . get_entity_orderby($dict_table)
 		;
 
@@ -653,8 +653,8 @@ EOT;
 		$query = "select d.*, m2m.content as m2m_content"
 			. " from $dict_table d"
 			. " inner join $m2m_table m2m on m2m.$dict_table=d.id"
-			. " and " . sqlcond_fromhash($fixed_hash, "m2m") . " and m2m.published=1"
-			. " where d.published=1 and d.deleted=0"
+			. " and " . sqlcond_fromhash($fixed_hash, "m2m") . " and m2m.published=true"
+			. " where d.published=true and d.deleted=false"
 			. " order by d." . get_entity_orderby($dict_table)
 			. ", m2m.manorder asc"
 			;
@@ -762,10 +762,10 @@ EOT;
 		. ", m2mrw." . $m2m_tablehash[$rw_table][2] . " as m2mrw_content"
 		. " from $dict_table d"
 		. " left outer join $ro_table m2mro on m2mro.$dict_table=d.id"
-			. " and " . sqlcond_fromhash($fixed_hash, "m2mro") . " and m2mro.published=1"
+			. " and " . sqlcond_fromhash($fixed_hash, "m2mro") . " and m2mro.published=true"
 		. " left outer join $rw_table m2mrw on m2mrw.$dict_table=d.id"
-			. " and " . sqlcond_fromhash($fixed_hash, "m2mrw") . " and m2mrw.published=1"
-		. " where d.published=1 and d.deleted=0"
+			. " and " . sqlcond_fromhash($fixed_hash, "m2mrw") . " and m2mrw.published=true"
+		. " where d.published=true and d.deleted=false"
 		. " order by d." . get_entity_orderby($dict_table)
 		;
 
@@ -883,13 +883,13 @@ EOT;
 	$query = "select d.id, d.ident, m2m.id as m2m_id"
 		. " from $dict_table d"
 		. " left outer join $m2m_table m2m on m2m.$entity=$id and m2m.$dict_table=d.id"
-		. " where d.published=1"
+		. " where d.published=true"
 		. " order by d." . get_entity_orderby($dict_table);
 
 	$query = "select d.id, d.ident, m2m.id as m2m_id"
 		. " from $dict_table d"
-		. " left outer join $m2m_table m2m on m2m.$entity=$id and m2m.$dict_table=d.id and m2m.deleted=0"
-		. " where d.published=1 and d.deleted=0"
+		. " left outer join $m2m_table m2m on m2m.$entity=$id and m2m.$dict_table=d.id and m2m.deleted=false"
+		. " where d.published=true and d.deleted=false"
 		. " order by d." . get_entity_orderby($dict_table);
 
 	$query = add_sql_table_prefix($query);
@@ -1062,7 +1062,7 @@ function select_table_all($table, $value = "_global", $sql_field = "ident", $tag
 */
 		
 	$deleted_cond = "";
-	if (entity_has_deleted_field($table_strict)) $deleted_cond = "and e.deleted=0";
+	if (entity_has_deleted_field($table_strict)) $deleted_cond = "and e.deleted=false";
 		
 	$cache_key = $table_strict . ":" . $value . ":" . $sql_field . ":" . pr($fixed_hash) . ":" . $forcezero_option . ":" . $forcezero_evenifwasselected;
 //	pre("$cache_key");
@@ -1090,19 +1090,19 @@ function select_table_all($table, $value = "_global", $sql_field = "ident", $tag
 				. " from $table_strict e"
 				. " inner join $m2m_dependtable m2m on m2m.$table_strict=e.id "
 					. sqlcond_fromhash($fixed_hash, "m2m", " and ", " and ")
-					. " and m2m.published=1 and m2m.deleted=0"
+					. " and m2m.published=true and m2m.deleted=false"
 				. " where 1=1 $deleted_cond "
 				. " group by e.id"
 				. " order by e." . get_entity_orderby($table_strict);
 
-// 1 select e.id, e.ident as ident, e.published from cstore e inner join m2m_cstore_city m2m on m2m.cstore=e.id and m2m.published=1 and m2m.deleted=0 where 1=1 and e.deleted=0 group by e.id order by e.ident asc
-// 2 select e.id, e.ident as ident, e.published from city e inner join m2m_cstore_city m2m on m2m.city=e.id and m2m.published=1 and m2m.deleted=0 where 1=1 and e.deleted=0 group by e.id order by e.ident asc 
+// 1 select e.id, e.ident as ident, e.published from cstore e inner join m2m_cstore_city m2m on m2m.cstore=e.id and m2m.published=true and m2m.deleted=false where 1=1 and e.deleted=false group by e.id order by e.ident asc
+// 2 select e.id, e.ident as ident, e.published from city e inner join m2m_cstore_city m2m on m2m.city=e.id and m2m.published=true and m2m.deleted=false where 1=1 and e.deleted=false group by e.id order by e.ident asc 
 // а 2 должно зависеть от m2m.cstore=[сеть выбранная ранее]
 
 //	мешало в oregons shop-edit, "city" => array ("Город", "select_hard", "ident")
 // shop -> cstore, cstore -> m2m -> city, cstore не содержит city
 //	OPTIONS_SQL failed:
-//	select id, ident as ident, published from oregons_cstore where 1=1 and deleted=0 and city='1' order by ident asc:
+//	select id, ident as ident, published from oregons_cstore where 1=1 and deleted=false and city='1' order by ident asc:
 //	Unknown column 'city' in 'where clause'
 //				. sqlcond_fromhash($fixed_hash, "", " and ", " and ")
 // вообще ужас
@@ -1186,7 +1186,7 @@ function options_sql_tree($table, $value, $field = "ident", $parent_id = 0, $lev
 	$ret = "";
 
 	$deleted_cond = "";
-	if (entity_has_deleted_field($table)) $deleted_cond = "and deleted=0";
+	if (entity_has_deleted_field($table)) $deleted_cond = "and deleted=false";
 
 	$query = "select id, $field, published from $table where parent_id=$parent_id $deleted_cond order by " . get_entity_orderby($table);
 	$query = add_sql_table_prefix($query);
@@ -1418,7 +1418,7 @@ EOT;
 
 	$query = "select id, $sql_field as ident, published"
 		. " from $table_strict"
-		. " where deleted=0"
+		. " where deleted=false"
 		. sqlcond_fromhash($fixed_hash, "", " and ", " and ")
 		. " order by " . get_entity_orderby($table_strict);
 
@@ -1703,8 +1703,8 @@ function checkbox_table($table, $value_array = "_global", $sql_field = "ident", 
 	if ($value_array == "_global") $value_array = get_array($table);
 	
 	$pubdel_cond = "";
-	if (entity_has_deleted_field($table_strict)) $pubdel_cond = " and deleted=0";
-	if (entity_has_field($table_strict, "published")) $pubdel_cond = " and published=1";
+	if (entity_has_deleted_field($table_strict)) $pubdel_cond = " and deleted=false";
+	if (entity_has_field($table_strict, "published")) $pubdel_cond = " and published=true";
 
 	$query = "select id, $sql_field as ident, published"
 		. " from $table_strict"

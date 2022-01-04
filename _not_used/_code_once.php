@@ -23,10 +23,10 @@ function product_iccontent_by_tpl($fixed_hash
 		. " from ic ic"
 		. " inner join ictype t on ic.ictype=t.id"
 		. " inner join $m2m_table m2m on m2m.ic=ic.id"
-//		. " left outer join icdictcontent icdc on m2m.ic=ic.id and iccontent=icdc.id and icdc.published=1 and icdc.deleted=0"
-		. " left outer join icdict icd on ic.icdict=icd.id and icd.published=1 and icd.deleted=0"
-		. " left outer join icdictcontent icdc on icdc.icdict=icd.id and m2m.iccontent=icdc.id and icdc.published=1 and icdc.deleted=0"
-		. " where ic.deleted=0 and ic.published=1 and t.published=1 and t.deleted=0"
+//		. " left outer join icdictcontent icdc on m2m.ic=ic.id and iccontent=icdc.id and icdc.published=true and icdc.deleted=false"
+		. " left outer join icdict icd on ic.icdict=icd.id and icd.published=true and icd.deleted=false"
+		. " left outer join icdictcontent icdc on icdc.icdict=icd.id and m2m.iccontent=icdc.id and icdc.published=true and icdc.deleted=false"
+		. " where ic.deleted=false and ic.published=true and t.published=true and t.deleted=false"
 		. sqlcond_fromhash($fixed_hash, "", " and ")
 		. " and ic.icwhose=" . $icwhose_id
 		. " order by ic." . get_entity_orderfield("ic");
@@ -201,7 +201,7 @@ EOT;
 	$query = "select m.* from "
 		. " " . TABLE_PREFIX . "mmenu m, " . TABLE_PREFIX . "mmenu parent"
 		. " where parent.$parent_wcond and m.parent_id=parent.id"
-		. " and m.published=1 and m.deleted=0"
+		. " and m.published=true and m.deleted=false"
 		. " order by m.manorder";
 	
 	$qa = select_queryarray($query);
@@ -388,7 +388,7 @@ function login_auth($auth, $sendcookie = 1) {
 
 
 	$person_id = 0;
-	$query = "select * from " . TABLE_PREFIX . "person where auth='$auth' and deleted=0";
+	$query = "select * from " . TABLE_PREFIX . "person where auth='$auth' and deleted=false";
 //	echo $query;
 	$result = pg_query($cms_dbc, $query) or die("SELECT person failed");
 	$num_rows = pg_num_rows($result);

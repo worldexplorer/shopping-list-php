@@ -7,7 +7,7 @@ if (($action == "up" || $action == "down") && $id > 0) {
 	if ($in_backoffice_readonly == 1) {
 		$alertmsg = $in_backoffice_readonly_msg;
 	} else {
-		$query = "select $manorder_field, ident, date_updated from $entity where id=$id and deleted=0";
+		$query = "select $manorder_field, ident, date_updated from $entity where id=$id and deleted=false";
 	//	echo "move from: $query<br>";
 		$query = add_sql_table_prefix($query);
 		$result = pg_query($cms_dbc, $query) or die("Up\Down query1 failed:<br>$query");
@@ -16,8 +16,8 @@ if (($action == "up" || $action == "down") && $id > 0) {
 		$ident = $row["ident"];
 		$date_updated1 = $row["date_updated"];
 		
-		$query_next = "select e.id, e.$manorder_field, e.date_updated from $entity e where e.$manorder_field>$sort1 $o2mfixed_cond and e.deleted=0 order by e.$manorder_field";
-		$query_prev = "select e.id, e.$manorder_field, e.date_updated from $entity e where e.$manorder_field<$sort1 $o2mfixed_cond and e.deleted=0 order by e.$manorder_field desc";
+		$query_next = "select e.id, e.$manorder_field, e.date_updated from $entity e where e.$manorder_field>$sort1 $o2mfixed_cond and e.deleted=false order by e.$manorder_field";
+		$query_prev = "select e.id, e.$manorder_field, e.date_updated from $entity e where e.$manorder_field<$sort1 $o2mfixed_cond and e.deleted=false order by e.$manorder_field desc";
 		
 		if ($m2mfixed_cond != "") {
 // from _list.php, case '-m2mjoin oregons_s +got_backhref'
@@ -58,7 +58,7 @@ if (($action == "up" || $action == "down") && $id > 0) {
 						$list_left_fields_updown .= ", $dependant_entity.ident as ${dependant_entity}_ident";
 						$list_left_m2mjoins_updown .=
 							" left join $m2m_dependtable_updown m2m_$dependant_entity"
-								. " on m2m_$dependant_entity.$entity=e.id and m2m_$dependant_entity.deleted=0"
+								. " on m2m_$dependant_entity.$entity=e.id and m2m_$dependant_entity.deleted=false"
 							. " left join $dependant_entity $dependant_entity"
 								. " on $dependant_entity.id=m2m_$dependant_entity.$dependant_entity";
 				
@@ -72,7 +72,7 @@ if (($action == "up" || $action == "down") && $id > 0) {
 				. " where e.$manorder_field>$sort1"
 				. $o2mfixed_cond
 				. $m2mfixed_cond
-				. " and e.deleted=0 order by e.$manorder_field";
+				. " and e.deleted=false order by e.$manorder_field";
 
 			$query_prev = "select e.id, e.$manorder_field, e.date_updated"
 				. " from $entity e"
@@ -80,7 +80,7 @@ if (($action == "up" || $action == "down") && $id > 0) {
 				. " where e.$manorder_field<$sort1"
 				. $o2mfixed_cond
 				. $m2mfixed_cond
-				. " and e.deleted=0 order by e.$manorder_field desc";
+				. " and e.deleted=false order by e.$manorder_field desc";
 		
 		}
 		

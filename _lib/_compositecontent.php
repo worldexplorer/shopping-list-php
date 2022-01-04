@@ -139,7 +139,7 @@ EOT;
 
 	$query = "select m2m.id as id, $subject as ident"
 			. " from $m2m_table m2m, $join_tables"
-			. " where deleted=0 and " . sqlcond_fromhash($m2m_fixed)
+			. " where deleted=false and " . sqlcond_fromhash($m2m_fixed)
 			. " and $join_cond"
 			. " order by $orderby";
 
@@ -179,7 +179,7 @@ function optionscompositecontent_productbyfixed($m2m_table, $m2m_fixed, $composi
 			$fixed_cond = sqlcond_fromhash($fixed_hash, "m2m", " and ");
 			$query = "select p.*, p.id as $product_table"
 				. " from $product_table p"
-				. " inner join $m2m_dependtable m2m on m2m.$product_table=p.id $fixed_cond and m2m.deleted=0"
+				. " inner join $m2m_dependtable m2m on m2m.$product_table=p.id $fixed_cond and m2m.deleted=false"
 				. " group by p.id"
 				. " order by p." . get_entity_orderby($product_table);
 		}
@@ -235,7 +235,7 @@ EOT;
 				}
 			}
 	
-			$query2 = "select m2m.id from $m2m_table m2m where deleted=0 and"
+			$query2 = "select m2m.id from $m2m_table m2m where deleted=false and"
 					. " $m2m_fixed_cond"
 					. " and $joinon";
 	
@@ -310,7 +310,7 @@ function optionscompositecontent_pgroupfromroot($m2m_table, $m2m_fixed, $composi
 		. " get_down_products[$get_down_products]"
 		);*/
 
-//	$query = "select id, ident, published from pgroup where parent_id=$parent_id and published=1 order by " . get_entity_orderby("pgroup");
+//	$query = "select id, ident, published from pgroup where parent_id=$parent_id and published=true order by " . get_entity_orderby("pgroup");
 
 	// выбирать m2m_ugroup_pgroup m2m.id чтобы определить checked
 	$m2m_fixed_cond = "";
@@ -323,7 +323,7 @@ function optionscompositecontent_pgroupfromroot($m2m_table, $m2m_fixed, $composi
 	if (entity_present_in_db($m2m_table) && $make_checkboxed_condition) {
 		$m2m_fixed_cond = sqlcond_fromhash($m2m_fixed, "m2m", " and ");
 		$m2m_select_fields = ", m2m.id as m2m_id";
-		$m2m_left_join = " left join $m2m_table m2m on m2m.$pgroup_table=pg.id and m2m.published=1 and m2m.deleted=0" . $m2m_fixed_cond;
+		$m2m_left_join = " left join $m2m_table m2m on m2m.$pgroup_table=pg.id and m2m.published=true and m2m.deleted=false" . $m2m_fixed_cond;
 	}
 	
 
@@ -333,10 +333,10 @@ function optionscompositecontent_pgroupfromroot($m2m_table, $m2m_fixed, $composi
 		$query = "select pg.id, pg.ident, pg.published, count(pg_down.id) as pgroup_down_cnt, count(p.id) as product_cnt"
 				. $m2m_select_fields
 			. " from $pgroup_table pg"
-			. " left outer join $product_table p on p.pgroup=pg.id and p.deleted=0"
-			. " left outer join $pgroup_table pg_down on pg_down.parent_id=pg.id and pg_down.deleted=0"
+			. " left outer join $product_table p on p.pgroup=pg.id and p.deleted=false"
+			. " left outer join $pgroup_table pg_down on pg_down.parent_id=pg.id and pg_down.deleted=false"
 				. $m2m_left_join
-			. " where pg.parent_id=$parent_id and pg.deleted=0" . $compositecontent_select_pgroup_sqlcond
+			. " where pg.parent_id=$parent_id and pg.deleted=false" . $compositecontent_select_pgroup_sqlcond
 			. " group by pg.id"
 			. " order by pg." . get_entity_orderby($pgroup_table);
 			
@@ -344,7 +344,7 @@ function optionscompositecontent_pgroupfromroot($m2m_table, $m2m_fixed, $composi
 			$query = "select id, ident, published from $pgroup_table pg"
 					. $m2m_select_fields
 					. $m2m_left_join
-				. " where pg.parent_id=$parent_id and deleted=0" . $compositecontent_select_pgroup_sqlcond
+				. " where pg.parent_id=$parent_id and deleted=false" . $compositecontent_select_pgroup_sqlcond
 				. " order by pg." . get_entity_orderby($pgroup_table);
 		}
 
@@ -355,18 +355,18 @@ function optionscompositecontent_pgroupfromroot($m2m_table, $m2m_fixed, $composi
 			$query = "select pg.id, pg.ident, pg.published, count(distinct pg_down.id) as pgroup_down_cnt, count(distinct p.id) as product_cnt"
 					. $m2m_select_fields
 				. " from $pgroup_table pg"
-				. " left join $m2m_dependtable m2m_dep on m2m_dep.$pgroup_table=pg.id and m2m_dep.deleted=0"
-				. " left join $product_table p on p.id=m2m_dep.$product_table and p.deleted=0"
-				. " left outer join $pgroup_table pg_down on pg_down.parent_id=pg.id and pg_down.deleted=0"
+				. " left join $m2m_dependtable m2m_dep on m2m_dep.$pgroup_table=pg.id and m2m_dep.deleted=false"
+				. " left join $product_table p on p.id=m2m_dep.$product_table and p.deleted=false"
+				. " left outer join $pgroup_table pg_down on pg_down.parent_id=pg.id and pg_down.deleted=false"
 					. $m2m_left_join
-				. " where pg.parent_id=$parent_id and pg.deleted=0"
+				. " where pg.parent_id=$parent_id and pg.deleted=false"
 				. " group by pg.id"
 				. " order by pg." . get_entity_orderby($pgroup_table);
 		}
 
 	} else {
 		$query = "select id, ident, published from $pgroup_table"
-			. " where published=1 and deleted=0"
+			. " where published=true and deleted=false"
 			. " order by " . get_entity_orderby($pgroup_table);
 	}
 
@@ -822,7 +822,7 @@ EOT;
 					$joinon .= "$value=" . $row[$value];
 				}
 		
-				$query2 = "select m2m.id from $m2m_table m2m where deleted=0 and"
+				$query2 = "select m2m.id from $m2m_table m2m where deleted=false and"
 						. " $m2m_fixed_cond"
 						. " and $joinon";
 //				echo "$query2<br>";

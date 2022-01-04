@@ -417,7 +417,7 @@ $deleted = "";
 if ($list_query_cond != "") {
 	$list_query_cond .= " and ";
 }
-$list_query_cond .= "e.deleted=0 ";
+$list_query_cond .= "e.deleted=false ";
 
 //if ($list_url_suffix == "") $list_url_suffix = hrefsuffix_fromhash($fixed_hash, "?");
 
@@ -443,7 +443,7 @@ if (isset($entity_fixed_list[$entity])) {
 //		pre("entity[$entity] dependant_entity[$dependant_entity] m2m_dependtable[$m2m_dependtable]");
 	
 		if ($m2m_dependtable == "") {
-	//		. " left join m2m_product_pgroup m2m on m2m.$entity=e.id and m2m.deleted=0"
+	//		. " left join m2m_product_pgroup m2m on m2m.$entity=e.id and m2m.deleted=false"
 	//		. " left join pgroup pg on pg.id=m2m.pgroup"
 	
 			$list_left_fields .= ", $dependant_entity.ident as ${dependant_entity}_ident";
@@ -485,7 +485,7 @@ if (isset($entity_fixed_list[$entity])) {
 
 			$list_left_m2mjoins .=
 				" left join $m2m_dependtable m2m_$dependant_entity"
-					. " on m2m_$dependant_entity.$entity=e.id and m2m_$dependant_entity.deleted=0"
+					. " on m2m_$dependant_entity.$entity=e.id and m2m_$dependant_entity.deleted=false"
 				. " left join $dependant_entity $dependant_entity"
 					. " on $dependant_entity.id=m2m_$dependant_entity.$dependant_entity";
 	
@@ -513,19 +513,19 @@ foreach ($entity_masterfor_list as $entity_masterfor) {
 		$list_left_fields .= ", count(distinct $entity_masterfor.id) as ${entity_masterfor}_cnt";
 
 		if ($entity_masterfor == $entity) {
-	//		. " left join pollvote pv on pv.$entity=e.id and pv.deleted=0 and pv.published=1"
+	//		. " left join pollvote pv on pv.$entity=e.id and pv.deleted=false and pv.published=true"
 	
 			$list_left_o2mjoins .=
 				" left join $entity_masterfor $entity_masterfor"
-					. " on e.id=$entity_masterfor.parent_id and $entity_masterfor.deleted=0"
-//					. " and $entity_masterfor.published=1"
+					. " on e.id=$entity_masterfor.parent_id and $entity_masterfor.deleted=false"
+//					. " and $entity_masterfor.published=true"
 					;
 		} else {
 	
 			$list_left_o2mjoins .=
 				" left join $entity_masterfor $entity_masterfor"
-					. " on $entity_masterfor.$entity=e.id and $entity_masterfor.deleted=0"
-//					. " and $entity_masterfor.published=1"
+					. " on $entity_masterfor.$entity=e.id and $entity_masterfor.deleted=false"
+//					. " and $entity_masterfor.published=true"
 					;
 		}
 	} else {
@@ -537,7 +537,7 @@ foreach ($entity_masterfor_list as $entity_masterfor) {
 
 		$list_left_m2mjoins .=
 			" left join $m2m_dependtable m2m_$entity_masterfor"
-				. " on m2m_$entity_masterfor.$entity=e.id and m2m_$entity_masterfor.deleted=0"
+				. " on m2m_$entity_masterfor.$entity=e.id and m2m_$entity_masterfor.deleted=false"
 			. " left join $entity_masterfor $entity_masterfor"
 				. " on $entity_masterfor.id=m2m_$entity_masterfor.$entity_masterfor";
 
@@ -572,15 +572,15 @@ foreach ($table_columns as $table_column => $column_params) {
 		if ($entity_masterfor == $entity) {
 			$list_left_o2mjoins .=
 				" left join $entity_masterfor $entity_masterfor"
-					. " on e.id=$entity_masterfor.parent_id and $entity_masterfor.deleted=0"
-//					. " and $entity_masterfor.published=1"
+					. " on e.id=$entity_masterfor.parent_id and $entity_masterfor.deleted=false"
+//					. " and $entity_masterfor.published=true"
 					;
 		} else {
 	
 			$list_left_o2mjoins .=
 				" left join $entity_masterfor $entity_masterfor"
-					. " on $entity_masterfor.$entity=e.id and $entity_masterfor.deleted=0"
-//					. " and $entity_masterfor.published=1"
+					. " on $entity_masterfor.$entity=e.id and $entity_masterfor.deleted=false"
+//					. " and $entity_masterfor.published=true"
 					;
 		}
 	} else {
@@ -588,7 +588,7 @@ foreach ($table_columns as $table_column => $column_params) {
 
 		$list_left_m2mjoins .=
 			" left join $m2m_dependtable m2m_$entity_masterfor"
-				. " on m2m_$entity_masterfor.$entity=e.id and m2m_$entity_masterfor.deleted=0"
+				. " on m2m_$entity_masterfor.$entity=e.id and m2m_$entity_masterfor.deleted=false"
 			. " left join $entity_masterfor $entity_masterfor"
 				. " on $entity_masterfor.id=m2m_$entity_masterfor.$entity_masterfor";
 	}

@@ -45,11 +45,11 @@ $entity_fields = array (
 	"admins_csv" => array ("PERSON_ID<br> Aдминов,<br> CSV", "textfield", ""),
 	"admins_notify_after_votes" => array ("Админам отправлять<br> updates email<br> после N голосов", "number", ""),
 
-	"gender_explicit" => array ("", "checkbox", 1),
+	"gender_explicit" => array ("", "checkbox", "", true),
 	
 	//"~11" => array ("[@masterdepend_cnt@]", "ahref", "<a href='@masterdepend_entity@.php?#ENTITY#=#ID#'>Варианты ответов для этого опросника</a>"),
 	
-	"published" => array ("", "checkbox", 1)
+	"published" => array ("", "checkbox", "", true)
 );
 
 ?>

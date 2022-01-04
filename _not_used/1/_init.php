@@ -607,7 +607,7 @@ function bo_href_preview($row) {
 	if ($popupface_href_tpl == "") return $ret;
 
 	$href_face_tpl = $popupface_href_tpl;
-	$href_face_tpl .= (!isset($row["published"]) || $row["published"] == 0) ? "&force_published=1" : "";
+	$href_face_tpl .= (!isset($row["published"]) || $row["published"] == 0) ? "&force_published=true" : "";
 	$target_blank = (strpos($popupface_href_tpl, "popup") !== false) ? "" : "target='_blank'";
 
 
@@ -638,7 +638,7 @@ function popup_face($row) {
 
 	if ($popupface_href_tpl == "") return $ret;
 	$href_face_tpl = $popupface_href_tpl;
-	$href_face_tpl .= ($row["published"] == 0) ? "&force_published=1" : "";
+	$href_face_tpl .= ($row["published"] == 0) ? "&force_published=true" : "";
 	$target_blank = (strpos($popupface_href_tpl, "popup") !== false) ? "" : "target='_blank'";
 
 	$row["href_face"] = hash_by_tpl($row, $href_face_tpl);

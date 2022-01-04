@@ -31,7 +31,7 @@ $table_columns = array (
 	"forwardfrom_id" => array("", "textfield", "", "4em", "3em"),
 
 	//"ident" => array($entity_msg_h, "hrefedit"),
-	"~2" => array($entity_msg_h, "ahref", "<a href=#ENTITY#-edit.php?id=#ID#>#CONTENT#</a>"),
+	"~2" => array($entity_msg_h, "ahref", "<a href=#ENTITY#-edit.php?id=#ID#>___#CONTENT#</a>"),
 	// "ident" => array("", "textfield", "", "17em", "16em"),
 	// "content" => array("", "textfield", "", "17em", "16em"),
 
@@ -40,8 +40,9 @@ $table_columns = array (
 	"purchase_ident" => array("", "ahref", "<a href=purchase-edit.php?id=#PURCHASE#>#PURCHASE_IDENT#</a>"),
 	"puritem_cnt" => array("", "ahref", "<a href=puritem.php?purchase=#PURCHASE#>Продуктов: #PURITEM_CNT#</a>"),
 
+	"archived" => array("", "checkbox"),
 	"edited" => array("", "checkbox"),
-	"published" => array("", "checkbox"),
+	// "published" => array("", "checkbox"),
 	"~delete" => array("", "checkboxdel")
 );
 

@@ -10,7 +10,7 @@ function pollvote_table($row) {
 //		pre ($id_fordelete);
 
 		if (count($id_fordelete) > 0) {
-			$del_query = "update pollvote set deleted=1 where id in (" . sqlin_fromarray($id_fordelete) . ")";
+			$del_query = "update pollvote set deleted=true where id in (" . sqlin_fromarray($id_fordelete) . ")";
 			pg_query($cms_dbc, $del_query) or die("DELETE failed:<br>$del_query<br>");
 
 			$upd_query = "update pollanswer set votes = (votes - " . count($id_fordelete) . ") where id=$id";
@@ -27,7 +27,7 @@ function pollvote_table($row) {
 </tr>
 EOT;
 
-	$query = "select * from pollvote where pollanswer=$id and deleted=0 order by " . get_entity_orderby("pollvote");
+	$query = "select * from pollvote where pollanswer=$id and deleted=false order by " . get_entity_orderby("pollvote");
 	$qa = select_queryarray($query);
 	
 	foreach ($qa as $row) {
@@ -67,7 +67,7 @@ $entity_fields = array (
 	
 	"multicb" => array ("", "checkbox"),
 
-	"published" => array ("Опубликовано", "checkbox", 1)
+	"published" => array ("Опубликовано", "checkbox", "", true)
 );
 
 ?>

@@ -17,9 +17,9 @@ require_once "../_lib/__fixed.php";
 $fixed_cond = sqlcond_fromhash($fixed_hash, "e", " and ");
 $list_query = "select e.*, count(p.id) as cnt"
 	. " from $entity e"
-	. " left join pollvote p on p.{$entity}=e.id and p.deleted=0 and p.published=1"
+	. " left join pollvote p on p.{$entity}=e.id and p.deleted=false and p.published=true"
 	. " where 1=1 $fixed_cond"
-	. " and e.deleted=0"
+	. " and e.deleted=false"
 	. " group by e.id"
 	. " order by e." . get_entity_orderby($entity)
 	;

@@ -445,6 +445,9 @@ switch ($lang_current) {
 			"poll-gender_explicit" => "С разбивкой М/Ж",
 
 // shopping-list-php
+			// person
+			"username" => "username",
+			"color" => "color",
 			"person_created" => "Создал",
 			"person_purchased" => "Купил",
 			// purchase
@@ -454,6 +457,8 @@ switch ($lang_current) {
 			"show_weight" => "show_weight",
 			"comment_above" => "Comment Above",
 			"comment_below" => "Comment Below",
+			"purchased" => "purchased",
+			"persons_can_edit" => "persons_can_edit",
 			// message
 			"persons_sent" => "IdsSent",
 			"persons_read" => "IdsRead",

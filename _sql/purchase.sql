@@ -8,8 +8,8 @@ CREATE TABLE shli_purchase (
 	date_updated	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	date_created	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	date_published	TIMESTAMP WITHOUT TIME ZONE, -- date_purchased
-	published		SMALLINT NOT NULL DEFAULT 1,
-	deleted			SMALLINT NOT NULL DEFAULT 0,
+	published		BOOLEAN NOT NULL DEFAULT true,
+	deleted			BOOLEAN NOT NULL DEFAULT false,
 	manorder		SERIAL, -- INTEGER NOT NULL DEFAULT 0 CHECK (manorder >= 0),
 
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
@@ -20,13 +20,17 @@ CREATE TABLE shli_purchase (
 	room			INTEGER NOT NULL,
 	message			INTEGER NOT NULL,
 
-	show_pgroup		SMALLINT NOT NULL DEFAULT 0,
-	show_price		SMALLINT NOT NULL DEFAULT 0,
-	show_qnty		SMALLINT NOT NULL DEFAULT 0,
-	show_weight		SMALLINT NOT NULL DEFAULT 0,
+	show_pgroup		BOOLEAN NOT NULL DEFAULT false,
+	show_price		BOOLEAN NOT NULL DEFAULT false,
+	show_qnty		BOOLEAN NOT NULL DEFAULT false,
+	show_weight		BOOLEAN NOT NULL DEFAULT false,
 
+	copiedfrom_id		INTEGER,
 
 	person_created		INTEGER NOT NULL,
+	persons_can_edit	INTEGER[],
+
+	purchased			BOOLEAN NOT NULL DEFAULT false,
 	person_purchased	INTEGER,
 
 	price_total			NUMERIC(7,2),
@@ -59,8 +63,8 @@ CREATE TRIGGER trg_shli_purchase_update_date_updated
 --\d shli_purchase;
 
 insert into shli_purchase
-	(id, room, message, show_pgroup, show_price, person_created, ident) values
-	(1, 1, 1, 1, 1, 1, 'Фуд Сити')
+	(id, room, message, show_pgroup, show_price, person_created, 	ident) values
+	(1, 	1, 	1, 		true, 			true, 		1, 				'Фуд Сити')
 ;
 
 ALTER SEQUENCE shli_purchase_id_seq RESTART WITH 2;

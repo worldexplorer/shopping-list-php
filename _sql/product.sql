@@ -8,8 +8,8 @@ CREATE TABLE shli_product (
 	date_updated	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	date_created	TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	date_published	TIMESTAMP WITHOUT TIME ZONE,
-	published		SMALLINT NOT NULL DEFAULT 1,
-	deleted			SMALLINT NOT NULL DEFAULT 0,
+	published		BOOLEAN NOT NULL DEFAULT true,
+	deleted			BOOLEAN NOT NULL DEFAULT false,
 	manorder		SERIAL, -- INTEGER NOT NULL DEFAULT 0 CHECK (manorder >= 0),
 
 	ident			VARCHAR(250) NOT NULL DEFAULT '',
@@ -49,12 +49,12 @@ CREATE TRIGGER trg_shli_product_update_date_updated
 
 insert into shli_product
 	(id, room, pgroup, purchase_origin, punit, ident) values
-	(1, 1, 2, 1, 20, 'Гречка'),
-	(2, 1, 2, 1, 20, 'Манка'),
-	(3, 1, 3, 1, 1, 'Сочник'),
-	(4, 1, 4, 1, 1, 'Йогурт'),
-	(5, 1, 4, 1, 22, 'Кефир'),
-	(6, 1, 4, 1, 22, 'Сгущёнка')
+	(1, 	1, 	2, 		1, 				20, 	'Гречка'),
+	(2, 	1, 	2, 		1, 				20, 	'Манка'),
+	(3, 	1, 	3, 		1, 				1, 		'Сочник'),
+	(4, 	1, 	4, 		1, 				1, 		'Йогурт'),
+	(5, 	1, 	4, 		1, 				22, 	'Кефир'),
+	(6, 	1, 	4, 		1, 				22, 	'Сгущёнка')
 ;
 
 ALTER SEQUENCE shli_product_id_seq RESTART WITH 7;

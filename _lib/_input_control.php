@@ -18,7 +18,7 @@ function ic($m2m_entity_iccontent_tablename, $entity_ = "_global", $entity_id_ =
 		. " from ic ic, icwhose icwhose, icwhat icwhat, ictype ictype"
 		. " where LOWER(LEFT(icwhose.hashkey, $entity_len)) = '$entity_'"
 		. " and ic.icwhose=icwhose.id and ic.icwhat=icwhat.id and ic.ictype=ictype.id"
-//		. " and icwhat.published=1"
+//		. " and icwhat.published=true"
 		. " order by icwhat.manorder";
 */
 	$query = "select ic.id as ic_id, ic.ident as ic_ident, ic.published as ic_published, ic.icdict as icdict_id, LOWER(ictype.hashkey) as ictype_hashkey, ic.$obligatory_field as obligatory, jsv.hashkey as jsv_hashkey, ic.param1 as param1"
@@ -26,7 +26,7 @@ function ic($m2m_entity_iccontent_tablename, $entity_ = "_global", $entity_id_ =
 		. " left outer join jsvalidator jsv on ic.jsvalidator=jsv.id"
 		. " where LOWER(LEFT(icwhose.hashkey, $icwhose_hashkey_len)) = '$icwhose_hashkey'"
 		. " and ic.icwhose=icwhose.id and ic.ictype=ictype.id"
-		. " and ic.published=1 and ictype.published=1"
+		. " and ic.published=true and ictype.published=true"
 		. " order by ic." . get_entity_orderfield("ic");
 
 	$result = pg_query($cms_dbc, $query)
@@ -145,7 +145,7 @@ function icselect($icdict, $value = "_global", $default = "", $it_name = "", $ta
 
 	$query = "select id, ident"
 		. " from icdictcontent "
-		. " where icdict=$icdict and published=1"
+		. " where icdict=$icdict and published=true"
 		. " order by manorder";
 
 	$options = options_sql($query, $value);
@@ -213,7 +213,7 @@ function icmulti($icdict, $value_array = array(), $ic_inputtype = "icmulticheckb
 
 	$query = "select id, ident, tf1_width, tf1_incolumn, label_style"
 		. " from icdictcontent"
-		. " where icdict=$icdict and published=1 and deleted=0"
+		. " where icdict=$icdict and published=true and deleted=false"
 		. " order by " . get_entity_orderby("icdictcontent");
 	$query = add_sql_table_prefix($query);
 	$result = pg_query($cms_dbc, $query)
@@ -471,7 +471,7 @@ function ic_update($m2m_entity_iccontent_tablename, $entity_ = "_global", $entit
 		. " from ic ic, icwhose icwhose, ictype ictype"
 		. " where LOWER(LEFT(icwhose.hashkey, $entity_len)) = '$entity_'"
 		. " and ic.icwhose=icwhose.id and ic.ictype=ictype.id"
-		. " and ictype.published=1 and ic.published=1"
+		. " and ictype.published=true and ic.published=true"
 		. " order by ic.manorder";
 
 	$result = pg_query($cms_dbc, $query)
@@ -630,7 +630,7 @@ function icradio($icdict, $it_value, $it_name = "_global", $read_only = 0) {
 
 	$ret = "";
 
-	$query = "select id, ident, tf1_width, tf1_incolumn, label_style from icdictcontent where icdict=$icdict and published=1 order by manorder";
+	$query = "select id, ident, tf1_width, tf1_incolumn, label_style from icdictcontent where icdict=$icdict and published=true order by manorder";
 	$query = add_sql_table_prefix($query);
 	$result = pg_query($cms_dbc, $query)
 		or die("SELECT MULTI_VALUE failed:<br>$query:<br>" . pg_last_error($cms_dbc));

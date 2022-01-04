@@ -42,6 +42,9 @@ $table_columns = array (
 	// "female" => array("", "checkbox"),
 	// "unsubscribed" => array("", "checkbox"),
 	
+	"username" => array("", "textfield", "", "11em", "10em"),
+	"color" => array("", "textfield", "", "7em", "6em"),
+
 	"published" => array("", "checkbox"),
 	"~delete" => array("", "checkboxdel")
 );

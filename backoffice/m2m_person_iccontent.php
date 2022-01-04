@@ -20,7 +20,7 @@ $list_query = "select ics.*, ic.ident as property_ident, p.id as person, p.ident
 	. " from m2m_person_iccontent ics"
 	. " left outer join ic ic on ics.ic=ic.id"
 	. " left outer join person p on ics.person=p.id"
-	. " where ics.deleted=0 "
+	. " where ics.deleted=false "
 	. " order by ics." . get_entity_orderby("icsheet")
 ;
 //$debug_query = 1;

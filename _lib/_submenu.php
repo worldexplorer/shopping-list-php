@@ -8,7 +8,7 @@ switch ($entity) {
 		$query_submenu = "select cs.id, concat(c.ident, ' | ', cs.ident) as ident"
 			. " from chainstore cs, city c"
 			. " where cs.city=c.id"
-			. " and cs.deleted=0 and c.deleted=0"
+			. " and cs.deleted=false and c.deleted=false"
 			. " order by c." . get_entity_orderby("city") . ", cs." . get_entity_orderby("chainstore")
 			;
 
@@ -37,7 +37,7 @@ $fixed_deeper_local["manager"] = $manager;
 
 $query = "select id, ident, published"
 	. " from " . $dependant_entity
-	. " where deleted=0 " . sqlcond_fromhash($fixed_deeper_local, "", " and ", "", TABLE_PREFIX)
+	. " where deleted=false " . sqlcond_fromhash($fixed_deeper_local, "", " and ", "", TABLE_PREFIX)
 	. " order by " . get_entity_orderby($dependant_entity);
 
 $forcezero_option = " - $msg_submenu_all " . strtolower ($entity_list[$dependant_entity]) . " - ";
@@ -80,7 +80,7 @@ $fixed_deeper_local["manager"] = $manager;
 
 $query = "select id, ident, published"
 	. " from " . $dependant_entity
-	. " where deleted=0 " . sqlcond_fromhash($fixed_deeper_local, "", " and ", "", TABLE_PREFIX)
+	. " where deleted=false " . sqlcond_fromhash($fixed_deeper_local, "", " and ", "", TABLE_PREFIX)
 	. " order by " . get_entity_orderby($dependant_entity);
 
 $forcezero_option = " - $msg_submenu_all " . strtolower ($entity_list[$dependant_entity]) . " - ";
@@ -104,7 +104,7 @@ rawsubmenu_fromhash($submenu_hash);
 	case "img":
 		if ($spanstyle == "") $spanstyle = "width:7em;";
 
-		$query_entity = "select owner_entity as id, owner_entity as ident from img where deleted=0 group by owner_entity";
+		$query_entity = "select owner_entity as id, owner_entity as ident from img where deleted=false group by owner_entity";
 		submenu_by_query ($query_entity, "owner_entity"
 //			, "<span style='#spanstyle#'>Родитель:</span> #select_tag#", " - все изображения - ", 1
 			, "<tr><td align=right style='padding-right:1ex'>Родитель:</td><td> #select_tag#</td></tr>", " - все изображения - ", 1
@@ -120,7 +120,7 @@ rawsubmenu_fromhash($submenu_hash);
 			$query_entity_id = "select owner.id, owner.ident, owner.published"
 				. " from img i"
 				. " inner join $owner_entity owner on i.owner_entity='$owner_entity' and i.owner_entity_id=owner.id"
-				. " where i.deleted=0 and owner.deleted=0"
+				. " where i.deleted=false and owner.deleted=false"
 				. " group by owner.id"
 				. " order by owner." . get_entity_orderby($owner_entity)
 				;
@@ -321,7 +321,7 @@ function submenu_for_entity($entity, $href_basepage = "_global", $href_fixedhash
 
 			$query = "select id, ident, published"
 				. " from $dependant_entity"
-				. " where deleted=0 " . sqlcond_fromhash($fixed_deeper_local, "", " and ", "")
+				. " where deleted=false " . sqlcond_fromhash($fixed_deeper_local, "", " and ", "")
 				. " order by " . get_entity_orderby($dependant_entity)
 				. " limit $_submenu_rowlimit"
 				;
@@ -338,7 +338,7 @@ function submenu_for_entity($entity, $href_basepage = "_global", $href_fixedhash
 
 			$query_dependant_cnt = "select count(id) as total_cnt"
 				. " from $dependant_entity"
-				. " where deleted=0 " . sqlcond_fromhash($fixed_deeper_local, "", " and ", "")
+				. " where deleted=false " . sqlcond_fromhash($fixed_deeper_local, "", " and ", "")
 				;
 			$query_dependant_cnt = add_sql_table_prefix($query_dependant_cnt);
 			$list_qa_cnt = select_queryarray($query_dependant_cnt);

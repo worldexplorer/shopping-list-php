@@ -64,8 +64,8 @@ $entity_fields = array (
 	"phone" => array ("", "textfield", ""),
 	"email" => array ("", "textfield", ""),
 		
-//	"female" => array ("", "checkbox", 0),
-//	"unsubscribed" => array ("", "checkbox", 0),
+//	"female" => array ("", "checkbox", "", false),
+//	"unsubscribed" => array ("", "checkbox", "", false),
 
 //	"~1_layer-open" => array ("Авторизация", "layer_open"),
 	"password" => array ("", "textfield", ""),
@@ -90,6 +90,8 @@ $entity_fields = array (
 //		, "PERSON_PROPERTIES", "добавить новые свойства персоны"
 //	),
 
+	"username" => array ("", "textfield", ""),
+	"color" => array ("", "textfield", ""),
 	
 	"~service_layer-open" => array ("", "layer_open"),
 	//"brief" => array ("Кратко<br><br>в список<br>команд", "freetext_200", ""),
@@ -108,7 +110,8 @@ $entity_fields = array (
 	"~service_layer-close" => array ("", "layer_close"),
 	
 	//"published" => array ("", "checkbox", 1, "@bo_href_preview@"),
-	"published" => array ("", "checkbox", 1),
+	"published" => array ("", "checkbox", "", true),
+	"deleted" => array ("", "checkbox", "", false),
 );
 
 

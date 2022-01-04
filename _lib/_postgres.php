@@ -430,7 +430,7 @@ function delete ($fields_cond = 0, $entity = "_global:entity", $cms_dbc = "_glob
 
 	$query = "delete from $entity where $delete_cond";
 	if ($entity_has_deleted_field == 1) {
-		$query = "update $entity set deleted=1 where $delete_cond";
+		$query = "update $entity set deleted=true where $delete_cond";
 	}
 
 	$query = add_sql_table_prefix($query);
@@ -2399,7 +2399,7 @@ function check_uniquefield_dbtable($table = "person", $fname = "login", $value =
 	
 	$ret = 0;
 	
-	$query = "select $id_field from " . TABLE_PREFIX . "$table where $fname='$value' and deleted=0";
+	$query = "select $id_field from " . TABLE_PREFIX . "$table where $fname='$value' and deleted=false";
 	$result = pg_query($cms_dbc, $query);
 	if (pg_num_rows($result) == 0) {
 		$ret = 1;

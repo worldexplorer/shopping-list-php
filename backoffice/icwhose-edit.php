@@ -9,7 +9,7 @@ $entity_fields = array (
 	"~11" => array ("[@masterdepend_cnt@]", "ahref", "<a href='@masterdepend_entity@.php?#ENTITY#=#ID#'>@masterdepend_entity_hr@</a>"),
 	"brief" => array ("", "freetext_200", ""),
 
-	"published" => array ("", "checkbox", 1)
+	"published" => array ("", "checkbox", "", true)
 );
 
 ?>

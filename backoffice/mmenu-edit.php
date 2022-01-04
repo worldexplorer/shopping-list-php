@@ -64,8 +64,8 @@ $entity_fields = array (
 
 	"parent_id" => array ("", "select_table_tree_root"),
 //	"is_inline" => array ("Блоком на родителе", "checkbox"),
-//	"published_legend" => array ("", "checkbox", 0),
-//	"published_sitemap" => array ("", "checkbox", 0),
+//	"published_legend" => array ("", "checkbox", "", false),
+//	"published_sitemap" => array ("", "checkbox", "", false),
 	"~service_layer-close" => array ("", "layer_close"),
 
 //	"~1_open" => array ("Классификаторы", "columned_open"),

@@ -11,7 +11,7 @@ function multicompositeiccontent_updateall($m2m_table, $fixed_hash, $absorbing_f
 		. " , t.hashkey as ictype_hashkey"
 		. " from ic ic"
 		. " inner join ictype t on ic.ictype=t.id"
-		. " where ic.deleted=0 and ic.published=1 and t.published=1 and t.deleted=0"
+		. " where ic.deleted=false and ic.published=true and t.published=true and t.deleted=false"
 		. " and ic.icwhose=" . $icwhose_id
 		. " order by ic." . get_entity_orderfield("ic");
 	$ic_rows = select_queryarray($query);
@@ -121,7 +121,7 @@ function multicompositeiccontent($m2m_table, $fixed_hash, $absorbing_fixedhash, 
 	$query = "select ic.id, ic.ident, ic.ictype, ic.icdict, ic.param1, ic.param2, ic.$obligatory_field as obligatory, ic.graycomment"
 		. " , t.hashkey as ictype_hashkey"
 		. " from ic ic, ictype t"
-		. " where ic.deleted=0 and ic.published=1 and t.published=1 and t.deleted=0"
+		. " where ic.deleted=false and ic.published=true and t.published=true and t.deleted=false"
 		. " and ic.ictype=t.id"
 		. " and ic.icwhose=" . $icwhose_id
 		. " order by ic." . get_entity_orderfield("ic");
@@ -149,7 +149,7 @@ function multicompositeiccontent($m2m_table, $fixed_hash, $absorbing_fixedhash, 
 				. sqlcond_fromhash(array_merge($fixed_hash, $absorbed_fixedhash), "m2m", "and ")
 
 
-			. " where ic.deleted=0 and ic.$published_field=1 and t.published=1 and t.deleted=0"
+			. " where ic.deleted=false and ic.$published_field=1 and t.published=true and t.deleted=false"
 			. " and ic.icwhose=" . $icwhose_id
 			. " group by ic.id"
 			. " order by ic." . get_entity_orderfield("ic");
@@ -256,7 +256,7 @@ EOT;
 				$query = "select id, ident, published"
 						. " from icdictcontent"
 						. " where icdict=" . $ic["icdict"]
-						. " and deleted=0"
+						. " and deleted=false"
 						. " order by manorder";
 
 				$published_opthash_bak = $published_opthash;
@@ -280,7 +280,7 @@ EOT;
 
 				$query = "select id, ident, published"
 						. " from icdictcontent"
-						. " where icdict=" . $ic["icdict"] . " and published=1 and deleted=0"
+						. " where icdict=" . $ic["icdict"] . " and published=true and deleted=false"
 						. " order by manorder";
 
 				$published_opthash_bak = $published_opthash;

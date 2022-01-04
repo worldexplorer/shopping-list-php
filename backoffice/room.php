@@ -9,11 +9,11 @@ $list_left_fields .=
 
 $list_left_m2mjoins .=
 	  " left join person person_created"
-		. " on person_created.id=e.person_created and person_created.deleted=0"
+		. " on person_created.id=e.person_created and person_created.deleted=false"
 //	. " left join m2m_room_person m2m_participants"
-//		. " on m2m_participants.room=e.id and m2m_participants.deleted=0"
+//		. " on m2m_participants.room=e.id and m2m_participants.deleted=false"
 //	. " left join person participants"
-//		. " on participants.id=m2m_participants.person and participants.deleted=0"
+//		. " on participants.id=m2m_participants.person and participants.deleted=false"
 ;
 
 $list_left_fields_groupby =

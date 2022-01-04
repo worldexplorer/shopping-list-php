@@ -107,7 +107,7 @@ $entity_fields = array (
 	"~service_layer-close" => array ("", "layer_close"),
 	
 	//"published" => array ("", "checkbox", 1, "@bo_href_preview@"),
-	"published" => array ("", "checkbox", 1),
+	"published" => array ("", "checkbox", "", true),
 );
 
 ?>

@@ -39,7 +39,7 @@ function login_password($login, $passwd, $sendcookie = 1, $passwd_md5 = 0) {
 
 
 	$person_id = 0;
-	$query = "select *, md5(auth) as auth_from_db from " . TABLE_PREFIX . "person where login='$login' and deleted=0";
+	$query = "select *, md5(auth) as auth_from_db from " . TABLE_PREFIX . "person where login='$login' and deleted=false";
 //	echo $query;
 	$result = pg_query($cms_dbc, $query) or die("SELECT person failed");
 	$num_rows = pg_num_rows($result);

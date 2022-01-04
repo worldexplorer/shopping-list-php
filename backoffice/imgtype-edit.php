@@ -199,7 +199,7 @@ $entity_fields = array (
 	"merge_seed" => array ("Merge Seed", "number", "", "используется для ватермаркнутой картинки"),
 	"date_updated" => array ("Обновлено", "timestampro", "", "авторесайзы старее этой даты – будут перегенерированы"),
 //	"date_created" => array ("Cоздание", "timestampro", ""),
-//	"published" => array ("Опубликовано", "checkbox", 1)
+//	"published" => array ("Опубликовано", "checkbox", "", true)
 );
 
 jsv_addvalidation("JSV_TF_CHAR", "ident", "Название");

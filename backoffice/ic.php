@@ -24,8 +24,8 @@ $table_columns = array (
 
 //$debug_query = 1;
 $list_left_additional_fields = " , icd.ident as icdict_ident, count(distinct icdc.id) as icdictcontent_cnt";
-$list_left_additional_joins = " left outer join icdict icd on e.icdict=icd.id and icd.deleted=0"
-	. " left outer join icdictcontent icdc on icdc.icdict=icd.id and icdc.deleted=0"
+$list_left_additional_joins = " left outer join icdict icd on e.icdict=icd.id and icd.deleted=false"
+	. " left outer join icdictcontent icdc on icdc.icdict=icd.id and icdc.deleted=false"
 	;
 $list_left_fields_groupby .= ", icdict_ident";
 

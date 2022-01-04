@@ -9,7 +9,7 @@ $entity_fields = array (
 	"person_created" => array ("", "select_hard", "ident"),
 	"~11" => array ("[@masterdepend_cnt@]", "ahref", "<a href='@masterdepend_entity@.php?#ENTITY#=#ID#'>@masterdepend_entity_hr@</a>"),
 
-	"published" => array ("", "checkbox", 1)
+	"published" => array ("", "checkbox", "", true)
 );
 
 // $debug_query = 1;

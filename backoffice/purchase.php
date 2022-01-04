@@ -10,9 +10,9 @@ $list_left_fields .=
 
 $list_left_m2mjoins .=
 	  " left join person person_created"
-		. " on person_created.id=e.person_created and person_created.deleted=0"
+		. " on person_created.id=e.person_created and person_created.deleted=false"
 	. " left join person person_purchased"
-		. " on person_purchased.id=e.person_purchased and person_purchased.deleted=0"
+		. " on person_purchased.id=e.person_purchased and person_purchased.deleted=false"
 ;
 
 $list_left_fields_groupby =
@@ -28,6 +28,8 @@ $table_columns = array (
 
 	"person_created" => array("", "ahref",
 		"<a href=person.php?id=#PERSON_CREATED#>#PERSON_CREATED_IDENT#</a>"),
+	"persons_can_edit" => array("", "textfield", "", "6em", "5em"),
+	"purchased" => array("", "checkbox"),
 	"person_purchased" => array("", "ahref",
 		"<a href=person.php?id=#PERSON_PURCHASED#>#PERSON_PURCHASED_IDENT#</a>"),
 
@@ -35,14 +37,14 @@ $table_columns = array (
 //	"~ident" => array("", "textfield", "", "11em", "10em"),
 
 	"puritem" => array("Позиций", "cnt"),
-	
+
 	
 //	"message" => array("Msg", "ahref", "#MESSAGE#"),
 //	"comment_above" => array("comment above", "textfield", "", "11em", "10em"),
 //	"comment_below" => array("comment below", "textfield", "", "11em", "10em"),
 
-	"comment_above" => array("comment above", "view"),
-	"comment_below" => array("comment below", "view"),
+//	"comment_above" => array("comment above", "view"),
+//	"comment_below" => array("comment below", "view"),
 
 	"price_total" => array("Price", "ahref", "#PRICE_TOTAL#"),
 	"weight_total" => array("Weight", "ahref", "#WEIGHT_TOTAL#"),
