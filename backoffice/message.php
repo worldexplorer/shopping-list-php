@@ -31,7 +31,7 @@ $table_columns = array (
 	"forwardfrom_id" => array("", "textfield", "", "4em", "3em"),
 
 	//"ident" => array($entity_msg_h, "hrefedit"),
-	"~2" => array($entity_msg_h, "ahref", "<a href=#ENTITY#-edit.php?id=#ID#>___#CONTENT#</a>"),
+	"~2" => array($entity_msg_h, "ahref", "<a href=#ENTITY#-edit.php?id=#ID#>___#IDENT#</a>"),
 	// "ident" => array("", "textfield", "", "17em", "16em"),
 	// "content" => array("", "textfield", "", "17em", "16em"),
 

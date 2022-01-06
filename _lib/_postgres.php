@@ -1549,7 +1549,18 @@ function mkupdatefields_fromform($entity_fields, $id = "_global:id", $entity = "
 
 				$tmp_field = "$name='$form_value'";
 //				if (!in_array($name, $non_prefixed_fields)) $tmp_field = TABLE_PREFIX . $tmp_field;
-				$sql_field .= $tmp_field;
+//				$sql_field .= $tmp_field;
+
+				$nullify = 0;
+				if ($form_value == 0) {
+					$nullify = entity_field_accepts_NULL($entity, $name);
+//					pre("nullify=$nullify for $tmp_field", $nullify);
+				}
+
+				$sql_field .= $nullify == 1
+					? "$name=NULL"
+					: $tmp_field;
+
 				break;
 
 			case "o2m":

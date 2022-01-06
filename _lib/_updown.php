@@ -16,8 +16,8 @@ if (($action == "up" || $action == "down") && $id > 0) {
 		$ident = $row["ident"];
 		$date_updated1 = $row["date_updated"];
 		
-		$query_next = "select e.id, e.$manorder_field, e.date_updated from $entity e where e.$manorder_field>$sort1 $o2mfixed_cond and e.deleted=false order by e.$manorder_field";
-		$query_prev = "select e.id, e.$manorder_field, e.date_updated from $entity e where e.$manorder_field<$sort1 $o2mfixed_cond and e.deleted=false order by e.$manorder_field desc";
+		$query_next = "select e.id, e.$manorder_field, e.date_updated from $entity e where e.$manorder_field>$sort1 and $o2mfixed_cond and e.deleted=false order by e.$manorder_field";
+		$query_prev = "select e.id, e.$manorder_field, e.date_updated from $entity e where e.$manorder_field<$sort1 and $o2mfixed_cond and e.deleted=false order by e.$manorder_field desc";
 		
 		if ($m2mfixed_cond != "") {
 // from _list.php, case '-m2mjoin oregons_s +got_backhref'

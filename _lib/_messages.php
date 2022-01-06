@@ -42,7 +42,7 @@ switch ($lang_current) {
 			"m2m_room_person" => "Участники чатов",
 			"message" => "Сообщения",
 			"purchase" => "Закупки",
-			"puritem" => "Списки продуктов",
+			"puritem" => "Продукты",
 			"m2m_puritem_person" => "Совершённые закупки",
 			"punit" => "Единицы измерения",
 		
@@ -124,7 +124,7 @@ switch ($lang_current) {
 			"m2m_room_person" => "нового участника чата",
 			"message" => "новое сообщение",
 			"purchase" => "новую закупку",
-			"puritem" => "новый список продуктов",
+			"puritem" => "новый продукт в список",
 			"m2m_puritem_person" => "новую совершённую закупку",
 			"punit" => "новую единицу измерения",
 
@@ -451,14 +451,23 @@ switch ($lang_current) {
 			"person_created" => "Создал",
 			"person_purchased" => "Купил",
 			// purchase
-			"show_pgroup" => "show_pgroup",
-			"show_price" => "show_price",
-			"show_qnty" => "show_qnty",
-			"show_weight" => "show_weight",
+			// "show_pgroup" => "show_pgroup",
+			// "show_price" => "show_price",
+			// "show_qnty" => "show_qnty",
+			// "show_weight" => "show_weight",
+			"show_pgroup" => "Грп",
+			"show_price" => "Цена",
+			"show_qnty" => "Колво",
+			"show_weight" => "Вес",
 			"comment_above" => "Comment Above",
 			"comment_below" => "Comment Below",
 			"purchased" => "purchased",
-			"persons_can_edit" => "persons_can_edit",
+			"persons_can_edit" => "persons_can_edit{}",
+			//puritem
+			"bought" => "bought",
+			"bought_qnty" => "bQnty",
+			"bought_price" => "bPrice",
+			"bought_weight" => "bWeight",
 			// message
 			"persons_sent" => "IdsSent",
 			"persons_read" => "IdsRead",
@@ -1273,6 +1282,7 @@ switch ($lang_current) {
 			"sold" => "Sold",
 			"disclaimer_list" => "Disclaimer for product list",
 			"disclaimer_pcard" => "Disclaimer for product card",
+
 
 // pgroup
 			"divclass" => "DIV Class",

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="example">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/_lib/html_mime_mail_2.5/docs/examples/example.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

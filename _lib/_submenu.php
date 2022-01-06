@@ -321,7 +321,7 @@ function submenu_for_entity($entity, $href_basepage = "_global", $href_fixedhash
 
 			$query = "select id, ident, published"
 				. " from $dependant_entity"
-				. " where deleted=false " . sqlcond_fromhash($fixed_deeper_local, "", " and ", "")
+				. " where deleted=false " . sqlcond_fromhash($fixed_deeper_local, "", " and ", " and")
 				. " order by " . get_entity_orderby($dependant_entity)
 				. " limit $_submenu_rowlimit"
 				;
@@ -338,7 +338,7 @@ function submenu_for_entity($entity, $href_basepage = "_global", $href_fixedhash
 
 			$query_dependant_cnt = "select count(id) as total_cnt"
 				. " from $dependant_entity"
-				. " where deleted=false " . sqlcond_fromhash($fixed_deeper_local, "", " and ", "")
+				. " where deleted=false " . sqlcond_fromhash($fixed_deeper_local, "", " and ", " and")
 				;
 			$query_dependant_cnt = add_sql_table_prefix($query_dependant_cnt);
 			$list_qa_cnt = select_queryarray($query_dependant_cnt);

@@ -42,7 +42,7 @@ $menu_bo = array (
 	"~9" => "&nbsp;",
 	"purchase" => "",
 	"puritem" => "",
-	"m2m_puritem_person" => "",
+	// "m2m_puritem_person" => "",
 
 	"~10" => "&nbsp;",
 	"pgroup" => "",

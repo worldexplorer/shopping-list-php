@@ -6,6 +6,7 @@ require_once "../_lib/_init.php";
 $list_left_fields .=
 	    ", person_created.ident as person_created_ident"
 	  . ", person_purchased.ident as person_purchased_ident"
+	  . ", message.ident as message_ident"
 ;
 
 $list_left_m2mjoins .=
@@ -13,11 +14,14 @@ $list_left_m2mjoins .=
 		. " on person_created.id=e.person_created and person_created.deleted=false"
 	. " left join person person_purchased"
 		. " on person_purchased.id=e.person_purchased and person_purchased.deleted=false"
+//	. " left join message message"
+//		. " on message.id=e.message and message.deleted=false"
 ;
 
 $list_left_fields_groupby =
 	  ", person_created_ident"
 	. ", person_purchased_ident"
+	. ", message_ident"
 ;
 
 $table_columns = array (
@@ -25,18 +29,20 @@ $table_columns = array (
 
 //	"room" => array("", "view"),
 	"room" => array("", "ahref", "<a href=room-edit.php?id=#ROOM#>#ROOM_IDENT#</a>"),
+	"message" => array("", "ahref", "<a href=message-edit.php?id=#MESSAGE#>#MESSAGE_IDENT#</a>"),
 
 	"person_created" => array("", "ahref",
 		"<a href=person.php?id=#PERSON_CREATED#>#PERSON_CREATED_IDENT#</a>"),
 	"persons_can_edit" => array("", "textfield", "", "6em", "5em"),
-	"purchased" => array("", "checkbox"),
-	"person_purchased" => array("", "ahref",
-		"<a href=person.php?id=#PERSON_PURCHASED#>#PERSON_PURCHASED_IDENT#</a>"),
 
 	"ident" => array('', "hrefedit"),
 //	"~ident" => array("", "textfield", "", "11em", "10em"),
 
 	"puritem" => array("Позиций", "cnt"),
+
+	"purchased" => array("", "checkbox"),
+	"person_purchased" => array("", "ahref",
+		"<a href=person.php?id=#PERSON_PURCHASED#>#PERSON_PURCHASED_IDENT#</a>"),
 
 	
 //	"message" => array("Msg", "ahref", "#MESSAGE#"),
@@ -50,9 +56,9 @@ $table_columns = array (
 	"weight_total" => array("Weight", "ahref", "#WEIGHT_TOTAL#"),
 
 	"show_pgroup" => array("Грп", "checkbox"),
-	"show_price" => array("Цена", "checkbox"),
-	"show_qnty" => array("Колво", "checkbox"),
-	"show_weight" => array("Вес", "checkbox"),
+	"show_price" => array("", "checkbox"),
+	"show_qnty" => array("", "checkbox"),
+	"show_weight" => array("", "checkbox"),
 
 	"published" => array("", "checkbox"),
 	"~delete" => array("", "checkboxdel")
