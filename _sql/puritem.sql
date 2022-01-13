@@ -11,7 +11,7 @@ CREATE TABLE shli_puritem (
 	published		BOOLEAN NOT NULL DEFAULT true,
 	deleted			BOOLEAN NOT NULL DEFAULT false,
 	manorder		SERIAL, -- INTEGER NOT NULL DEFAULT 0 CHECK (manorder >= 0),
-	ident			VARCHAR(250) NOT NULL DEFAULT '',
+	ident			TEXT NOT NULL DEFAULT '',
 
 	room			INTEGER NOT NULL,
 	purchase		INTEGER NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE shli_puritem (
 	qnty			NUMERIC(7,2),
 	--punit			INTEGER,
 
-	bought			BOOLEAN NOT NULL DEFAULT false,
+	bought			BOOLEAN DEFAULT false,
 	bought_qnty		NUMERIC(7,2),
 	bought_price	NUMERIC(7,2),
 	bought_weight	NUMERIC(7,2),
@@ -66,3 +66,12 @@ insert into shli_puritem
 ALTER SEQUENCE shli_puritem_id_seq RESTART WITH 8;
 
 -- select * from shli_puritem;
+
+-- alter table shli_puritem alter column ident TYPE TEXT
+
+--ALTER TABLE "shli_puritem"
+--	ALTER COLUMN "bought" TYPE BOOLEAN,
+--	ALTER COLUMN "bought" DROP NOT NULL,
+--	ALTER COLUMN "bought" SET DEFAULT 'false';
+-- alter table shli_puritem alter column bought DROP NOT NULL;
+-- update shli_puritem set bought=NULL where id=14

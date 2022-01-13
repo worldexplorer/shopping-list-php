@@ -56,9 +56,11 @@ $table_columns = array (
 	"weight_total" => array("Weight", "ahref", "#WEIGHT_TOTAL#"),
 
 	"show_pgroup" => array("Грп", "checkbox"),
-	"show_price" => array("", "checkbox"),
+	"show_serno" => array("", "checkbox"),
 	"show_qnty" => array("", "checkbox"),
+	"show_price" => array("", "checkbox"),
 	"show_weight" => array("", "checkbox"),
+	"show_threestate" => array("", "checkbox"),
 
 	"published" => array("", "checkbox"),
 	"~delete" => array("", "checkboxdel")

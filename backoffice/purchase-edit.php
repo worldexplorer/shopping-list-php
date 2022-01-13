@@ -6,9 +6,11 @@ $entity_fields = array (
 	"ident" => array ("", "textfield", ""),
 
 	"show_pgroup" => array ("", "checkbox", "", true),
-	"show_price" => array ("", "checkbox", "", true),
+	"show_serno" => array ("", "checkbox", "", true),
 	"show_qnty" => array ("", "checkbox", "", true),
-	"show_weight" => array ("", "checkbox", "", true),
+	"show_price" => array ("", "checkbox", "", false),
+	"show_weight" => array ("", "checkbox", "", false),
+	"show_threestate" => array ("", "checkbox", "BROKEN! true, false, NULL (for [?] value)", true),
 
 	"room" => array ("", "select_hard", "ident"),
 	"message" => array ("", "select_hard", "ident"),

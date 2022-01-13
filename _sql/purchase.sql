@@ -21,9 +21,11 @@ CREATE TABLE shli_purchase (
 	message			INTEGER NOT NULL,
 
 	show_pgroup		BOOLEAN NOT NULL DEFAULT false,
-	show_price		BOOLEAN NOT NULL DEFAULT false,
+	show_serno		BOOLEAN NOT NULL DEFAULT false,
 	show_qnty		BOOLEAN NOT NULL DEFAULT false,
+	show_price		BOOLEAN NOT NULL DEFAULT false,
 	show_weight		BOOLEAN NOT NULL DEFAULT false,
+	show_threestate	BOOLEAN NOT NULL DEFAULT false,
 
 	copiedfrom_id		INTEGER,
 
@@ -70,3 +72,6 @@ insert into shli_purchase
 ALTER SEQUENCE shli_purchase_id_seq RESTART WITH 2;
 
 --select * from shli_purchase;
+
+-- alter table shli_purchase add column show_serno BOOLEAN NOT NULL DEFAULT false;
+-- alter table shli_purchase add column show_threestate	BOOLEAN NOT NULL DEFAULT false;
