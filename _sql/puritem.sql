@@ -21,7 +21,7 @@ CREATE TABLE shli_puritem (
 	qnty			NUMERIC(7,2),
 	--punit			INTEGER,
 
-	bought			BOOLEAN DEFAULT false,
+	bought			SMALLINT NOT NULL DEFAULT 0,
 	bought_qnty		NUMERIC(7,2),
 	bought_price	NUMERIC(7,2),
 	bought_weight	NUMERIC(7,2),
@@ -70,8 +70,16 @@ ALTER SEQUENCE shli_puritem_id_seq RESTART WITH 8;
 -- alter table shli_puritem alter column ident TYPE TEXT
 
 --ALTER TABLE "shli_puritem"
---	ALTER COLUMN "bought" TYPE BOOLEAN,
---	ALTER COLUMN "bought" DROP NOT NULL,
---	ALTER COLUMN "bought" SET DEFAULT 'false';
--- alter table shli_puritem alter column bought DROP NOT NULL;
--- update shli_puritem set bought=NULL where id=14
+--	ALTER COLUMN "bought" TYPE BOOLEAN,show_serno
+
+-- ERROR
+-- ALTER TABLE "shli_puritem"
+-- 	ALTER COLUMN "bought" TYPE SMALLINT,
+-- 	ALTER COLUMN "bought" SET NOT NULL,
+-- 	ALTER COLUMN "bought" SET DEFAULT 0;
+
+alter table shli_puritem add column bought2 SMALLINT NOT NULL DEFAULT 0;
+update shli_puritem set bought2=1 where bought=true;
+update shli_puritem set bought2=2 where bought=NULL;
+ALTER TABLE shli_puritem DROP COLUMN bought;
+ALTER TABLE shli_puritem RENAME COLUMN bought2 TO bought;

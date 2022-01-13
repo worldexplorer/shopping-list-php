@@ -29,7 +29,7 @@ $table_columns = array (
 	"punit" => array("Ед", "ahref", "<a href=punit.php?id=#PUNIT#>#PUNIT_IDENT#</a>"),
 	// "comment" => array("comment", "textfield", "", "11em", "10em"),
 
-	"bought" => array("", "checkbox"),
+	"bought" => array("", "textfield", "", "3em", "2em"),
 	"bought_qnty" => array("", "textfield", "", "6em", "5em"),
 	"bought_price" => array("", "textfield", "", "6em", "5em"),
 	"bought_weight" => array("", "textfield", "", "6em", "5em"),

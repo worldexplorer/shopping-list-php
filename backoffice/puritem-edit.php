@@ -14,7 +14,7 @@ $entity_fields = array (
 
 	"comment" => array ("", "textarea_3"),
 
-	"bought" => array ("", "checkbox", "", false),
+	"bought" => array ("", "number"),
 	"bought_qnty" => array("", "number"),
 	"bought_price" => array("", "number"),
 	"bought_weight" => array("", "number"),

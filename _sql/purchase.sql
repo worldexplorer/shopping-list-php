@@ -25,7 +25,9 @@ CREATE TABLE shli_purchase (
 	show_qnty		BOOLEAN NOT NULL DEFAULT false,
 	show_price		BOOLEAN NOT NULL DEFAULT false,
 	show_weight		BOOLEAN NOT NULL DEFAULT false,
-	show_threestate	BOOLEAN NOT NULL DEFAULT false,
+
+	show_state_unknown	BOOLEAN NOT NULL DEFAULT false,
+	show_state_stop		BOOLEAN NOT NULL DEFAULT false,
 
 	copiedfrom_id		INTEGER,
 
@@ -74,4 +76,14 @@ ALTER SEQUENCE shli_purchase_id_seq RESTART WITH 2;
 --select * from shli_purchase;
 
 -- alter table shli_purchase add column show_serno BOOLEAN NOT NULL DEFAULT false;
--- alter table shli_purchase add column show_threestate	BOOLEAN NOT NULL DEFAULT false;
+-- alter table shli_purchase add column show_state_unknown	BOOLEAN NOT NULL DEFAULT false;
+
+
+-- ALTER TABLE "shli_purchase"
+-- 	RENAME COLUMN "show_threestate" TO "show_state_unknown";
+-- ALTER TABLE "shli_purchase"
+-- 	ALTER COLUMN "show_state_unknown" TYPE BOOLEAN,
+-- 	ALTER COLUMN "show_state_unknown" SET NOT NULL,
+-- 	ALTER COLUMN "show_state_unknown" SET DEFAULT 'false';
+-- ALTER TABLE "shli_purchase"
+-- 	ADD "show_state_stop" BOOLEAN NOT NULL DEFAULT 'false';
