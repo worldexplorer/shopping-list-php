@@ -6,5 +6,5 @@
 require_once "../_lib/_init.php";
 //redirect("mmenu-edit.php?id=10");
 //redirect("product.php");
-redirect("question.php");
+redirect("message.php");
 ?>
