@@ -31,7 +31,7 @@ $table_columns = array (
 	"~delete" => array("", "checkboxdel")
 );
 
-$debug_query = 1;
+// $debug_query = 1;
 ?>
 <? require "../_lib/_updown.php" ?>
 <? require_once "_top.php" ?>

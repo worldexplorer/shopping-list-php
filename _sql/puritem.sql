@@ -78,8 +78,8 @@ ALTER SEQUENCE shli_puritem_id_seq RESTART WITH 8;
 -- 	ALTER COLUMN "bought" SET NOT NULL,
 -- 	ALTER COLUMN "bought" SET DEFAULT 0;
 
-alter table shli_puritem add column bought2 SMALLINT NOT NULL DEFAULT 0;
-update shli_puritem set bought2=1 where bought=true;
-update shli_puritem set bought2=2 where bought=NULL;
-ALTER TABLE shli_puritem DROP COLUMN bought;
-ALTER TABLE shli_puritem RENAME COLUMN bought2 TO bought;
+-- alter table shli_puritem add column bought2 SMALLINT NOT NULL DEFAULT 0;
+-- update shli_puritem set bought2=1 where bought=true;
+-- update shli_puritem set bought2=2 where bought=NULL;
+-- ALTER TABLE shli_puritem DROP COLUMN bought;
+-- ALTER TABLE shli_puritem RENAME COLUMN bought2 TO bought;

@@ -42,7 +42,7 @@ switch ($lang_current) {
 			"m2m_room_person" => "Участники чатов",
 			"message" => "Сообщения",
 			"purchase" => "Закупки",
-			"puritem" => "Продукты",
+			"puritem" => "Позиции закупки",
 			"m2m_puritem_person" => "Совершённые закупки",
 			"punit" => "Единицы измерения",
 		

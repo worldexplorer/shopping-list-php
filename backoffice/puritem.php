@@ -23,7 +23,7 @@ $table_columns = array (
 	"room" => array("", "ahref", "<a href=room-edit.php?id=#ROOM#>#ROOM_IDENT#</a>"),
 	"purchase" => array("", "ahref", "<a href=purchase-edit.php?id=#PURCHASE#>#PURCHASE_IDENT#</a>"),
 	"pgroup" => array("", "ahref", "<a href=pgroup-edit.php?id=#PGROUP#>#PGROUP_IDENT#</a>"),
-	"product" => array("", "ahref", "<a href=purchase-edit.php?id=#PRODUCT#>#PRODUCT_IDENT#</a>"),
+	"product" => array("", "ahref", "<a href=product-edit.php?id=#PRODUCT#>#PRODUCT_IDENT#</a>"),
 
 	"qnty" => array("qnty", "textfield", "", "6em", "5em"),
 	"punit" => array("Ед", "ahref", "<a href=punit.php?id=#PUNIT#>#PUNIT_IDENT#</a>"),
