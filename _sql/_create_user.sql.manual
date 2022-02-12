@@ -25,3 +25,4 @@ sudo -u postgres psql
 postgres=# create database shli ENCODING = 'UTF8';
 postgres=# create user shli with encrypted password 'shli';
 postgres=# grant all privileges on database shli to shli;
+psql -U shli -W shli

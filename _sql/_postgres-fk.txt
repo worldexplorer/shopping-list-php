@@ -7,3 +7,7 @@
 \i product.sql
 \i puritem.sql
 \i message.sql
+
+--\i imgtype.sql
+--\i img.sql
+--\i m2m_puritem_person.sql

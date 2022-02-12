@@ -45,7 +45,7 @@ CREATE TABLE shli_purchase (
 	,FOREIGN KEY ("person_created") REFERENCES "shli_person"(id)
 	,FOREIGN KEY ("person_purchased") REFERENCES "shli_person"(id)
 	,FOREIGN KEY ("room") REFERENCES "shli_room"(id)
-	,FOREIGN KEY ("message") REFERENCES "shli_message"(id)
+--	,FOREIGN KEY ("message") REFERENCES "shli_message"(id)
 );
 
 

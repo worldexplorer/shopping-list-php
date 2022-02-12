@@ -4,7 +4,8 @@ DirectoryIndex  index.php
 AuthType        Basic
 AuthName        "Private"
 #htpasswd -b .htpasswd admin admin
-AuthUserFile	/app/backoffice/.htpasswd
+#AuthUserFile	/app/backoffice/.htpasswd
+AuthUserFile	/home/user/projects/shopping-list/shopping-list-php/backoffice/.htpasswd
 require         valid-user
 
 #CharsetDisable  on
