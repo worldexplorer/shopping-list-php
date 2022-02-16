@@ -33,7 +33,8 @@ $table_columns = array (
 
 	"person_created" => array("", "ahref",
 		"<a href=person.php?id=#PERSON_CREATED#>#PERSON_CREATED_IDENT#</a>"),
-	"persons_can_edit" => array("", "textfield", "", "6em", "5em"),
+	"persons_can_edit" => array("", "textfield", "", "10em", "9em"),
+	"persons_can_fill" => array("", "textfield", "", "10em", "9em"),
 
 	"ident" => array('', "hrefedit"),
 //	"~ident" => array("", "textfield", "", "11em", "10em"),

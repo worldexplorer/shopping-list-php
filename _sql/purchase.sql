@@ -33,6 +33,7 @@ CREATE TABLE shli_purchase (
 
 	person_created		INTEGER NOT NULL,
 	persons_can_edit	INTEGER[],
+	persons_can_fill	INTEGER[],
 
 	purchased			BOOLEAN NOT NULL DEFAULT false,
 	person_purchased	INTEGER,
@@ -45,7 +46,11 @@ CREATE TABLE shli_purchase (
 	,FOREIGN KEY ("person_created") REFERENCES "shli_person"(id)
 	,FOREIGN KEY ("person_purchased") REFERENCES "shli_person"(id)
 	,FOREIGN KEY ("room") REFERENCES "shli_room"(id)
---	,FOREIGN KEY ("message") REFERENCES "shli_message"(id)
+	-- 1) create without this FK: \i purchase.sql,
+	-- 2) create messages: \i message.sql
+	-- 3) re-create purchase WITH this FK: \i purchase.sql
+	-- 4) prisma db pull; prisma generate; prisma format
+	,FOREIGN KEY ("message") REFERENCES "shli_message"(id)
 );
 
 
@@ -67,8 +72,8 @@ CREATE TRIGGER trg_shli_purchase_update_date_updated
 --\d shli_purchase;
 
 insert into shli_purchase
-	(id, room, message, show_pgroup, show_price, person_created, 	ident) values
-	(1, 	1, 	1, 		true, 			true, 		1, 				'Фуд Сити')
+	(id, room, message, show_pgroup, show_price, person_created, 	ident, persons_can_edit, persons_can_fill) values
+	(1, 	1, 	2, 		true, 			true, 		1, 				'Фуд Сити',		'{1,2}',		'{1,2}')
 ;
 
 ALTER SEQUENCE shli_purchase_id_seq RESTART WITH 2;

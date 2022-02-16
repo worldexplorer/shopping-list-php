@@ -59,12 +59,12 @@ insert into shli_ic
 ;
 insert into shli_ic
 	(id, manorder, icwhose, ictype, icdict, inbrief, sorting, ident) values
-	(3, 3, 1, 4, 1, 1, 1, 'Упаковка:')
+	(3, 3, 1, 4, 1, true, true, 'Упаковка:')
 ;
 insert into shli_ic
 	(id, manorder, icwhose, ictype, inbrief, sorting, ident) values
-	(4, 4, 1, 2, 1, 1, 'Доставка: дней'),
-	(5, 5, 1, 2, 1, 1, 'На складе: шт')
+	(4, 4, 1, 2, true, true, 'Доставка: дней'),
+	(5, 5, 1, 2, true, true, 'На складе: шт')
 ;
 
 ALTER SEQUENCE shli_ic_id_seq RESTART WITH 6;

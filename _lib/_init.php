@@ -1575,7 +1575,7 @@ EOT;
 
 //			$ret = entity_list_tpl($tpl, "", "jsvalidator", 0);
 
-			$query = "select * from jsvalidator where published = 1 and content != '' and hashkey not in ('', 'JSV_NONE')";
+			$query = "select * from jsvalidator where published = true and content != '' and hashkey not in ('', 'JSV_NONE')";
 			$ret = query_by_tpl($query, $tpl);
 		}
 

@@ -466,6 +466,7 @@ switch ($lang_current) {
 			"comment_below" => "Comment Below",
 			"purchased" => "purchased",
 			"persons_can_edit" => "persons_can_edit{}",
+			"persons_can_fill" => "persons_can_fill{}",
 			//puritem
 			"bought" => "bought",
 			"bought_qnty" => "bQnty",

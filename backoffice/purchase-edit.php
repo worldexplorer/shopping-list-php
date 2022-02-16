@@ -19,6 +19,7 @@ $entity_fields = array (
 	"puritem" => array ("", "cnt"),
 	"person_created" => array ("", "select_hard", "ident"),
 	"persons_can_edit" => array("", "arrayint"),
+	"persons_can_fill" => array("", "arrayint"),
 	"purchased" => array ("", "checkbox", "", true),
 	"person_purchased" => array ("", "select_soft", "ident"),
 

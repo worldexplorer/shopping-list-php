@@ -57,10 +57,10 @@ CREATE TRIGGER trg_shli_message_update_date_updated
 --\d shli_message;
 
 insert into shli_message
-	(id, room, person, purchase, content, edited) values
-	(1, 1, 2, NULL, 'Привет, вот список', true),
-	(2, 1, 2, 1, '', false),
-	(3, 1, 1, NULL, 'Готово, купил', false)
+	(id, room, person, purchase, ident, 			content, 			edited) values
+	(1, 	1, 2, 		NULL, 		'Привет, вот список', 'Привет, вот список',	 true),
+	(2, 	1, 2, 		1, 		'', 				'', 				false),
+	(3, 	1, 1, 		NULL, 	'Готово, купил', 	  'Готово, купил', 		false)
 ;
 
 
