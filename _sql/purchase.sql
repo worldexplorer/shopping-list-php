@@ -92,3 +92,5 @@ ALTER SEQUENCE shli_purchase_id_seq RESTART WITH 2;
 -- 	ALTER COLUMN "show_state_unknown" SET DEFAULT 'false';
 -- ALTER TABLE "shli_purchase"
 -- 	ADD "show_state_stop" BOOLEAN NOT NULL DEFAULT 'false';
+
+--ALTER TABLE "shli_purchase" ADD "persons_can_fill" INTEGER[];
