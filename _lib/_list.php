@@ -768,9 +768,20 @@ if ($mode == "update") {
 			foreach ($table_columns as $table_column => $column_params) {
 				$column_type = (isset($column_params[1])) ? $column_params[1] : "";
 			
-				if (!isset($row[$table_column])) {
-			//		$errormsg .= "{$entity}[{$table_column}]: column is not set<br>";
-			//		echo "{$entity}[{$table_column}]: column is not set<br>";
+				// if (!isset($row[$table_column])) {
+				// 	$errormsg .= "{$entity}[{$table_column}]: column is not set<br>";
+				// 	echo "{$entity}[{$table_column}]: column is not set<br>";
+				// 	continue;
+				// }
+				
+				if (!entity_has_field($entity, $table_column)) {
+					// $errormsg .= "{$entity}[{$table_column}]: column does not exist<br>";
+					// echo "{$entity}[{$table_column}]: column does not exist<br>";
+
+					// $entity_fields_hash = entity_field_types($entity);
+					// $entity_field_names = array_keys($entity_fields_hash);
+					// pre($table_columns, 'table_columns');
+					// pre($entity_field_names, 'entity_field_names');
 					continue;
 				}
 				
@@ -810,6 +821,9 @@ if ($mode == "update") {
 						$sumbitted_value = get_string($it_name);
 						$msg = "it_name=[$it_name] row[$table_column]=[" . $row[$table_column] . "] sumbitted_value=[$sumbitted_value]";
 						if ($row[$table_column] != $sumbitted_value) {
+							if ($sumbitted_value == '' && entity_field_accepts_NULL($entity, $table_column)) {
+								$sumbitted_value = 'NULL';
+							}
 							$update_hash[$table_column] = $sumbitted_value;
 							$msg .= " will update";
 						}
@@ -889,13 +903,15 @@ for ($i=1; $row = pg_fetch_assoc($result); $i++) {
 			case "date":
 				$date_hash = parse_datetime($row[$table_column]);
 				$uts = datehash_2uts($date_hash);
-				$row[$table_column] = strftime($date_fmt, $uts);
+				// $row[$table_column] = date_format(date_create($uts), $datetime_fmt);
+				$row[$table_column] = date($datetime_fmt, $uts);
 				break;
 
 			case "datetime":
 				$date_hash = parse_datetime($row[$table_column]);
 				$uts = datehash_2uts($date_hash);
-				$row[$table_column] = strftime($datetime_fmt, $uts);
+				// $row[$table_column] = date_format(date_create($uts), $datetime_fmt);
+				$row[$table_column] = date($datetime_fmt, $uts);
 				break;
 	
 			case "checkbox":

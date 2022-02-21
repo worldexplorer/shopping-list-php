@@ -2832,7 +2832,7 @@ function autoresize($row, $imgtype_hashkey = "IMG_PRODUCT", $autoresize_type = "
 				if (file_exists($ar_dst_absname)) {
 	//				clearstatcache();
 					$ar_mtime_ts = filemtime($ar_dst_absname);
-					$ar_mtime = strftime("%Y-%m-%d %H:%M:%S", $ar_mtime_ts);
+					$ar_mtime = date($datetime_fmt, $ar_mtime_ts);
 //					pre("ar_mtime=$ar_mtime, ar_mtime_ts=$ar_mtime_ts");
 
 					if ($ar_mtime_ts > $imgrow_updated_ts && $ar_mtime_ts > $imgtype_updated_ts) $should_resize = 0;

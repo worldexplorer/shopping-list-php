@@ -74,6 +74,7 @@ $entity_orderby_list = array (
 	"punit" => "ident asc",
 	"pgroup" => "manorder asc",
 	"message" => "manorder desc",
+	"purchase" => "manorder desc",
 );
 
 $entity_fixed_list = array (

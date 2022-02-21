@@ -297,17 +297,21 @@ $freetext2textarea = array (
 if (!isset($as_freetext)) $as_freetext = get_number("as_freetext");
 
 
-$datetime_fmt = "%d-%b-%Y %H:%M:%S";
-$date_fmt = "%d-%b-%Y";
+// $datetime_fmt = "%d-%b-%Y %H:%M:%S";
+// $date_fmt = "%d-%b-%Y";
+// $date_fmt = "%Y-%m-%d";
 
-$datetime_fmt = "%Y-%m-%d %H:%M:%S";
-$date_fmt = "%Y-%m-%d";
-$time_fmt = "%H:%M:%S";
+$datetime_fmt = "Y-m-d H:i:s";
+$date_fmt = "Y-m-d";
+$time_fmt = "H:i:s";
 
-$datetime_fmt_mysql_like = "%Y-%m-%d %H:%M:%S";
-$timestamp_fmt_mysql_like = "%Y%m%d%H%M%S";
+// $datetime_fmt_mysql_like = "%Y-%m-%d %H:%M:%S";
+// $timestamp_fmt_mysql_like = "%Y%m%d%H%M%S";
+$datetime_fmt_mysql_like = "Y-m-d H:i:s";
+$timestamp_fmt_mysql_like = "YmdHis";
 
-$timestamp_fmt = "%Y%m%d%H%M%S";
+// $timestamp_fmt = "%Y%m%d%H%M%S";
+$timestamp_fmt = "YmdHis";
 
 /*
 $months = array(" ", "январь", "февраль", "март", "апрель", "май", "июнь",
@@ -448,15 +452,15 @@ $popup = get_number("popup");
 
 
 $today_dt_datetime = "0000-00-00 00:00:00";
-if ($id == 0) $today_dt_datetime = strftime("%Y-%m-%d %H:%M:%S");
+if ($id == 0) $today_dt_datetime = date($datetime_fmt, time());
 $today_datehash = parse_datetime($today_dt_datetime);
 $today_uts = datehash_2uts($today_datehash);
 
 $today_ts_datetime = "00000000000000";
-if ($id == 0) $today_ts_datetime = strftime("%Y%m%d%H%M%S");
+if ($id == 0) $today_ts_datetime = date($timestamp_fmt, time());
 
-$today_date = strftime("%Y-%m-%d");
-$today_datetime = strftime("%Y-%m-%d %H:%M:%S");
+$today_date = date($date_fmt, time());
+$today_datetime = date($datetime_fmt, time());
 
 
 
@@ -1255,9 +1259,11 @@ function ts2human($ts) {
 	}
 
 	if ($hour_ == 0 && $minute_ == 0 && $sec_ == 0) {
-		$ret = strftime($date_fmt, $unix_timestamp);
+		// $ret = date_format(date_create($unix_timestamp), $date_fmt);
+		$ret = date($date_fmt, $unix_timestamp);
 	} else {
-		$ret = strftime($datetime_fmt, $unix_timestamp);
+		// $ret = date_format(date_create($unix_timestamp), $datetime_fmt);
+		$ret = date($datetime_fmt, $unix_timestamp);
 	}
 
 

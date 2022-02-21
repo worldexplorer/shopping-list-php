@@ -369,6 +369,7 @@ function update($fields, $fields_cond = 0, $entity = "_global:entity", $cms_dbc 
 			if (
 				strpos($value, "CURRENT_TIMESTAMP") !== false
 				|| $value == "LAST_INSERT_ID()"
+				|| $value == "NULL"
 				|| $db_field_type == "boolean"
 				) {
 				$fields_update .= "$key=$value";
@@ -458,11 +459,11 @@ table_schema='public'";
 	}
 	$entity_prefixed = prefixed_entity($entity);
 
-	//pre($dbtables, "_mysqli.php:dbtables");
-	//pre($entity_prefixed, "_mysqli.php:entity_prefixed");
+	//pre($dbtables, "_postgres.php:dbtables");
+	//pre($entity_prefixed, "_postgres.php:entity_prefixed");
 
 	if (in_array($entity_prefixed, $dbtables_prefixed)) $ret = 1;
-	pr("_mysqli.php:entity_present_in_db($entity) = $ret");
+	pr("_postgres.php:entity_present_in_db($entity) = $ret");
 
 	return $ret;
 }
@@ -930,7 +931,7 @@ function hash_by_tpl ($row, $tpl, $entity = "_global:entity", $wrap_breaks = 1, 
 			if (!isset($date_fmt)) $date_fmt = "%a %d-%b-%Y %R:%M";
 			if (substr($field, 0, 4) == "date" && $in_backoffice == 0) {
 				$value = ts2human($value); // used for timestamp and datetime, formatted as filled
-//				$value = strftime($date_fmt, $value);
+//				$value = date($date_fmt, $value);
 			}
 	
 			$ret = str_replace("#".strtoupper($field)."#", $value, $ret);
@@ -2321,7 +2322,7 @@ function get_cached($hashkey) {
 }
 
 function set_cached($hashkey, $content, $ident = "", $insert_expiration_minutes = 180) {
-	global $debug_query, $debug_cache, $freeze_cache, $today_datetime;
+	global $debug_query, $debug_cache, $freeze_cache, $today_datetime, $timestamp_fmt;
 
 	$qa = select_fieldlistarray("*"
 		, array("hashkey" => $hashkey, "deleted" => 0)		//"published" => 1, 
@@ -2335,7 +2336,7 @@ function set_cached($hashkey, $content, $ident = "", $insert_expiration_minutes 
 
 		$expiration_minutes = $row["expiration_minutes"];
 		$date_expiration_uts = $date_today_uts + $expiration_minutes * 60;
-		$date_expiration_ts = strftime("%Y%m%d%H%M%S", $date_expiration_uts); 
+		$date_expiration_ts = date($timestamp_fmt, $date_expiration_uts); 
 
 		$update_hash = array(
 			  "content" => $content
@@ -2361,7 +2362,7 @@ function set_cached($hashkey, $content, $ident = "", $insert_expiration_minutes 
 		if ($ident == "") $ident = $hashkey;
 
 		$date_expiration_uts = $date_today_uts + $insert_expiration_minutes;
-		$date_expiration_ts = strftime("%Y%m%d%H%M%S", $date_expiration_uts); 
+		$date_expiration_ts = date($timestamp_fmt, $date_expiration_uts); 
 
 		$insert_hash = array(
 			"content" => $content

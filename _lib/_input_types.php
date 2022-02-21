@@ -656,7 +656,7 @@ function parse_datetime($value) {
 //	print_r($matches);
 
 	if (count($matches) > 0) {
-		$date_hash["year"] = strftime("%Y");
+		$date_hash["year"] = date("Y", time());
 		$date_hash["day"] = $matches[1];
 		$date_hash["month"] = $matches[2];
 		return $date_hash;
@@ -781,12 +781,12 @@ function doubledate($name, $value, $default) {
 
 //	print_r(getdate($value));
 
-	$options_day = getDay_dd(strftime("%d", $value));
-	$options_month = getMonth_dd(strftime("%m", $value));
-	$options_year = getYear_dd(strftime("%Y", $value));
-	$options_hour = getHour_dd(strftime("%H", $value));
-	$options_minute = getMinute_dd(strftime("%M", $value));
-	$options_second = getMinute_dd(strftime("%S", $value));
+	$options_day = getDay_dd(date("d", $value));
+	$options_month = getMonth_dd(date("m", $value));
+	$options_year = getYear_dd(date("Y", $value));
+	$options_hour = getHour_dd(date("H", $value));
+	$options_minute = getMinute_dd(date("i", $value));
+	$options_second = getMinute_dd(date("s", $value));
 
 	$ret = <<< EOT
 <select name="{$name}_day">$options_day</select>

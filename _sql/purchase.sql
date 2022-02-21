@@ -32,8 +32,8 @@ CREATE TABLE shli_purchase (
 	copiedfrom_id		INTEGER,
 
 	person_created		INTEGER NOT NULL,
-	persons_can_edit	INTEGER[],
-	persons_can_fill	INTEGER[],
+	persons_can_edit	INTEGER[], -- NULL => disable permissions check
+	persons_can_fill	INTEGER[], -- NULL => disable permissions check
 
 	purchased			BOOLEAN NOT NULL DEFAULT false,
 	person_purchased	INTEGER,
