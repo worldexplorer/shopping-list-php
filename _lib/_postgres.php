@@ -498,12 +498,13 @@ function entity_field_accepts_NULL($entity, $field) {
 	$field_type = entity_field_type($entity, $field);
 
 	$ret = 0;
-	$has_nullable = $field_type.strstr($field_type, "NULLABLE");
-	if ($has_nullable) {
+	$has_nullable = strpos($field_type, "NULLABLE");
+	if ($has_nullable === false) {
+	} else {
 		$ret = 1;
 	}
 
-	// pre("entity_field_accepts_NULL($entity, $field) = $ret");
+	// pre("entity_field_accepts_NULL($entity, $field) = $ret has_nullable[$has_nullable] field_type[$field_type]");
 
 	return $ret;
 }

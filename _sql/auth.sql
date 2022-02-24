@@ -58,9 +58,9 @@ CREATE TRIGGER trg_shli_auth_update_date_updated
 
 
 insert into shli_auth
-	(id, ident, phone, code, auth, person) values
-	(1, 'Петрович', '+1-555-555-55-55', '123456', '123456', 1),
-	(2, 'Дуся', '+1-555-555-55-56', '123456', '123456', 2);
+	(id, ident, 	phone, 				code, 		auth, published, person) values
+	(1, 'Петрович',	'+1-555-555-55-55', '123456', '123456',		true,	1),
+	(2, 'Дуся', 	'+1-555-555-55-56', '123456', '12345',		true,	2);
 
 ALTER SEQUENCE shli_auth_id_seq RESTART WITH 3;
 

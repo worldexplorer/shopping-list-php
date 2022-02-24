@@ -27,11 +27,11 @@ if ($mode == "auth_regenerate" && $id > 0) {
 
 $entity_fields = array (
 	"ident" => array ("Персона", "textfield", ""),
-	"person" => array("", "select_hard"),
+	"person" => array("", "select_soft"),
 	
 	"email" => array ("", "textfield", ""),
 	"phone" => array ("", "textfield", ""),
-	"code" => array ("", "textfield", "", "Истёк 13 дней назад"),
+	"code" => array ("", "textfield", "", "??? Истёк XXX дней назад"),
 	"auth" => array ("", "textfield", ""),
 	"~login-auth" => array ("", "ahref",
 		// "<a href=../auth.php?l_auth=#AUTH# target=_blank>$msg_tag_shortcut войти с лица токеном</a>" + 
@@ -49,7 +49,7 @@ $entity_fields = array (
 	"deleted" => array ("", "checkbox", "", false),
 );
 
-//$debug_query = 1;
+// $debug_query = 1;
 ?>
 <? require "../_lib/_entity_edit.php" ?>
 <? require_once "_top.php" ?>

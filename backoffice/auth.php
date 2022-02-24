@@ -16,9 +16,9 @@ $table_columns = array (
 	"id" => array("", "serno"),
 	"date_created" => array("", "timestamp"),
 
-	"person_ident" => array("", "ahref", "<a href=''>#PERSON_IDENT#</a>"),
+	"person_ident" => array("", "ahref", "<a href='person-edit.php?id=#PERSON#'>#PERSON_IDENT#</a>"),
 
-	"~2" => array($entity_msg_h, "ahref", "$tpl_login_password <a href=#ENTITY#-edit.php?id=#ID#>#IDENT#</a>"),
+	"~2" => array($entity_msg_h, "ahref", "$tpl_login_password <a href=#ENTITY#-edit.php?id=#ID#>___ #IDENT#</a>"),
 	"ident" => array("", "textfield", "", "11em", "10em"),
 
 	"email" => array("", "textfield", "", "11em", "10em"),
