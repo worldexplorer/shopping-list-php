@@ -36,6 +36,7 @@ if ($_SERVER["SERVER_NAME"] == "localhost") {
 $menu_bo = array (
 //	"m2m_room_person" => "",
 	"person" => "",
+	"auth" => "Авторизации",
 	"room" => "",
 	"message" => "",
 
@@ -75,6 +76,7 @@ $entity_orderby_list = array (
 	"pgroup" => "manorder asc",
 	"message" => "manorder desc",
 	"purchase" => "manorder desc",
+	"auth" => "manorder desc",
 );
 
 $entity_fixed_list = array (
@@ -88,6 +90,7 @@ $entity_fixed_list = array (
 	"purchase" => array("room"),
 	"puritem" => array("room", "purchase", "pgroup", "product"),
 	"room" => array("person"),
+	"auth" => array("person"),
 
 	"ic" => array("icwhose", "ictype"),
 	"icdict" => array("icwhose"),
@@ -130,11 +133,13 @@ $no_entity_img_leftjoin = array (
 // shopping-list-php:
 	"m2m_puritem_person", "m2m_room_person",
 	"message", 
-	//"person", "pgroup", "product", 
+	"person",
+	"auth", 
+	//"pgroup", "product", 
 	"punit", 
-	//"purchase", 
-	"puritem"
-	//, "room"
+	"purchase", 
+	"puritem",
+	"room"
 );
 //$no_entity_img_leftjoin = array_keys($entity_list);
 

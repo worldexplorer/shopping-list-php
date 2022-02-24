@@ -29,6 +29,7 @@ switch ($lang_current) {
 			"m2m_agroup_replic" => "Обсуждение",
 		
 			"person" => "Персоны",
+			"auth" => "Авторизация",
 			"m2m_person_iccontent" => "Свойства персон",
 			"m2m_person_rating" => "Рейтинг,отзыв,пожел",
 			"m2m_person_replic" => "Обсуждение",
@@ -113,6 +114,7 @@ switch ($lang_current) {
 			"article" => "новую статью",
 			"agroup" => "новую рубрику",
 			"person" => "новую персону",
+			"auth" => "новую авторизацию",
 			"m2m_article_rating" => "Новый Рейтинг,отзыв,пожел",
 			"m2m_article_replic" => "Новую реплику",			
 			//slspicy
@@ -194,6 +196,7 @@ switch ($lang_current) {
 			"article" => "новая статья",
 			"agroup" => "новая рубрика",
 			"person" => "новая персона",
+			"auth" => "новая авторизация",
 			"m2m_article_rating" => "новый Рейтинг,отзыв,пожел",
 			"m2m_article_replic" => "новая реплика",			
 			//slspicy
@@ -450,6 +453,11 @@ switch ($lang_current) {
 			"color" => "color",
 			"person_created" => "Создал",
 			"person_purchased" => "Купил",
+			// auth
+			"auth-code" => "1раз Код",
+			"auth-ident" => "Персона",
+			"auth-auth" => "Токен",
+			"auth-published" => "Ввёл Код",
 			// purchase
 			// "show_pgroup" => "show_pgroup",
 			// "show_price" => "show_price",
@@ -992,6 +1000,7 @@ switch ($lang_current) {
 		if (!isset($entity_list))
 		$entity_list = array (
 			"person" => "Персоны",
+			"auth" => "Авторизация",
 		//	"=article-lost.php" => "Статьи без разделов",
 			"article" => "Статьи",
 			"agroup" => "Рубрики",
@@ -1052,6 +1061,7 @@ switch ($lang_current) {
 		if (!isset($add_entity_msg_list))
 		$add_entity_msg_list = array (
 			"person" => "новую персону",
+			"auth" => "новую авторизацию",
 			"article" => "новую статью",
 			"agroup" => "новую рубрику",
 			"m2m_article_rating" => "Новый Рейтинг,отзыв,пожел",
@@ -1111,6 +1121,7 @@ switch ($lang_current) {
 		if (!isset($new_entity_ident_list))
 		$new_entity_ident_list = array (
 			"person" => "новая персона",
+			"auth" => "новая авторизация",
 			"article" => "новая статья",
 			"agroup" => "новая рубрика",
 			"m2m_article_rating" => "новый Рейтинг,отзыв,пожел",

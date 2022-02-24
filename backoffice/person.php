@@ -1,22 +1,30 @@
 <?
-
 require_once "../_lib/_init.php";
 
-//$debug_query = 1;
+// $debug_query = 1;
 
 //$list_left_additional_fields .= ", count(distinct game.id) as game_cnt";
 
 
+// $list_left_additional_joins .= ""
+// 	. " left join auths auth on auth.person=e.id"
+// ;
 
-$tpl_login_password = <<< EOT
-<a title='Login via userId+password' href="javascript:popup_url('../index.php?l_person_id=#ID#&l_passwd=#PASSWD#&mode=login_person&l_email=#EMAIL#', 'person_#ID#', '')">$msg_tag_shortcut</a>
-EOT;
+// $list_left_additional_fields .= ""
+// 	. ", group_concat(distinct auths.id, '=', auths.date_created, ':', auths.auth order by auths.id separator '~~') as person_auths"
+// ;
+
+// $tpl_login_password = <<< EOT
+// <a title='Login via userId+password' href="javascript:popup_url('../index.php?l_person_id=#ID#&l_passwd=#PASSWD#&mode=login_person&l_email=#EMAIL#', 'person_#ID#', '')">$msg_tag_shortcut</a>
+// EOT;
 
 $tpl_login_auth = <<< EOT
 <a title='Login via token [#AUTH#]' href="javascript:popup_url('../auth.php?l_auth=#AUTH#', 'person_#ID#', '')">$msg_tag_shortcut</a>
 <a title='Login via token [#AUTH#]' href="javascript:popup_url('../index.php?auth=#AUTH#', 'person_#ID#', '')">#AUTH#</a>
 EOT;
 
+$tpl_single = "<a href='auth-edit.php?id=#ID#'>#IDENT#</a>";
+$tpl_multiple = "<a href='auth-edit.php?id=#ID#'>#IDENT_TRUNCATED#</a>";
 
 $table_columns = array (
 	"id" => array("", "serno"),
@@ -25,15 +33,17 @@ $table_columns = array (
 	//"~3" => array("Log in", "ahref", "<a href=/login.php?login=#PHONE#&password=#COOKIE# target=_blank>$msg_tag_shortcut Log in</a>", "6em"),
 	//"~3" => array("Log in", "ahref", $tpl_login_password, "6em"),
 	//"ident" => array($entity_msg_h, "hrefedit"),
-	"~2" => array($entity_msg_h, "ahref", "$tpl_login_password <a href=#ENTITY#-edit.php?id=#ID#>#IDENT#</a>"),
+	"~2" => array($entity_msg_h, "ahref", "$tpl_login_auth <a href=#ENTITY#-edit.php?id=#ID#>#IDENT#</a>"),
 	"ident" => array("", "textfield", "", "11em", "10em"),
 
 	"phone" => array("", "textfield", "", "11em", "10em"),
 	"email" => array("", "textfield", "", "11em", "10em"),
 
-	"password" => array("", "textfield", "", "11em", "10em"),
+	// "password" => array("", "textfield", "", "11em", "10em"),
 	//"auth" => array("", "textfield", "", "11em", "10em"),
-	"auth" => array("", "ahref", "$tpl_login_auth"),
+	// "auth" => array("", "ahref", "$tpl_login_auth"),
+	// "person_auths" => array("Авторизации", "groupconcat_to_ahref", "", $tpl_single, $tpl_multiple),
+	"~4" => array("Авторизации", "ahref", "<a href='auth.php?person=#ID#'>#AUTH_CNT#</a>"),
 	
 	//"game-HASHKEY_ALREADY_USED" => array("", "cnt"),
 	//"game" => array("", "cnt"),
@@ -77,7 +87,6 @@ EOT;
 $topline_right_fromSubmenu_show = true;
 
 ?>
-
 <? require "../_lib/_updown.php" ?>
 <? require_once "_top.php" ?>
 <? require "../_lib/_list.php" ?>
