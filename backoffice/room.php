@@ -38,13 +38,13 @@ $table_columns = array (
 //	"message_pinned_text" => array("Pinned", "view"),
 	"~1" => array("Pinned Txt", "ahref",
 		"#MESSAGE_PINNED# <a href=message-edit.php?id=#MESSAGE_PINNED#>#MESSAGE_PINNED_TEXT#</a>"),
-	"~2" => array("Img", "ahref", "#img_cnt#"),
+//	"~2" => array("Img", "ahref", "#img_cnt#"),
 
 	"published" => array("", "checkbox"),
 	"~delete" => array("", "checkboxdel")
 );
 
-// $debug_query = 1;
+$debug_query = 1;
 ?>
 <? require "../_lib/_updown.php" ?>
 <? require_once "_top.php" ?>

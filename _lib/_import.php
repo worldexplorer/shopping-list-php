@@ -314,7 +314,7 @@ function resolve_dictionnaries($product_hash, $dict_list, $should_insert = 1) {
 			} else {
 				$insert_hash = array_merge($select_hash,
 					array("ident" => $value),
-					array("published" => 1, "date_created" => "CURRENT_TIMESTAMP"));
+					array("published" => true, "date_created" => "CURRENT_TIMESTAMP"));
 				if ($dict_strict == "pgroup") $insert_hash["parent_id"] = 1;
 				$value_id = insert($insert_hash, $dict_strict);
 			}

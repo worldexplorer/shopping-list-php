@@ -5,7 +5,7 @@ function pollanswer_cnt($row) {
 	global $id;
 	$ret = 0;
 	
-	$cnt = select_field("count(id) as cnt", array("poll" => $id, "deleted" => 0), "pollanswer");
+	$cnt = select_field("count(id) as cnt", array("poll" => $id, "deleted" => false), "pollanswer");
 	if ($cnt > 0) $ret = $cnt;
 	
 	return $ret;

@@ -192,7 +192,7 @@ function optionscompositecontent_productbyfixed($m2m_table, $m2m_fixed, $composi
 
 	while ($row = pg_fetch_array($result)) {
 //		pre($row);
-		$row["option_color"] = ($row["published"] == '1') ? OPTIONS_COLOR_BLACK : OPTIONS_COLOR_GRAY;
+		$row["option_color"] = ($row["published"] == true) ? OPTIONS_COLOR_BLACK : OPTIONS_COLOR_GRAY;
 		$row["selected"] = "";
 		$row["checked"] = "";
 		$row["spaces"] = spaces_bylevel($level);
@@ -381,7 +381,7 @@ function optionscompositecontent_pgroupfromroot($m2m_table, $m2m_fixed, $composi
 //		pre($row);
 //		$row["ident"] = preg_replace("/^(\d*\.*)(.*)$/", '$2', $row["ident"]);
 		$row["spaces"] = spaces_bylevel($level);
-		$row["option_color"] = ($row["published"] == 1) ? OPTIONS_COLOR_BLACK : OPTIONS_COLOR_GRAY;
+		$row["option_color"] = ($row["published"] == true) ? OPTIONS_COLOR_BLACK : OPTIONS_COLOR_GRAY;
 		$option_value = $row["id"];
 		$row["option_value"] = $option_value;
 		$row["padding-left"] = $level;
@@ -718,7 +718,7 @@ function optionscompositecontent_supplierbypgroup($m2m_table, $m2m_fixed, $compo
 //		$is_concurent = $row["is_concurent"];
 //		$is_concurent_txt = 
 
-		$row["option_color"] = ($row["published"] == '1') ? OPTIONS_COLOR_AHREF : OPTIONS_COLOR_GRAY;
+		$row["option_color"] = ($row["published"] == true) ? OPTIONS_COLOR_AHREF : OPTIONS_COLOR_GRAY;
 
 		if (isset($row["is_concurent"])) {
 			$row["ident"] .= ($row["is_concurent"] == 1) ? " (конкурент)" : "";
@@ -918,14 +918,14 @@ function multicompositecontent_update($m2m_table, $value_arr,
 		if ($value_array_key === FALSE) {
 			echo "deleting $m2m_id [$composite_db_value] ";
 // not selected in form, should be deleted
-			$update_hash = array("deleted" => 1);
+			$update_hash = array("deleted" => true);
 //			if (entity_has_field($m2m_table, "site_updated")) $update_hash["site_updated"] = 1;
 			update ($update_hash, array("id" => $m2m_id), $m2m_table);
 		} else {
 // selected in form and present in db, restore deleted
 			if ($m2m_deleted == 1) {
 				echo "restoring deleted $m2m_id [$composite_db_value] ";
-				$update_hash = array("deleted" => 0);
+				$update_hash = array("deleted" => false);
 //				if (entity_has_field($m2m_table, "site_updated")) $update_hash["site_updated"] = 1;
 				update ($update_hash, array("id" => $m2m_id), $m2m_table);
 			}

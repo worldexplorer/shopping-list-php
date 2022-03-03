@@ -72,7 +72,7 @@ function multicompositeiccontent_updateall($m2m_table, $fixed_hash, $absorbing_f
 				
 					default:
 						$it_value_dbrawarray = select_fieldarray("iccontent"
-							, array_merge($composite, $absorbed_fixedhash, array("deleted" => 0))
+							, array_merge($composite, $absorbed_fixedhash, array("deleted" => false))
 							, $m2m_table);
 
 						$it_value_dbarray = array();
@@ -325,7 +325,7 @@ EOT;
 					$debug_query = 0;
 					$it_value_dbarray = ($m2m_table != "m2m_nosave")
 						? select_fieldarray("iccontent"
-								, array_merge($composite, $absorbed_fixedhash, array("deleted" => 0))
+								, array_merge($composite, $absorbed_fixedhash, array("deleted" => false))
 								, $m2m_table)
 						: array()
 						;
@@ -355,7 +355,7 @@ EOT;
 					if ($m2m_table != "m2m_nosave" && entity_has_field($m2m_table, "iccontent_tf1") == 1) {
 						$debug_query = 0;
 						$it_iccontent_tf1_dbarray = select_fieldarray("iccontent_tf1"
-							, array_merge($composite, $absorbed_fixedhash, array("deleted" => 0))
+							, array_merge($composite, $absorbed_fixedhash, array("deleted" => false))
 							, $m2m_table);
 						$debug_query = 0;
 //						pre($it_iccontent_tf1_dbarray);

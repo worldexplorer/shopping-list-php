@@ -16,15 +16,15 @@ if ($entity == "mmenu") {
 // нет смысла создавать mmenu для avacancy-reply.php?id=2, но пусть пока так
 		$mmenu_hashkey_eq = "=" . substr(strrchr($_SERVER["REQUEST_URI"], "/"), 1);
 		if ($rewrite_engine_on == 1) $mmenu_hashkey_eq .= ".php";
-		$mmenu_id = select_field("id", array("hashkey" => $mmenu_hashkey_eq, "deleted" => 0), "mmenu");
+		$mmenu_id = select_field("id", array("hashkey" => $mmenu_hashkey_eq, "deleted" => false), "mmenu");
 
 		if ($mmenu_id == "") {
 			$mmenu_hashkey_eq = "=" . substr(strrchr($_SERVER["SCRIPT_FILENAME"], "/"), 1);
-			$mmenu_id = select_field("id", array("hashkey" => $mmenu_hashkey_eq, "deleted" => 0), "mmenu");
+			$mmenu_id = select_field("id", array("hashkey" => $mmenu_hashkey_eq, "deleted" => false), "mmenu");
 		}
 
 		if ($mmenu_id == "") {
-			$mmenu_id = select_field("id", array("hashkey" => $mmenu_hashkey, "deleted" => 0), "mmenu");
+			$mmenu_id = select_field("id", array("hashkey" => $mmenu_hashkey, "deleted" => false), "mmenu");
 		}
 		$debug_query = 0;
 	}
@@ -103,7 +103,7 @@ $mmenu_id_backup = $mmenu_id;
 foreach ($root_tree as $mmenu_id) {
 //	$mmenu_row_tmp = select_entity_row(array("id" => $mmenu_id), "mmenu");
 	$mmenu_row_tmp = $fromend_root_tree_content[$mmenu_id];
-	if (isset($mmenu_row_tmp["id"]) && $mmenu_row_tmp["published"] == 1) {
+	if (isset($mmenu_row_tmp["id"]) && $mmenu_row_tmp["published"] == true) {
 //		pre($mmenu_row_tmp);
 
 		$tpl = <<< EOT

@@ -54,7 +54,7 @@ EOT;
 
 $pollanswer_cnt = 0;
 if ($id > 0) {
-	$pollanswer_cnt = select_field("count(id) as cnt", array("pollanswer" => $id, "deleted" => 0), "pollvote");
+	$pollanswer_cnt = select_field("count(id) as cnt", array("pollanswer" => $id, "deleted" => false), "pollvote");
 }
 
 $entity_fields = array (

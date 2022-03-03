@@ -54,7 +54,7 @@ function ic($m2m_entity_iccontent_tablename, $entity_ = "_global", $entity_id_ =
 					"entity" => $entity_,
 					"entity_id" => $entity_id_,
 					"ic" => $ic_id,
-					"deleted" => 0
+					"deleted" => false
 					),
 				$m2m_entity_iccontent_tablename);
 
@@ -63,7 +63,7 @@ function ic($m2m_entity_iccontent_tablename, $entity_ = "_global", $entity_id_ =
 						"entity" => $entity_,
 						"entity_id" => $entity_id_,
 						"ic" => $ic_id,
-						"deleted" => 0
+						"deleted" => false
 						),
 					$m2m_entity_iccontent_tablename);
 
@@ -484,7 +484,7 @@ function ic_update($m2m_entity_iccontent_tablename, $entity_ = "_global", $entit
 		$ic_published = $row["ic_published"];
 		$ictype_hashkey = $row["ictype_hashkey"];
 		$icdict_id = $row["icdict_id"];
-//		if ($row["ic_published"] == 0) continue;
+//		if ($row["ic_published"] == false) continue;
 
 		$it_name = "ic_$ic_id";
 
@@ -512,13 +512,13 @@ function ic_update($m2m_entity_iccontent_tablename, $entity_ = "_global", $entit
 								"entity" => $entity_,
 								"entity_id" => $entity_id_,
 								"ic" => $ic_id,
-								"deleted" => 0
+								"deleted" => false
 								),
 							$m2m_entity_iccontent_tablename);
 				
 				$icdict_array = select_fieldarray("id",
 							array(
-								"published" => 1,
+								"published" => true,
 								"icdict" => $icdict_id
 								),
 							"icdictcontent");
@@ -559,7 +559,7 @@ function ic_update($m2m_entity_iccontent_tablename, $entity_ = "_global", $entit
 						"ic" => $ic_id,
 						"iccontent" => $value);
 					delete ($delete_hash, $m2m_entity_iccontent_tablename);
-//					update (array("deleted" => 1), $delete_hash, $m2m_entity_iccontent_tablename);
+//					update (array("deleted" => true), $delete_hash, $m2m_entity_iccontent_tablename);
 //					echo "<pre>"; print_r ($delete_hash); echo "</pre>";
 				}
 /*

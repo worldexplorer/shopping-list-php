@@ -68,7 +68,7 @@ function product_iccontent_by_tpl($fixed_hash
 			case "SELECT":
 				if ($row["iccontent"] != "") {
 					$row["iccontent_wrapped"] = $row["ident"] . ": " . select_field("ident",
-						array("id" => $row["iccontent"], "published" => 1, "deleted" => 0),
+						array("id" => $row["iccontent"], "published" => true, "deleted" => false),
 						"icdictcontent");
 				}
 				break;
@@ -229,7 +229,7 @@ function mmenu_hrefto($row) {
 
 	if ($row["is_drone"] == 1) {
 		$ret = "#";		// feature to set "drone" but not clickable
-		$row_child = select_entity_row(array("parent_id" => $row["id"], "published" => 1, "deleted" => 0), "mmenu");
+		$row_child = select_entity_row(array("parent_id" => $row["id"], "published" => true, "deleted" => false), "mmenu");
 		if (isset($row_child["id"])) $ret = mmenu_hrefto($row_child);
 		return $ret;
 	}

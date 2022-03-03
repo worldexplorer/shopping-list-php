@@ -31,7 +31,7 @@ EOT;
 $tpl_separator = "";
 
 //$menu_top_root_id = 2;
-//$_menu_top = tree_tpl($tpl, $tpl_cur, "mmenu", $root_mmenu_id, $menu_top_root_id, array("published" => 1), 1, 1);
+//$_menu_top = tree_tpl($tpl, $tpl_cur, "mmenu", $root_mmenu_id, $menu_top_root_id, array("published" => true), 1, 1);
 //$_menu_top = entity_list_tpl($tpl, $tpl_cur, "mmenu", 0, array("parent_id" => $menu_top_root_id));
 
 $_menu_top = mmenuleaf_anchor("MMENU_TOP", $tpl, $tpl_cur, 0, $tpl_separator);

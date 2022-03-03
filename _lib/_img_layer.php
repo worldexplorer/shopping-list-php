@@ -638,7 +638,7 @@ function img_big_resize_control($row, $is_new = 0) {
 	
 	$row["big_resize_checked"] = "";
 	if ($is_new == 1 && $row["big_resize_default_checked"] == 1) $row["big_resize_checked"] = "checked";
-	if ($row["img_big_present"] == 1 && $row["big_resize_published"] == 1) $ret = hash_by_tpl($row, $tpl_img_big_resize);
+	if ($row["img_big_present"] == true && $row["big_resize_published"] == true) $ret = hash_by_tpl($row, $tpl_img_big_resize);
 	
 	return $ret;
 }
@@ -650,7 +650,7 @@ function img_resize_control($row, $is_new = 0) {
 	
 	$row["resize_checked"] = "";
 	if ($is_new == 1 && $row["resize_default_checked"] == 1) $row["resize_checked"] = "checked";
-	if ($row["img_present"] == 1 && $row["resize_published"] == 1) $ret = hash_by_tpl($row, $tpl_img_resize);
+	if ($row["img_present"] == true && $row["resize_published"] == true) $ret = hash_by_tpl($row, $tpl_img_resize);
 	
 	return $ret;
 }
@@ -667,8 +667,8 @@ function img_control_tr($row) {
 	$ret = "";
 
 	if (
-		($row["img_present"] == 1 && $row["resize_published"] == 1)
-		|| ($row["img_big_present"] == 1 &&  $row["big_resize_published"] == 1)
+		($row["img_present"] == true && $row["resize_published"] == true)
+		|| ($row["img_big_present"] == true &&  $row["big_resize_published"] == true)
 		) {
 		$tpl = <<< EOT
 <tr><td colspan=2><div id="layer_img_hr_#ID#" style="display: #DISPLAY_CONTROL#"><hr></td></tr>
@@ -934,8 +934,8 @@ EOT;
 	$tpl = ($row["id"] == 0) ? $tpl_new : $tpl_already;
 
 	if ($row["id"] == 0) {
-		if ($row["db_field"] == "img" && $row["img_zip_present"] == 1) $present = 1;
-		if ($row["db_field"] == "img_big" && $row["img_big_zip_present"] == 1) $present = 1;
+		if ($row["db_field"] == "img" && $row["img_zip_present"] == true) $present = 1;
+		if ($row["db_field"] == "img_big" && $row["img_big_zip_present"] == true) $present = 1;
 		if ($present == 1) $ret .= hash_by_tpl($row, $tpl);
 	}
 	
@@ -959,8 +959,8 @@ EOT;
 	
 	$tpl = ($row["id"] == 0) ? $tpl_new : $tpl_already;
 
-	if ($row["db_field"] == "img" && $row["img_url_present"] == 1) $present = 1;
-	if ($row["db_field"] == "img_big" && $row["img_big_url_present"] == 1) $present = 1;
+	if ($row["db_field"] == "img" && $row["img_url_present"] == true) $present = 1;
+	if ($row["db_field"] == "img_big" && $row["img_big_url_present"] == true) $present = 1;
 	if ($present == 1) $ret .= hash_by_tpl($row, $tpl);
 	
 	return $ret;
@@ -979,12 +979,12 @@ function img_row_txt_control($row) {
 </tr>
 EOT;
 
-	if ($row["db_field"] == "img" && $row["img_txt_present"] == 1) {
+	if ($row["db_field"] == "img" && $row["img_txt_present"] == true) {
 //		pre($row);
 		$ret = hash_by_tpl($row, $tpl);
 	}
 
-	if ($row["db_field"] == "img_big" && $row["img_big_txt_present"] == 1) {
+	if ($row["db_field"] == "img_big" && $row["img_big_txt_present"] == true) {
 		$ret = hash_by_tpl($row, $tpl);
 	}
 	return $ret;
@@ -1218,7 +1218,7 @@ function img_layer($imgtype_row) {
 	$i = 0;
 	while ($row = pg_fetch_assoc($result)) {
 		$row["i"] = ++$i;
-		$row["pub_checked"] = ($row["published"] == '1') ? "checked" : "";
+		$row["pub_checked"] = ($row["published"] == true) ? "checked" : "";
 		$row["main_checked"] = ($row["img_main"] == '1') ? "checked" : "";
 		$row["faceted_checked"] = (isset($row["faceted"]) && $row["faceted"] == '1') ? "checked" : "";
 		$row["faceting_checked"] = (isset($row["faceting"]) && $row["faceting"] == '1') ? "checked" : "";
@@ -1286,7 +1286,7 @@ function img_singlerow($row) {
 
 //	pre($row);
 
-	if ($row["img_present"] == 1) {
+	if ($row["img_present"] == true) {
 		$tpl = (img_exists($row, "img")) ? $tpl_img_ex : $tpl_img_nex;
 		if ($row["id"] == 0) $tpl = $tpl_img_new_item;
 		
@@ -1312,11 +1312,11 @@ function img_singlerow($row) {
 		$ret .= hash_by_tpl($tpl_parm, $tpl);
 	}
 
-	if ($row["img_present"] == 1 && $row["img_big_present"] == 1) {
+	if ($row["img_present"] == true && $row["img_big_present"] == true) {
 		$ret .= "<tr><td colspan=2><hr></td></tr>";
 	}
 
-	if ($row["img_big_present"] == 1) {
+	if ($row["img_big_present"] == true) {
 		$tpl = (img_exists($row, "img_big")) ? $tpl_img_ex : $tpl_img_nex;
 		if ($row["id"] == 0) $tpl = $tpl_img_new_item;
 	
@@ -1358,7 +1358,7 @@ function img_singlerow_new($row) {
 
 //	pre($row);
 
-	if ($row["img_present"] == 1) {
+	if ($row["img_present"] == true) {
 		$tpl = (img_exists($row, "img")) ? $tpl_img_ex : $tpl_img_nex;
 		if ($row["id"] == 0) $tpl = $tpl_img_new_item;
 		
@@ -1383,7 +1383,7 @@ function img_singlerow_new($row) {
 	}
 
 
-	if ($row["img_big_present"] == 1) {
+	if ($row["img_big_present"] == true) {
 		$tpl = (img_exists($row, "img_big")) ? $tpl_img_ex : $tpl_img_nex;
 		if ($row["id"] == 0) $tpl = $tpl_img_new_item;
 	
@@ -1824,8 +1824,8 @@ function img_zip_process($img_hash, $img_row, $imgtype, $img_field_suffix = "", 
 						"img" . $img_field_suffix => $zip_fname,
 						"owner_entity" => $owner_entity,
 						"owner_entity_id" => $owner_entity_id,
-//						"published" => 0,
-//						"deleted" => 1,
+//						"published" => false,
+//						"deleted" => true,
 					);
 
 //					pre($img_select_hash);
@@ -1838,7 +1838,7 @@ function img_zip_process($img_hash, $img_row, $imgtype, $img_field_suffix = "", 
 //						pre($img_row);
 						$destiny_txt = ", found old img_id=" . $img_row["id"];
 						$updated_imgtype_visibility = update(
-								array("imgtype" => $imgtype, "published" => 1, "deleted" => 0),
+								array("imgtype" => $imgtype, "published" => true, "deleted" => false),
 								array("id" => $img_row["id"]), $img_table);
 						
 						$img_row = select_entity_row(array("id" => $img_row["id"]), $img_table);
@@ -1932,7 +1932,7 @@ function insert_newimg_and_createdir($imgtype, $img_table = "img") {
 		"imgtype" => $imgtype,
 		"owner_entity" => $owner_entity,
 		"owner_entity_id" => $owner_entity_id,
-//		"published" => 1,
+//		"published" => true,
 		"published" => (get_string("0_img_pub") == "on") ? 1 : 0,
 		"date_created" => "CURRENT_TIMESTAMP"
 	);
@@ -2194,7 +2194,7 @@ function img_update_postupload($img_row, $img_hash, $img_table = "img") {
 // в img_update - только заполнение img_hash, в img_post_update их надо записать и файлы подчистить
 	if (isset($img_row["faceted"]) && $img_hash["faceted"] != $img_row["faceted"]) {			//isset($_POST["{$img_id}_img_faceted"]) && 
 		$txt_pub_hash["faceted"] = $img_hash["faceted"];
-		if ($txt_pub_hash["faceted"] == 1) $txt_pub_hash["date_faceted"] = "CURRENT_TIMESTAMP";
+		if ($txt_pub_hash["faceted"] == true) $txt_pub_hash["date_faceted"] = "CURRENT_TIMESTAMP";
 		else $txt_pub_hash["date_faceted"] = "0";
 	}
 

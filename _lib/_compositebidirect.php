@@ -182,7 +182,7 @@ function options_pgrouptreeproductselectable($m2m_table, $m2m_fixed, $composite,
 	for ($i=0; $row = pg_fetch_array($result); $i++) {
 //		pre($row);
 		$pgroup_id = $row["id"];
-		$row["option_color"] = ($row["published"] == 1) ? OPTIONS_COLOR_BLACK : OPTIONS_COLOR_GRAY;
+		$row["option_color"] = ($row["published"] == true) ? OPTIONS_COLOR_BLACK : OPTIONS_COLOR_GRAY;
 		$row["option_value"] = $pgroup_id;
 		$row["padding-left"] = $level * 2;
 
@@ -307,7 +307,7 @@ EOT;
 
 			while ($row_product = pg_fetch_array($result_product)) {
 	//			pre($row_product);
-				$row_product["option_color"] = ($row_product["published"] == "1") ? OPTIONS_COLOR_BLACK : OPTIONS_COLOR_GRAY;
+				$row_product["option_color"] = ($row_product["published"] == true) ? OPTIONS_COLOR_BLACK : OPTIONS_COLOR_GRAY;
 				$row_product["option_color"] = ($row_product["id"] == $id) ? OPTIONS_COLOR_GRAY : $row_product["option_color"];
 				$row_product["checked"] = ($row_product["m2m_id"] != "") ? "checked" : "";
 				$row_product["disabled"] = ($row_product["m2m_id"] != "") ? "disabled" : "";
@@ -483,7 +483,7 @@ EOT;
 	$unique_product_checked_cnt = 0;
 	while ($row = pg_fetch_array($result_product)) {
 //		pre($row);
-		$row["option_color"] = ($row["published"] == "1") ? OPTIONS_COLOR_BLACK : OPTIONS_COLOR_GRAY;
+		$row["option_color"] = ($row["published"] == true) ? OPTIONS_COLOR_BLACK : OPTIONS_COLOR_GRAY;
 		$row["checked"] = ($row["m2m_id"] != "") ? "checked" : "";
 		$row[$product_table] = $row["id"];
 		$row["option_value"] = composite_itvalue($composite, $row);
@@ -597,7 +597,7 @@ function multicompositebidirect_update($m2m_table, $value_arr
 		if ($value_array_key === FALSE) {
 			if ($m2m_deleted == 0) {
 //				pre ("deleting ${entity}_from=[$id], ${entity}_to=[$composite_first_value]");
-				$update_hash = array("deleted" => 1);
+				$update_hash = array("deleted" => true);
 				$deleted = update ($update_hash, array("${entity}_from" => $id, "${entity}_to" => $composite_first_value), $m2m_table);
 				if ($deleted == 0) $errormsg .= "bidirect delete: $msg_bo_bidirect_directlink_was_absent $m2m_table(${entity}_from=[$composite_first_value], ${entity}_to=[$id])<br>";
 	
@@ -608,7 +608,7 @@ function multicompositebidirect_update($m2m_table, $value_arr
 						&& select_field("id", array("${entity}_from" => $composite_first_value, "${entity}_to" => $id), $m2m_table) == 0
 						) {
 		//				$inserted = 0;
-						$inserted = insert (array("${entity}_from" => $composite_first_value, "${entity}_to" => $id, "deleted" => 1), $m2m_table);
+						$inserted = insert (array("${entity}_from" => $composite_first_value, "${entity}_to" => $id, "deleted" => true), $m2m_table);
 						if ($inserted > 0) {
 							$errormsg .= "bidirect delete: $msg_bo_bidirect_reciplink_restored"
 									. " $m2m_table(${entity}_from=[$composite_first_value], ${entity}_to=[$id], inserted=[$inserted])<br>";
@@ -622,7 +622,7 @@ function multicompositebidirect_update($m2m_table, $value_arr
 		} else {
 // selected in form and present in db, restore deleted
 			if ($m2m_deleted == 1) {
-				$update_hash = array("deleted" => 0);
+				$update_hash = array("deleted" => false);
 //bidirect
 //				pre ("restoring deleted ${entity}_from=[$id], ${entity}_to=[$composite_first_value]");
 				$restored = update ($update_hash, array("${entity}_from" => $id, "${entity}_to" => $composite_first_value), $m2m_table);
@@ -633,7 +633,7 @@ function multicompositebidirect_update($m2m_table, $value_arr
 					$restored = update ($update_hash, array("${entity}_from" => $composite_first_value, "${entity}_to" => $id), $m2m_table);
 					if ($restored == 0) {
 	//					$inserted = 0;
-						$inserted = insert (array("${entity}_from" => $composite_first_value, "${entity}_to" => $id, "deleted" => 0), $m2m_table);
+						$inserted = insert (array("${entity}_from" => $composite_first_value, "${entity}_to" => $id, "deleted" => false), $m2m_table);
 						if ($inserted > 0) {
 							$errormsg .= "bidirect restore: $msg_bo_bidirect_reciplink_restored"
 									. " $m2m_table(${entity}_from=[$composite_first_value], ${entity}_to=[$id])<br>";

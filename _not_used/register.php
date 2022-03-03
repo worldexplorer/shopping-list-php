@@ -232,8 +232,8 @@ if ($mode == "" || ($mode == "update" && $errormsg != "")) {
 if ($mode == "update" && $errormsg == "") {
 	$person_row = select_entity_row(array("email" => $markers_hash["email"]), "person");
 	if (isset($person_row["id"])) {
-		 if ($person_row["published"] == 0) $errormsg = "��� ������� ��� �������� �������������, ���������� � <a href='mmenu.php?id=35'>��������������</a>";
-		 if ($person_row["deleted"] == 1) $errormsg = "��� ������� ��� �����, ���������� � <a href='mmenu.php?id=35'>��������������</a>";
+		 if ($person_row["published"] == false) $errormsg = "��� ������� ��� �������� �������������, ���������� � <a href='mmenu.php?id=35'>��������������</a>";
+		 if ($person_row["deleted"] == true) $errormsg = "��� ������� ��� �����, ���������� � <a href='mmenu.php?id=35'>��������������</a>";
 	}
 }
 */
@@ -244,7 +244,7 @@ if ($mode == "update" && $errormsg == "") {
 	if (isset($person_row["id"])) {
 		$email = $markers_hash["email"];
 
-		 if ($person_row["deleted"] == 0 && $person_row["published"] == 1) {
+		 if ($person_row["deleted"] == 0 && $person_row["published"] == true) {
 			$errormsg = "������������ � e-mail [" . $markers_hash["email"] . "] ��� ���������������, <br>���������� <a href='javascript:popup_pwreminder(\"" . $markers_hash["email"] . "\")'>��������� ������</a>.";
 
 			$mmenu_content .= <<<EOT
@@ -255,10 +255,10 @@ popup_pwreminder("$email")
 EOT;
 		}
 
-		if ($person_row["published"] == 0) {
+		if ($person_row["published"] == false) {
 		 	$errormsg = "��� ������� ��� �������� �������������, ���������� � <a href='askme.php?subject=" . urlencode("������������ " . $markers_hash["email"] . " �������������") . "'>��������������</a>";
 		 }
-		 if ($person_row["deleted"] == 1) {
+		 if ($person_row["deleted"] == true) {
 		 	$errormsg = "��� ������� ��� �����, ���������� � <a href='askme.php?subject=" . urlencode("������������ " . $markers_hash["email"] . " �����") . "'>��������������</a>";
 		 }
 	}
@@ -302,7 +302,7 @@ if ($mode == "update" && $errormsg == "") {
 		"email" => $markers_hash["email"],
 		"ident" => $markers_hash["cname"],
 //		"city" => $markers_hash["city"],
-		"published" => 1,
+		"published" => true,
 //		"date_birth" => $date_birth,
 //		"age" => $age,
 		"date_created" => "CURRENT_TIMESTAMP",

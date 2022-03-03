@@ -58,7 +58,7 @@ function options_product($product_value, $product_table, $pgroup_table, $pgroup_
 
 	while ($row = pg_fetch_array($result)) {
 		$row["spaces"] = spaces_bylevel($level);
-		$row["option_color"] =  ($row["published"] == '1') ? OPTIONS_COLOR_BLACK : OPTIONS_COLOR_GRAY;
+		$row["option_color"] =  ($row["published"] == true) ? OPTIONS_COLOR_BLACK : OPTIONS_COLOR_GRAY;
 		$row["selected"] = ($row["id"] == $product_value) ?  "selected" : "";
 
 		$tpl = <<< EOT
@@ -347,7 +347,7 @@ function m2mtfcontrolled($dict_table, $value = "_global", $m2m_content_table = "
 EOT;
 	}
 	
-	$m2m_controlling_fixedhash = array_merge($m2m_controlling_fixedhash, array("deleted" => 0, "published" => 1));
+	$m2m_controlling_fixedhash = array_merge($m2m_controlling_fixedhash, array("deleted" => false, "published" => true));
 	$m2m_controlling_fixedhash = absorb_fixedhash($m2m_controlling_fixedhash);
 	if ($debug_query == true) pre($m2m_controlling_fixedhash, "m2m_controlling_fixedhash");
 
@@ -387,7 +387,7 @@ EOT;
 		$row["dict_id"] = $row["id"];
 		$row["dict_ident"] = $row["ident"];
 		$row["dict_published"] = $row["published"];
-		$row["dict_color"] = ($row["published"] == 1) ? COLOR_ENABLED : COLOR_DISABLED;
+		$row["dict_color"] = ($row["published"] == true) ? COLOR_ENABLED : COLOR_DISABLED;
 		$row["dict_table"] = $dict_table;
 		$row["tf_size"] = $input_size["text_insidelayer"];
 		
@@ -532,7 +532,7 @@ EOT;
 			$row["dict_id"] = $row["id"];
 			$row["dict_ident"] = $row["ident"];
 			$row["dict_published"] = $row["published"];
-			$row["dict_color"] = ($row["published"] == 1) ? COLOR_ENABLED : COLOR_DISABLED;
+			$row["dict_color"] = ($row["published"] == true) ? COLOR_ENABLED : COLOR_DISABLED;
 			$row["dict_table"] = $dict_table;
 			$row["tf_size"] = $input_size["text_insidelayer"];
 			$row["m2m_content"] = $row["m2m_content"];
@@ -1033,7 +1033,7 @@ function table_ro($name, $value = 0, $sql_field = "ident") {
 
 
 function select_table($table, $value = "_global", $sql_field = "ident", $tag_attr = "") {
-	return select_table_all($table, $value, $sql_field, $tag_attr, array("published" => 1));
+	return select_table_all($table, $value, $sql_field, $tag_attr, array("published" => true));
 }
 
 function select_tablelink_all($table, $value = "_global", $sql_field = "ident", $tag_attr = "") {
@@ -1287,7 +1287,7 @@ function options_sql_VERYSLOW($query, $default, $forcezero_option = "", $forceze
 
 	while ($row = pg_fetch_array($result)) {
 		$row["i"] = $i++;
-		$row["published_style"] = ($row["published"] == 1) ? "" : " style='color: " . OPTIONS_COLOR_GRAY. "'";
+		$row["published_style"] = ($row["published"] == true) ? "" : " style='color: " . OPTIONS_COLOR_GRAY. "'";
 		$row["selected"] = ($row["id"] == $default) ? "selected" : "";
 		$row["checked"] = ($row["id"] == $default) ? "checked" : "";
 		if ($row["id"] == $default) $was_selected = 1;

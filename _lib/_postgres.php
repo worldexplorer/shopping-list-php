@@ -359,33 +359,40 @@ function update($fields, $fields_cond = 0, $entity = "_global:entity", $cms_dbc 
 
 	if (is_array($fields) && sizeof($fields) > 0) {
 		foreach ($fields as $key => $value) {
-			if ($fields_update != "") $fields_update .= ", ";
-			
+ 			if (is_array($value)) {
+				echo "$key is array(" . pr ($value) . ")<br>";
+				continue;
+ 			}
 
 			$db_field_type = entity_field_type($entity, $key);
 
-//			if (is_numeric($value) || ($value == "CURRENT_TIMESTAMP") || ($value == "LAST_INSERT_ID()")) {
+			$dbValue = "'" . addslashes($value) . "'";
 
 			if (
 				strpos($value, "CURRENT_TIMESTAMP") !== false
 				|| $value == "LAST_INSERT_ID()"
 				|| $value == "NULL"
-				|| $db_field_type == "boolean"
+				|| is_numeric($value)
 				) {
-				$fields_update .= "$key=$value";
-			} else {
-				if (is_array($value)) {
-					echo "$key is array(" . pr ($value) . ")<br>";
-					continue;
-				}
-				$fields_update .= "$key='" . addslashes($value) . "'";
+				$dbValue = $value;
+			} else if (is_bool($value)) {
+				$dbValue = $value == true ? "true" : "false";
+			} else if ($db_field_type == "boolean") {
+				$dbValue = $value == "true" ? "true" : "false";
 			}
+
+			if ($fields_update != "") $fields_update .= ", ";
+			$fields_update .= "$key=$dbValue";
 		}
 		
 		if (is_array($fields_cond)) {
 			foreach ($fields_cond as $key => $value) {
 				if ($update_cond != "") $update_cond .= " and ";
-				$update_cond .= "$key='$valcb_field_typeue'";
+				if (is_bool($value) || is_numeric($value)) {
+					$update_cond .= "$key=$value";
+				} else {
+					$update_cond .= "$key='$value'";
+				}
 			}
 		} else {
 			if (isset($id)) $update_cond = "id=$id";
@@ -1036,7 +1043,7 @@ function entity_list_tpl($tpl, $tpl_current = "_same", $entity = "_global:entity
 	$rows_per_page = absorb_variable($rows_per_page);
 	$list_url = absorb_variable($list_url);
 
-	$visible_mask = array("published" => 1, "deleted" => 0);
+	$visible_mask = array("published" => true, "deleted" => false);
 	$select_cond = sqlcond_fromhash(array_merge($visible_mask, $fixed_hash));
 
 	$list_query = "select * from $entity where $select_cond order by " . get_entity_orderby($entity);
@@ -1101,7 +1108,7 @@ function entity_tpl($tpl, $entity = "_global:entity", $fixed_hash = array(), $ha
 	$current = absorb_variable("_global:id");
 	
 	if (is_array($fixed_hash) && count($fixed_hash) > 0) {
-		$visible_mask = array("deleted" => 0, "published" => 1);
+		$visible_mask = array("deleted" => false, "published" => true);
 		$select_cond = sqlcond_fromhash(array_merge($visible_mask, $fixed_hash));
 	} else {
 		$select_cond = sqlcond_fromhash(array("id" => $current));
@@ -1143,7 +1150,7 @@ function tree_tpl($tpl, $tpl_current = "_same", $entity = "_global:entity", $cur
 //	$entity = prefixed_entity ($entity);
 	if (is_string($current)) $current = absorb_variable($current);
 
-	$visible_mask = array("deleted" => 0);
+	$visible_mask = array("deleted" => false);
 	$select_cond = sqlcond_fromhash(array_merge($visible_mask, $fixed_hash));
 
 	if ($query_tpl == "") {
@@ -1221,7 +1228,7 @@ function multi_update($table, $value_arr, $m2m_table) {
 //				echo "unset $table = $slave : $arr_index<br>";
 				unset($arr_copy[$arr_index]);
 
-				if ($row["deleted"] == 1) $arr_deleted[] = $row["id"];
+				if ($row["deleted"] == true) $arr_deleted[] = $row["id"];
 			}  else {
 //				echo "deleting $table = $slave<br>";
 //				$debug_query = 1;
@@ -1242,7 +1249,7 @@ function multi_update($table, $value_arr, $m2m_table) {
 		foreach ($arr_deleted as $value) {
 //			echo "arr_deleted[] = $value<br>";
 //			$debug_query = 1;
-			update (array("deleted" => 0), array("id" => $value), $m2m_table);
+			update (array("deleted" => false), array("id" => $value), $m2m_table);
 //			$debug_query = 0;
 		}
 
@@ -1943,8 +1950,8 @@ function multicompositepointer_multipleupdate($m2m_table, $fixed_hash, $pointerv
 		if ($value_array_key === FALSE) {
 			$affected = 0;
 // not selected in form, should be deleted
-//			if ($dbupdate == 1) update (array("deleted" => 1, "site_updated" => 1), array("id" => $m2m_id), $m2m_table);
-			if ($dbupdate == 1) $affected = update (array("deleted" => 1), array("id" => $m2m_id), $m2m_table);
+//			if ($dbupdate == 1) update (array("deleted" => true, "site_updated" => 1), array("id" => $m2m_id), $m2m_table);
+			if ($dbupdate == 1) $affected = update (array("deleted" => true), array("id" => $m2m_id), $m2m_table);
 			if ($debug == 1) echo "deleted affected=[$affected] id=[$m2m_id] $pointer=[$m2m_pointervalue] for [" . sqlcond_fromhash($fixed_hash) . "]<br>";
 
 			if (isset($iccontent_tf1_syncarray[$value_array_key])) {
@@ -1956,8 +1963,8 @@ function multicompositepointer_multipleupdate($m2m_table, $fixed_hash, $pointerv
 // selected in form and present in db, restore deleted
 			if ($m2m_deleted == 1) {
 				$affected = 0;
-//				if ($dbupdate == 1) update (array("deleted" => 0, "site_updated" => 1), array("id" => $m2m_id), $m2m_table);
-				if ($dbupdate == 1) $affected = update (array("deleted" => 0), array("id" => $m2m_id), $m2m_table);
+//				if ($dbupdate == 1) update (array("deleted" => false, "site_updated" => 1), array("id" => $m2m_id), $m2m_table);
+				if ($dbupdate == 1) $affected = update (array("deleted" => false), array("id" => $m2m_id), $m2m_table);
 				if ($debug == 1) echo "restored affected=[$affected] deleted id=[$m2m_id] $pointer=[$m2m_pointervalue] for [" . sqlcond_fromhash($fixed_hash) . "]";
 			}
 
@@ -2031,7 +2038,7 @@ function multicompositepointer_singleupdate($m2m_table, $fixed_hash, $pointerval
 	
 		$update_hash = array (
 			$pointer => $pointervalue
-			, "deleted" => 0
+			, "deleted" => false
 //			, "site_updated" => 1
 		);
 
@@ -2056,7 +2063,7 @@ function recursive_cnt($row) {
 	global $entity;
 	
 	$ret = "";
-	$ret = select_field("count(id)", array("parent_id" => $row["id"], "deleted" => 0), $entity);
+	$ret = select_field("count(id)", array("parent_id" => $row["id"], "deleted" => false), $entity);
 	return $ret;
 }
 
@@ -2120,13 +2127,13 @@ function masterdepend_cnt($masterdepend_entity = "") {
 //SELECT FIELD failed:
 //select count(id) from webie_product where webie_pgroup='2' and deleted='0' order by manorder asc limit 1
 //Unknown column 'webie_pgroup' in 'where clause'
-//			$ret = select_field("count(id)", array(TABLE_PREFIX . $entity => $id, "deleted" => 0), TABLE_PREFIX . $masterdepend_entity);
+//			$ret = select_field("count(id)", array(TABLE_PREFIX . $entity => $id, "deleted" => false), TABLE_PREFIX . $masterdepend_entity);
 
 			if ($m2mfixed_dependtable == "") {
-				$ret = select_field("count(id)", array($entity => $id, "deleted" => 0), TABLE_PREFIX . $masterdepend_entity);
+				$ret = select_field("count(id)", array($entity => $id, "deleted" => false), TABLE_PREFIX . $masterdepend_entity);
 			} else {
 //				$debug_query = 1;
-				$ret = select_field("count(id)", array($entity => $id, "deleted" => 0), TABLE_PREFIX . $m2mfixed_dependtable);
+				$ret = select_field("count(id)", array($entity => $id, "deleted" => false), TABLE_PREFIX . $m2mfixed_dependtable);
 //				$debug_query = 0;
 			}
 		} else {
@@ -2311,7 +2318,7 @@ function get_cached($hashkey) {
 	
 	$select_hash = array("hashkey" => $hashkey
 			, "(date_expiration + 0) >" => "(CURRENT_TIMESTAMP + 0)"
-			, "published" => 1, "deleted" => 0);
+			, "published" => true, "deleted" => false);
 	if ($freeze_cache == 1) {
 		unset($select_hash["date_expiration>"]);
 		if ($debug_cache == 1) pre("freeze_cache = 1, fetching $hashkey from cache despite expiration mark");
@@ -2326,13 +2333,13 @@ function set_cached($hashkey, $content, $ident = "", $insert_expiration_minutes 
 	global $debug_query, $debug_cache, $freeze_cache, $today_datetime, $timestamp_fmt;
 
 	$qa = select_fieldlistarray("*"
-		, array("hashkey" => $hashkey, "deleted" => 0)		//"published" => 1, 
+		, array("hashkey" => $hashkey, "deleted" => false)		//"published" => true, 
 		, "cached");
 
 	$date_today_datehash = parse_datetime($today_datetime);
 	$date_today_uts = datehash_2uts($date_today_datehash);
 
-	if (isset($qa[0]) && $qa[0]["published"] == 1) {
+	if (isset($qa[0]) && $qa[0]["published"] == true) {
 		$row = $qa[0];
 
 		$expiration_minutes = $row["expiration_minutes"];

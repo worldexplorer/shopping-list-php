@@ -97,7 +97,7 @@ if ($mode == "login_password" || $mode == "login_auth") {
 //		exit();
 
 
-//		$logged_page_is_published = select_field("published", array("deleted" => 0, "hashkey" => "logged"), "mmenu");
+//		$logged_page_is_published = select_field("published", array("deleted" => false, "hashkey" => "logged"), "mmenu");
 //		$logged_page_is_published = intval($logged_page_is_published);
 
 //		if ($logged_page_is_published == 1) {

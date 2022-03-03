@@ -91,8 +91,8 @@ $entity_fields = array (
 //	"tour" => array ("", "select_soft", get_number("tour")),
 	
 	"~2columned_open" => array ("", "columned_open"),
-	"game" => array ("", "radio_table", "ident", "", array("published" => 1)),
-	"tour" => array ("", "radio_table", "ident", "", array("published" => 1, "game" => $game_selected)),
+	"game" => array ("", "radio_table", "ident", "", array("published" => true)),
+	"tour" => array ("", "radio_table", "ident", "", array("published" => true, "game" => $game_selected)),
 	"~2columned_close" => array ("", "columned_close"),
 
 	//"brief" => array ("Кратко<br><br>в список<br>команд", "freetext_200", ""),

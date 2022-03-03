@@ -15,7 +15,7 @@ EOT;
 
 
 $menu_top_root_id = 5;
-//$_menu_bottom = tree_tpl($tpl, $tpl_cur, "mmenu", $root_mmenu_id, $menu_top_root_id, array("published" => 1), 1, 1);
+//$_menu_bottom = tree_tpl($tpl, $tpl_cur, "mmenu", $root_mmenu_id, $menu_top_root_id, array("published" => true), 1, 1);
 $_menu_bottom = entity_list_tpl($tpl, $tpl_cur, "mmenu", 0, array("parent_id" => $menu_top_root_id, ""));
 
 //$query_bottom = "select * from mmenu where published=true and published_legend=1 and deleted=false";

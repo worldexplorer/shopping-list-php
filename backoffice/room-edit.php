@@ -7,15 +7,14 @@ $entity_fields = array (
 	"message_pinned" => array ("Pinned Id", "textfieldro"),
 	"message_pinned_text" => array ("Pinned Txt", "textarea_3", ""),
 	"person_created" => array ("", "select_hard", "ident"),
-	"~11" => array ("[@masterdepend_cnt@]", "ahref", "<a href='@masterdepend_entity@.php?#ENTITY#=#ID#'>@masterdepend_entity_hr@</a>"),
+	// "~11" => array ("[@masterdepend_cnt@]", "ahref", "<a href='@masterdepend_entity@.php?#ENTITY#=#ID#'>@masterdepend_entity_hr@</a>"),
+	"person" => array ("", "m2mcb", "m2m_room_person"),
 
 	"published" => array ("", "checkbox", "", true)
 );
 
 // $debug_query = 1;
-
 ?>
-
 <? require "../_lib/_entity_edit.php" ?>
 <? require_once "_top.php" ?>
 <? require "../_lib/_edit_fields.php" ?>

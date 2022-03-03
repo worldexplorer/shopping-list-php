@@ -1,7 +1,7 @@
 <? require_once "../_lib/_init.php" ?>
 <?
 
-$person_cnt = select_field("count(id)", array("published" => 1), "person");
+$person_cnt = select_field("count(id)", array("published" => true), "person");
 
 $tpl_poll_rendered = <<< EOT
 <a href="javascript:popup_url('poll-rendered.php?id=#ID#', 'poll_rendered_#ID#', '')">$msg_tag_shortcut</a>

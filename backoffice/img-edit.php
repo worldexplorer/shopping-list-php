@@ -24,7 +24,7 @@ function single_img($row) {
 		);
 		$ret = hash_by_tpl($row, $tpl_img_new);
 	} else {
-		$row["pub_checked"] = ($row["published"] == '1') ? "checked" : "";
+		$row["pub_checked"] = ($row["published"] == true) ? "checked" : "";
 		$row["imgtype_resize_default_width"] = $imgtype_resize_default_width;
 		$row["imgtype_resize_default_height"] = $imgtype_resize_default_height;
 		$ret = hash_by_tpl($row, $tpl_img_singlerow);
@@ -106,7 +106,7 @@ if ($id == 0) {
 		$_REQUEST["imgtype"] = $qa[0]["id"];
 	} else {
 		$ctx_imgtype_query = "select id, ident from imgtype it "
-			. " where id=" . select_first_published("id", array("published" => 1, "deleted" => 0), "imgtype");
+			. " where id=" . select_first_published("id", array("published" => true, "deleted" => false), "imgtype");
 		$qa = select_queryarray($ctx_imgtype_query);
 		if (isset($qa[0])) $_REQUEST["imgtype"] = $qa[0]["id"];
 	}

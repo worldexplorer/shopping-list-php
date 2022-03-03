@@ -48,7 +48,6 @@ $table_columns = array (
 
 // $debug_query = 1;
 ?>
-
 <? require "../_lib/_updown.php" ?>
 <? require_once "_top.php" ?>
 <? require "../_lib/_list.php" ?>

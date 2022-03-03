@@ -41,7 +41,7 @@ foreach($fixed_fields as $fixed_field) {
 			default:
 				if ($fixed_getfirstfromdb == 1) {
 					$visible_mask = array();
-					if (entity_has_deleted_field($fixed_field)) $visible_mask = array("deleted" => 0);
+					if (entity_has_deleted_field($fixed_field)) $visible_mask = array("deleted" => false);
 					$fixed_value = select_first_published("id", $visible_mask, $fixed_field);
 
 					if ($in_silent_mode == 0) {
