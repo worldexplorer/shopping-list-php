@@ -31,8 +31,8 @@ $table_columns = array (
 
 	"person_ident" => array("Участники", "groupconcat"),
 	"message" => array("", "cnt"),
-	"product" => array("", "cnt"),
-	"pgroup" => array("", "cnt"),
+//	"product" => array("", "cnt"),
+//	"pgroup" => array("", "cnt"),
 	
 //	"message_pinned" => array("Pinned", "view"),
 //	"message_pinned_text" => array("Pinned", "view"),

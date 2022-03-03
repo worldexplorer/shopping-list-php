@@ -80,17 +80,22 @@ $entity_orderby_list = array (
 );
 
 $entity_fixed_list = array (
-	"pgroup" => array("room", "parent_id"
+	"pgroup" => array(
+		//"room", 
+		"parent_id"
 		//, "purchase_origin"
 	),
-	"product" => array("room",  "punit", "pgroup"
+	"product" => array(
+		// "room", 
+		"punit", "pgroup"
 		//, "purchase_origin"
 		),
-	"message" => array("room"
-		, "person"
+	"message" => array(
+		"room", 
+		"person"
 		, "purchase"),
 	"purchase" => array("room"),
-	"puritem" => array("room", "purchase", "pgroup", "product"),
+	// "puritem" => array("room", "purchase", "pgroup", "product"),
 	"room" => array("person"),
 	"auth" => array("person"),
 
