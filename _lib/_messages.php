@@ -458,6 +458,13 @@ switch ($lang_current) {
 			"auth-ident" => "Персона",
 			"auth-auth" => "Токен",
 			"auth-published" => "Ввёл Код",
+			"minutes_ago" => "Min ago",
+			"rquseragent" => "rquseragent",
+			"rqip" => "rqip",
+			"rqsocketid" => "rqsocketid",
+			"lastuseragent" => "lastuseragent",
+			"lastip" => "lastip",
+			"lastsocketid" => "lastsocketid",
 			// purchase
 			// "show_pgroup" => "show_pgroup",
 			// "show_price" => "show_price",

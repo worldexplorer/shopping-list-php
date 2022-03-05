@@ -19,6 +19,14 @@ CREATE TABLE shli_auth (
 	auth			VARCHAR(250) NOT NULL DEFAULT '',
 	person			INTEGER NOT NULL DEFAULT 0,
 	
+	rquseragent		VARCHAR(250) NOT NULL DEFAULT '',
+	rqip			VARCHAR(16) NOT NULL DEFAULT '',
+	rqsocketid		VARCHAR(40) NOT NULL DEFAULT '',
+	
+	lastuseragent	VARCHAR(250) NOT NULL DEFAULT '',
+	lastip			VARCHAR(16) NOT NULL DEFAULT '',
+	lastsocketid	VARCHAR(40) NOT NULL DEFAULT '',
+
 	PRIMARY KEY(id)
 ----		, key (published), key (deleted)эта анкета не определен
 ----		, key(ident)
@@ -79,3 +87,11 @@ ALTER SEQUENCE shli_auth_id_seq RESTART WITH 3;
 -- CREATE TRIGGER trg_shli_auth_update_date_updated
 -- 	BEFORE UPDATE ON shli_auth FOR EACH ROW
 -- 	EXECUTE PROCEDURE update_date_updated_column();
+
+-- ALTER TABLE "shli_auth" ADD "rquseragent" VARCHAR(250) NOT NULL DEFAULT '';
+-- ALTER TABLE "shli_auth" ADD "rqip" VARCHAR(16) NOT NULL DEFAULT '';
+-- ALTER TABLE "shli_auth" ADD "rqsocketid" VARCHAR(40) NOT NULL DEFAULT '';
+
+-- ALTER TABLE "shli_auth" ADD "lastuseragent" VARCHAR(250) NOT NULL DEFAULT '';
+-- ALTER TABLE "shli_auth" ADD "lastip" VARCHAR(16) NOT NULL DEFAULT '';
+-- ALTER TABLE "shli_auth" ADD "lastsocketid" VARCHAR(40) NOT NULL DEFAULT '';

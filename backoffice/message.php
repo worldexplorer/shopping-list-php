@@ -24,8 +24,8 @@ $table_columns = array (
 	// "persons_sent" => array("", "view"),
 	// "persons_read" => array("", "view"),
 
-	"persons_sent" => array("", "textfield", "", "4em", "3em"),
-	"persons_read" => array("", "textfield", "", "4em", "3em"),
+	"persons_sent" => array("", "textfield", "", "6em", "5em"),
+	"persons_read" => array("", "textfield", "", "6em", "5em"),
 
 	"replyto_id" => array("", "textfield", "", "4em", "3em"),
 	"forwardfrom_id" => array("", "textfield", "", "4em", "3em"),

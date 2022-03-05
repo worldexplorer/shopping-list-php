@@ -1,6 +1,26 @@
 <?
 require_once "../_lib/_init.php";
 
+// http://www.sqlines.com/postgresql/how-to/datediff
+$list_left_fields .=
+	  ", 
+DATE_PART('day', CURRENT_TIMESTAMP - e.date_created) * 24 + 
+DATE_PART('hour', CURRENT_TIMESTAMP - e.date_created) * 60 +
+DATE_PART('minute', CURRENT_TIMESTAMP - e.date_created)
+	  as minutes_ago,
+AGE(e.date_created) as age
+	  "
+;
+
+// $list_left_m2mjoins .=
+// 	  " left join purchase purchase_origin"
+// 		. " on purchase_origin.id=e.purchase_origin"
+// ;
+
+// $list_left_fields_groupby =
+// 	  ", purchase_origin_ident"
+// ;
+
 
 $tpl_login_password = <<< EOT
 <a title='Login via userId+password' href="javascript:popup_url('../index.php?l_person_id=#ID#&l_passwd=#PASSWD#&mode=login_person&l_email=#EMAIL#', 'person_#ID#', '')">$msg_tag_shortcut</a>
@@ -13,8 +33,11 @@ EOT;
 
 
 $table_columns = array (
-	"id" => array("", "serno"),
+	"id" => array("", "viewcenter"),
 	"date_created" => array("", "timestamp"),
+
+	"minutes_ago" => array("", "view"),
+	// "age" => array("", "view"),
 
 	"person_ident" => array("", "ahref", "<a href='person-edit.php?id=#PERSON#'>#PERSON_IDENT#</a>"),
 
@@ -26,7 +49,15 @@ $table_columns = array (
 	"code" => array("", "textfield", "", "6em", "5em"),
 	//"auth" => array("", "textfield", "", "11em", "10em"),
 	"auth" => array("", "ahref", "$tpl_login_auth"),
+
+	// "rquseragent" => array("", "view"),
+	// "rqip" => array("", "view"),
+	// "rqsocketid" => array("", "view"),
 	
+	// "lastuseragent" => array("", "view"),
+	"lastip" => array("", "view"),
+	"lastsocketid" => array("", "view"),
+
 	"published" => array("", "checkbox"),
 	"~delete" => array("", "checkboxdel")
 );
