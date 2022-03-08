@@ -1,15 +1,19 @@
 <?
 require_once "../_lib/_init.php";
 
+function psql_minago($field, $as, $comma = '') {
+	return "
+	DATE_PART('day', CURRENT_TIMESTAMP - $field) * 24 + 
+	DATE_PART('hour', CURRENT_TIMESTAMP - $field) * 60 +
+	DATE_PART('minute', CURRENT_TIMESTAMP - $field)
+		as $as $comma";
+}
+
 // http://www.sqlines.com/postgresql/how-to/datediff
-$list_left_fields .=
-	  ", 
-DATE_PART('day', CURRENT_TIMESTAMP - e.date_created) * 24 + 
-DATE_PART('hour', CURRENT_TIMESTAMP - e.date_created) * 60 +
-DATE_PART('minute', CURRENT_TIMESTAMP - e.date_created)
-	  as minutes_ago,
-AGE(e.date_created) as age
-	  "
+$list_left_fields .= ', '
+	. psql_minago('e.date_updated', 'loggedin_minago', ',')
+	. psql_minago('e.date_created', 'registered_minago')
+	// . ", AGE(e.date_created) as age"
 ;
 
 // $list_left_m2mjoins .=
@@ -34,15 +38,10 @@ EOT;
 
 $table_columns = array (
 	"id" => array("", "viewcenter"),
-	"date_created" => array("", "timestamp"),
-
-	"minutes_ago" => array("", "view"),
-	// "age" => array("", "view"),
-
-	"person_ident" => array("", "ahref", "<a href='person-edit.php?id=#PERSON#'>#PERSON_IDENT#</a>"),
+	// "date_created" => array("", "timestamp"),
 
 	"~2" => array($entity_msg_h, "ahref", "$tpl_login_password <a href=#ENTITY#-edit.php?id=#ID#>___ #IDENT#</a>"),
-	"ident" => array("", "textfield", "", "11em", "10em"),
+	// "ident" => array("", "textfield", "", "11em", "10em"),
 
 	"email" => array("", "textfield", "", "11em", "10em"),
 	"phone" => array("", "textfield", "", "11em", "10em"),
@@ -54,6 +53,12 @@ $table_columns = array (
 	// "rqip" => array("", "view"),
 	// "rqsocketid" => array("", "view"),
 	
+	"registered_minago" => array("Reg", "view"),
+	"loggedin_minago" => array("Log", "view"),
+	// "age" => array("", "view"),
+
+	"person_ident" => array("", "ahref", "<a href='person-edit.php?id=#PERSON#'>#PERSON_IDENT#</a>"),
+
 	// "lastuseragent" => array("", "view"),
 	"lastip" => array("", "view"),
 	"lastsocketid" => array("", "view"),
