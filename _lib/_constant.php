@@ -95,7 +95,9 @@ $entity_fixed_list = array (
 		"person"
 		, "purchase"),
 	"purchase" => array("room"),
-	// "puritem" => array("room", "purchase", "pgroup", "product"),
+	"puritem" => array("room", "purchase"
+		//	, "pgroup", "product"
+		),
 	"room" => array("person"),
 	"auth" => array("person"),
 

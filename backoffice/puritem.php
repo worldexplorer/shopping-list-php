@@ -3,16 +3,20 @@
 require_once "../_lib/_init.php";
 
 $list_left_fields .=
-	  ", punit.brief as punit_ident"
+//	  ", punit.brief as punit_ident" . 
+	  ", person.ident as person_bought_ident"
 ;
 
 $list_left_additional_joins .=
-	  " left join punit punit"
-		. " on punit.id=product.punit and punit.deleted=false"
+//	" left join punit punit"
+//		. " on e.punit=punit.id and punit.deleted=false" .
+	" left join person person"
+		. " on e.person_bought=person.id and person.deleted=false"
 ;
 
 $list_left_fields_groupby =
-	 ", punit_ident"
+	 //", punit_ident" .
+	 ", person_bought_ident"
 ;
 
 
@@ -30,6 +34,7 @@ $table_columns = array (
 	// "comment" => array("comment", "textfield", "", "11em", "10em"),
 
 	"bought" => array("", "textfield", "", "3em", "2em"),
+	"person_bought" => array("Bought", "ahref", "<a href=person-edit.php?id=#PERSON_BOUGHT#>#PERSON_BOUGHT_IDENT#</a>"),
 	"bought_qnty" => array("", "textfield", "", "6em", "5em"),
 	"bought_price" => array("", "textfield", "", "6em", "5em"),
 	"bought_weight" => array("", "textfield", "", "6em", "5em"),

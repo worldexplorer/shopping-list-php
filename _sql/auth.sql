@@ -28,7 +28,7 @@ CREATE TABLE shli_auth (
 	lastsocketid	VARCHAR(40) NOT NULL DEFAULT '',
 
 	PRIMARY KEY(id)
-----		, key (published), key (deleted)эта анкета не определен
+----		, key (published), key (deleted)
 ----		, key(ident)
 );
 

@@ -1,4 +1,5 @@
-Options         +Indexes
+Require		    all granted
+Options         +Indexes +FollowSymLinks
 DirectoryIndex  index.php
 
 # https://blog.doppler.com/configuring-php-applications-using-environment-variables
@@ -7,11 +8,11 @@ DirectoryIndex  index.php
 #SetEnv DATABASE_URL "postgres://shli:shli@localhost:5432/shli"
 
 
-#php_value xdebug.mode debug
-#php_flag xdebug.start_with_request yes
+php_flag short_open_tag on
 #php_value error_reporting 0
 
-
+#php_value xdebug.mode debug
+#php_flag xdebug.start_with_request yes
 
 #"C:\Program Files (x86)\Apache Software Foundation\Apache2.2\bin\htpasswd" -b C:\projects\mzgb\htdocs\mzgb\backoffice\.htpasswd admin shli
 #Updating password for user admin
@@ -23,6 +24,7 @@ DirectoryIndex  index.php
 
 #CharsetDisable  on
 
+#moved to _lib/_init.php:
 #php_value max_execution_time 60
 #php_value upload_max_filesize "5M"
 #php_value post_max_size "5M"

@@ -19,6 +19,8 @@ $entity_fields = array (
 	"bought_price" => array("", "number"),
 	"bought_weight" => array("", "number"),
 
+	"person_bought" => array ("", "select_soft", "ident"),
+
 	"~11" => array ("[@masterdepend_cnt@]", "ahref", "<a href='@masterdepend_entity@.php?#ENTITY#=#ID#'>@masterdepend_entity_hr@</a>"),
 
 	"published" => array ("", "checkbox", "", true),

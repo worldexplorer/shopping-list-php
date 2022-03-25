@@ -26,6 +26,7 @@ CREATE TABLE shli_puritem (
 	bought_price	NUMERIC(7,2),
 	bought_weight	NUMERIC(7,2),
 
+	person_bought	INTEGER,
 
 	comment			TEXT,
 	
@@ -83,3 +84,7 @@ ALTER SEQUENCE shli_puritem_id_seq RESTART WITH 8;
 -- update shli_puritem set bought2=2 where bought=NULL;
 -- ALTER TABLE shli_puritem DROP COLUMN bought;
 -- ALTER TABLE shli_puritem RENAME COLUMN bought2 TO bought;
+
+-- $ psql -U shli -W shli
+-- $ heroku psql
+-- alter table shli_puritem add column person_bought INTEGER;

@@ -7,7 +7,18 @@
 \i product.sql
 \i puritem.sql
 \i message.sql
+\i auth.sql
 
---\i imgtype.sql
---\i img.sql
+\i ictype.sql
+\i icwhose.sql
+\i icdict.sql
+\i icdictcontent.sql
+\i icsheet.sql
+\i ic.sql
+\i jsvalidator.sql
+
+\i imgtype.sql
+\i img.sql
+\i constant.sql
+
 --\i m2m_puritem_person.sql
