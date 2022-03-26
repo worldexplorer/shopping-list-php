@@ -8,7 +8,7 @@ DirectoryIndex  index.php
 #SetEnv DATABASE_URL "postgres://shli:shli@localhost:5432/shli"
 
 
-php_flag short_open_tag on
+#php_flag short_open_tag on
 #php_value error_reporting 0
 
 #php_value xdebug.mode debug
