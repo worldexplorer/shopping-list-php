@@ -26,6 +26,7 @@ CREATE TABLE shli_auth (
 	lastuseragent	VARCHAR(250) NOT NULL DEFAULT '',
 	lastip			VARCHAR(16) NOT NULL DEFAULT '',
 	lastsocketid	VARCHAR(40) NOT NULL DEFAULT '',
+	lastlogged		TIMESTAMP WITHOUT TIME ZONE,
 
 	PRIMARY KEY(id)
 ----		, key (published), key (deleted)
@@ -95,3 +96,5 @@ ALTER SEQUENCE shli_auth_id_seq RESTART WITH 3;
 -- ALTER TABLE "shli_auth" ADD "lastuseragent" VARCHAR(250) NOT NULL DEFAULT '';
 -- ALTER TABLE "shli_auth" ADD "lastip" VARCHAR(16) NOT NULL DEFAULT '';
 -- ALTER TABLE "shli_auth" ADD "lastsocketid" VARCHAR(40) NOT NULL DEFAULT '';
+
+ALTER TABLE "shli_auth" ADD "lastlogged" TIMESTAMP WITHOUT TIME ZONE;

@@ -11,18 +11,19 @@ function psql_minago($field, $as, $comma = '') {
 
 // http://www.sqlines.com/postgresql/how-to/datediff
 $list_left_fields .= ', '
-	. psql_minago('e.date_updated', 'loggedin_minago', ',')
+	. psql_minago('e.lastlogged', 'loggedin_minago', ',')
 	. psql_minago('e.date_created', 'registered_minago')
 	// . ", AGE(e.date_created) as age"
+	// . ' count(msg.id) as msg_count'
 ;
 
 // $list_left_m2mjoins .=
-// 	  " left join purchase purchase_origin"
-// 		. " on purchase_origin.id=e.purchase_origin"
+// 	  " left join purchase purchase_origin on purchase_origin.id=e.purchase_origin"
+// 	   " left join message msg on msg.person=person.id"
 // ;
 
 // $list_left_fields_groupby =
-// 	  ", purchase_origin_ident"
+// 	   ", purchase_origin_ident"
 // ;
 
 
