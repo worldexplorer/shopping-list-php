@@ -477,6 +477,8 @@ switch ($lang_current) {
 			"show_weight" => "Вес",
 			"show_state_unknown" => "Unkn",
 			"show_state_stop" => "Stop",
+			"show_state_halfdone" => "1/2done",
+			"show_state_question" => "Q?",
 			"comment_above" => "Comment Above",
 			"comment_below" => "Comment Below",
 			"purchased" => "purchased",

@@ -740,7 +740,14 @@ function select_entity_prevnext($fixed_hash = array(),
 //	if (count($href_fixed_hash) > 0) $href_fixed_hash = $fixed_hash;
 	$fixed_suffix = hrefsuffix_fromhash($href_fixed_hash, "&");
 
-	if (entity_has_deleted_field($entity)) $fixed_hash["deleted"] = 0;
+	if (entity_has_deleted_field($entity)) {
+		$db_field_type = entity_field_type($entity, "deleted");
+		if ($db_field_type == "boolean") {
+			$fixed_hash["deleted"] = false;
+		} else {
+			$fixed_hash["deleted"] = 0;
+		}
+	}
 
 //	while product-edit.php, got an error
 //select * from webie_product where manorder < '1' and webie_pgroup='2' and webie_supplier='1' order by manorder desc
@@ -754,8 +761,9 @@ function select_entity_prevnext($fixed_hash = array(),
 	if ($addslashes == 1) $order_value = addslashes($order_value);
 
 	if ($fixed_cond != "") $fixed_cond = " and " . $fixed_cond;
-	$query_prev = "select * from $entity where $order_field < '$order_value' $fixed_cond order by $order_field desc";
-	$query_next = "select * from $entity where $order_field > '$order_value' $fixed_cond order by $order_field asc";
+	$order_value_int = intval($order_value);
+	$query_prev = "select * from $entity where $order_field < $order_value_int $fixed_cond order by $order_field desc";
+	$query_next = "select * from $entity where $order_field > $order_value_int $fixed_cond order by $order_field asc";
 
 	$hash_4query = array (
 		"entity" => $entity,
@@ -1766,14 +1774,22 @@ function sqlcond_fromhash($fixed_hash, $col_prefix = "", $startfrom = "", $conju
 
 	if (is_array($fixed_hash) && count($fixed_hash) > 0) {
 		foreach($fixed_hash as $fixed_field => $fixed_value) {
-			if ($addslashes == 1) $fixed_value = addslashes($fixed_value);
-
 			$fixed_value_pure = $fixed_value;
-//			if (is_numeric($fixed_value) || (strpos($fixed_value, "CURRENT_TIMESTAMP") !== false)) {
-			if (strpos($fixed_value, "CURRENT_TIMESTAMP") === false) {
-				$fixed_value = "'$fixed_value'";
-			}
 
+			if (is_bool($fixed_value)) {
+				$fixed_value = $fixed_value == true ? 'true' : 'false';
+			} else if (is_numeric($fixed_value)) {
+				$fixed_value_as_number = intval($fixed_value);
+				$fixed_value = $fixed_value_as_number;
+			} else {
+				if ($addslashes == 1) $fixed_value = addslashes($fixed_value);
+
+	//			if (is_numeric($fixed_value) || (strpos($fixed_value, "CURRENT_TIMESTAMP") !== false)) {
+				if (strpos($fixed_value, "CURRENT_TIMESTAMP") === false) {
+					$fixed_value = "'$fixed_value'";
+				}
+			
+			}
 
 //			if ($fixed_field != "published" && $fixed_field != "deleted" && $fixed_field != "parent_id") {
 			if (!in_array($fixed_field, $non_prefixed_fields)) {

@@ -28,6 +28,8 @@ CREATE TABLE shli_purchase (
 
 	show_state_unknown	BOOLEAN NOT NULL DEFAULT false,
 	show_state_stop		BOOLEAN NOT NULL DEFAULT false,
+	show_state_halfdone	BOOLEAN NOT NULL DEFAULT false,
+	show_state_question	BOOLEAN NOT NULL DEFAULT false,
 
 	copiedfrom_id		INTEGER,
 
@@ -94,3 +96,6 @@ ALTER SEQUENCE shli_purchase_id_seq RESTART WITH 2;
 -- 	ADD "show_state_stop" BOOLEAN NOT NULL DEFAULT 'false';
 
 --ALTER TABLE "shli_purchase" ADD "persons_can_fill" INTEGER[];
+
+-- ALTER TABLE shli_purchase ADD show_state_halfdone BOOLEAN NOT NULL DEFAULT false;
+-- ALTER TABLE shli_purchase ADD show_state_question BOOLEAN NOT NULL DEFAULT false;

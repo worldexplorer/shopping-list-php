@@ -62,8 +62,10 @@ $table_columns = array (
 	"show_price" => array("", "checkbox"),
 	"show_weight" => array("", "checkbox"),
 
-	"show_state_unknown" => array("", "checkbox"),
-	"show_state_stop" => array("", "checkbox"),
+//	"show_state_unknown" => array("", "checkbox"),
+//	"show_state_stop" => array("", "checkbox"),
+//	"show_state_halfdone" => array("", "checkbox"),
+//	"show_state_question" => array("", "checkbox"),
 
 	"published" => array("", "checkbox"),
 	"~delete" => array("", "checkboxdel")

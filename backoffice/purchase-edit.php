@@ -13,6 +13,8 @@ $entity_fields = array (
 
 	"show_state_unknown" => array ("", "checkbox", "", true),
 	"show_state_stop" => array ("", "checkbox", "", true),
+	"show_state_halfdone" => array ("", "checkbox", "", true),
+	"show_state_question" => array ("", "checkbox", "", true),
 
 	"room" => array ("", "select_hard", "ident"),
 	"message" => array ("", "select_hard", "ident"),
