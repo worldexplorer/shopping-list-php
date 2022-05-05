@@ -326,8 +326,8 @@ function insert ($fields = array(), $entity = "_global:entity", $cms_dbc = "_glo
 		if ($debug_query == 1) plog("INSERT[$query]", "\n\n");
 		if ($result = pg_query($cms_dbc, $query)) {
 			// $id = pg_insert_id($cms_dbc);
-			$inserted_row = pg_fetch_row($result);
-			$id = $insert_row[0];
+			$inserted_row = pg_fetch_array($result);
+			$id = $inserted_row[0];
 			if ($updatemanorder_whileinsert == 1) {
 //				$order_field = $order_fields[0];
 //				foreach ($order_fields as $order_field) {
