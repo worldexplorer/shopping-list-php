@@ -30,7 +30,15 @@ vi /etc/postgres/13/pg_hba.conf
 # "local" is for Unix domain socket connections only
 #local   all             all                                     peer
 local   all             all                                     md5
+
 # https://sqlserverguides.com/restart-postgres/
+systemctl restart postgresql.service
 systemctl status postgresql.service
+
+heroku pg:backups:capture
+heroku pg:backups:download
+
+#https://devcenter.heroku.com/articles/heroku-postgres-import-export
+pg_restore --verbose --clean --no-acl --no-owner -h localhost -U myuser -d mydb latest.dump
 
 psql -U shli -W shli
